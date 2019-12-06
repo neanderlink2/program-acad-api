@@ -1,0 +1,1 @@
+Data Source=SQL5047.site4now.net;Initial Catalog=DB_A43442_programacad;User Id=DB_A43442_programacad_admin;Password=pr0gr4m4c4d@2019;

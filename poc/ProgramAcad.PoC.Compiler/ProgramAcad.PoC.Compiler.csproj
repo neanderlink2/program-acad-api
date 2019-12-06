@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ProgramAcad.Common\ProgramAcad.Common.csproj" />
+    <ProjectReference Include="..\..\src\ProgramAcad.Domain\ProgramAcad.Domain.csproj" />
+    <ProjectReference Include="..\..\src\ProgramAcad.Services\ProgramAcad.Services.csproj" />
+  </ItemGroup>
+
+</Project>

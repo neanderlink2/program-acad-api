@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Alexinea.Autofac.Extensions.DependencyInjection" Version="4.2.0" />
+    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
+    <PackageReference Include="Refit" Version="5.0.23" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="5.0.23" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProgramAcad.Common\ProgramAcad.Common.csproj" />
+    <ProjectReference Include="..\ProgramAcad.Infra.Data\ProgramAcad.Infra.Data.csproj" />
+    <ProjectReference Include="..\ProgramAcad.Services\ProgramAcad.Services.csproj" />
+  </ItemGroup>
+
+</Project>
