@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.EntityFrameworkCore;
+using ProgramAcad.Common.Extensions;
 using ProgramAcad.Domain.Contracts;
 using ProgramAcad.Infra.Data.Workers;
 using System;
@@ -19,7 +20,6 @@ namespace ProgramAcad.Infra.Data.Repository
             _dbSet = dbContext.Set<TModel>();
             _dataContext = dbContext;
         }
-
 
         public Task AddAsync(TModel entity)
         {
@@ -66,6 +66,11 @@ namespace ProgramAcad.Infra.Data.Repository
             return Task.Run(() => _dbSet.AsQueryable());
         }
 
+        public Task<IQueryable<TModel>> GetAllAsync(params string[] includes)
+        {
+            return Task.Run(() => _dbSet.IncludeMultiple(includes));
+        }
+
         public IQueryable<TModel> GetMany(Expression<Func<TModel, bool>> condicao)
         {
             return _dbSet.Where(condicao);
@@ -76,6 +81,11 @@ namespace ProgramAcad.Infra.Data.Repository
             return Task.Run(() => _dbSet.Where(condicao));
         }
 
+        public Task<IQueryable<TModel>> GetManyAsync(Expression<Func<TModel, bool>> condicao, params string[] includes)
+        {
+            return Task.Run(() => _dbSet.IncludeMultiple(includes).Where(condicao));
+        }
+
         public TModel GetSingle(Expression<Func<TModel, bool>> where)
         {
             return _dbSet.FirstOrDefault(where);
@@ -84,6 +94,11 @@ namespace ProgramAcad.Infra.Data.Repository
         public Task<TModel> GetSingleAsync(Expression<Func<TModel, bool>> condicao)
         {
             return _dbSet.FirstOrDefaultAsync(condicao);
+        }
+
+        public Task<TModel> GetSingleAsync(Expression<Func<TModel, bool>> condicao, params string[] includes)
+        {
+            return _dbSet.IncludeMultiple(includes).FirstOrDefaultAsync(condicao);
         }
 
         public Task UpdateAsync(TModel entity)

@@ -28,5 +28,14 @@ namespace ProgramAcad.Domain.Entities
         public ICollection<CasoTeste> CasosDeTeste { get; set; }
         public ICollection<AlgoritmoLinguagemDisponivel> LinguagensPermitidas { get; set; }
         public ICollection<AlgoritmoResolvido> AlgoritmosResolvidos { get; set; }
+
+        public void SetDataCriacao(DateTime data) => DataCriacao = data;
+
+        public void EditAlgoritmo(string titulo, string htmlDescricao, int idNivelDificuldade)
+        {
+            Titulo = titulo;
+            HtmlDescricao = htmlDescricao;
+            IdNivelDificuldade = idNivelDificuldade;
+        }
     }
 }

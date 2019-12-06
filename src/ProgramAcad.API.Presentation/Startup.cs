@@ -1,4 +1,5 @@
 using Autofac;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using ProgramAcad.API.Presentation.Helpers;
 using ProgramAcad.Infra.Data.Workers;
 using ProgramAcad.Infra.IoC;
+using System;
 
 namespace ProgramAcad.API.Presentation
 {
@@ -32,6 +34,8 @@ namespace ProgramAcad.API.Presentation
 
         public void ConfigureServices(IServiceCollection services)
         {
+            AddAutoMapperSetup(services);
+
             services.AddCors(configs =>
             {
                 configs.AddPolicy("AllowAnyOrigin", policy =>
@@ -57,6 +61,7 @@ namespace ProgramAcad.API.Presentation
             services.AddSwaggerDocumentation();
             services.AddApiClients(ConfigurationRoot);
 
+
             services.AddAuthentication(authOptions =>
             {
                 authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,9 +74,6 @@ namespace ProgramAcad.API.Presentation
                 jwtOptions.Authority = "https://securetoken.google.com/program-acad";
                 jwtOptions.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    //IssuerSigningKey = new SymmetricSecurityKey(
-                    //    Encoding.UTF8.GetBytes("Qdf2UzsogNl9elYvunxq9h3OylsI4WIHZpBd1B7wcZwjR4DJvEFWFn02uY5gZTnGWuEULo2Bi7TnOdkMq4VPmA==")),
                     ValidIssuer = "https://securetoken.google.com/program-acad",
                     ValidateIssuer = true,
                     ValidateAudience = true,
@@ -109,6 +111,13 @@ namespace ProgramAcad.API.Presentation
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void AddAutoMapperSetup(IServiceCollection services)
+        {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
     }
 }

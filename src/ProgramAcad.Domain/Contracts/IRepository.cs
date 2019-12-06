@@ -9,18 +9,21 @@ namespace ProgramAcad.Domain.Contracts
     {
         Task AddAsync(TModel entity);
         Task UpdateAsync(TModel entity);
-        Task DeleteAsync(TModel entity);        
+        Task DeleteAsync(TModel entity);
 
         IQueryable<TRetorno> FromSql<TRetorno>(string sql);
 
         IQueryable<TModel> GetAll();
         Task<IQueryable<TModel>> GetAllAsync();
+        Task<IQueryable<TModel>> GetAllAsync(params string[] includes);
 
         IQueryable<TModel> GetMany(Expression<Func<TModel, bool>> condicao);
         Task<IQueryable<TModel>> GetManyAsync(Expression<Func<TModel, bool>> condicao);
+        Task<IQueryable<TModel>> GetManyAsync(Expression<Func<TModel, bool>> condicao, params string[] includes);
 
         TModel GetSingle(Expression<Func<TModel, bool>> where);
         Task<TModel> GetSingleAsync(Expression<Func<TModel, bool>> condicao);
+        Task<TModel> GetSingleAsync(Expression<Func<TModel, bool>> condicao, params string[] includes);
 
         bool Any(Expression<Func<TModel, bool>> condicao);
         Task<bool> AnyAsync(Expression<Func<TModel, bool>> condicao);

@@ -1,12 +1,10 @@
-﻿using Alexinea.Autofac.Extensions.DependencyInjection;
-using Autofac;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Autofac;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Workers;
 using ProgramAcad.Infra.Data.Repository.Contracts;
 using ProgramAcad.Infra.Data.Workers;
+using ProgramAcad.Services.Modules.Algoritmos.Commands;
 using ProgramAcad.Services.Modules.Compiling;
-using System;
 
 namespace ProgramAcad.Infra.IoC
 {
@@ -26,6 +24,7 @@ namespace ProgramAcad.Infra.IoC
 
             RegisterRepository(builder);
             RegisterClients(builder);
+            RegisterCommands(builder);
 
             return builder;
         }
@@ -35,6 +34,13 @@ namespace ProgramAcad.Infra.IoC
             builder.RegisterAssemblyTypes(typeof(UsuarioRepository).Assembly)
                .Where(t => t.Namespace.EndsWith("Repositories"))
                .AsImplementedInterfaces()
+               .InstancePerLifetimeScope();
+        }
+
+        private static void RegisterCommands(ContainerBuilder builder)
+        {
+            builder.RegisterAssemblyTypes(typeof(CriarAlgoritmoCommand).Assembly)
+               .Where(t => t.Namespace.EndsWith("Commands"))
                .InstancePerLifetimeScope();
         }
 
