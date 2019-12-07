@@ -13,6 +13,10 @@ namespace ProgramAcad.Domain.Entities
             Titulo = titulo;
             HtmlDescricao = htmlDescricao;
             IdNivelDificuldade = idNivelDificuldade;
+
+            CasosDeTeste = new List<CasoTeste>();
+            LinguagensPermitidas = new List<AlgoritmoLinguagemDisponivel>();
+            AlgoritmosResolvidos = new List<AlgoritmoResolvido>();
         }
 
         public Guid Id { get; protected set; }

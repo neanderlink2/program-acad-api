@@ -4,6 +4,7 @@ using ProgramAcad.Domain.Workers;
 using ProgramAcad.Infra.Data.Repository.Contracts;
 using ProgramAcad.Infra.Data.Workers;
 using ProgramAcad.Services.Modules.Algoritmos.Commands;
+using ProgramAcad.Services.Modules.Algoritmos.Services;
 using ProgramAcad.Services.Modules.Compiling;
 
 namespace ProgramAcad.Infra.IoC
@@ -25,6 +26,7 @@ namespace ProgramAcad.Infra.IoC
             RegisterRepository(builder);
             RegisterClients(builder);
             RegisterCommands(builder);
+            RegisterAppServices(builder);
 
             return builder;
         }
@@ -32,7 +34,7 @@ namespace ProgramAcad.Infra.IoC
         private static void RegisterRepository(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(typeof(UsuarioRepository).Assembly)
-               .Where(t => t.Namespace.EndsWith("Repositories"))
+               .Where(t => t.Namespace.EndsWith("Contracts"))
                .AsImplementedInterfaces()
                .InstancePerLifetimeScope();
         }
@@ -41,6 +43,14 @@ namespace ProgramAcad.Infra.IoC
         {
             builder.RegisterAssemblyTypes(typeof(CriarAlgoritmoCommand).Assembly)
                .Where(t => t.Namespace.EndsWith("Commands"))
+               .InstancePerLifetimeScope();
+        }
+
+        private static void RegisterAppServices(ContainerBuilder builder)
+        {
+            builder.RegisterAssemblyTypes(typeof(AlgoritmoAppService).Assembly)
+               .Where(t => t.Namespace.EndsWith("Services"))
+               .AsImplementedInterfaces()
                .InstancePerLifetimeScope();
         }
 

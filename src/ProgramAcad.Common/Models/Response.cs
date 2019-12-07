@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace ProgramAcad.Common.Models
+﻿namespace ProgramAcad.Common.Models
 {
-    public class Response<TData>
+    public class Response<TData, TError>
     {
-        public Response(bool success, TData data, IEnumerable<ExpectedError> errors)
+        public Response(bool success, TData data, TError errors)
         {
             Success = success;
             Data = data;
@@ -13,6 +11,6 @@ namespace ProgramAcad.Common.Models
 
         public bool Success { get; protected set; }
         public TData Data { get; protected set; }
-        public IEnumerable<ExpectedError> Errors { get; protected set; }
+        public TError Errors { get; protected set; }
     }
 }

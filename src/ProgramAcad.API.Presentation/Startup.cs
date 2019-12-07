@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using ProgramAcad.API.Presentation.Helpers;
 using ProgramAcad.Infra.Data.Workers;
 using ProgramAcad.Infra.IoC;
+using ProgramAcad.Services.Modules.Algoritmos.MappingProfile;
 using System;
 
 namespace ProgramAcad.API.Presentation
@@ -54,13 +55,12 @@ namespace ProgramAcad.API.Presentation
             });
             services.AddDbContext<ProgramAcadContext>(options =>
             {
-                options.UseSqlServer(ConfigurationRoot.GetConnectionString("ProgramAcadContext"));
+                options.UseSqlServer(ConfigurationRoot.GetConnectionString("ProgramAcadDatabase"));
             });
 
             services.AddAppSettingsConfigs(ConfigurationRoot);
             services.AddSwaggerDocumentation();
             services.AddApiClients(ConfigurationRoot);
-
 
             services.AddAuthentication(authOptions =>
             {
@@ -117,7 +117,10 @@ namespace ProgramAcad.API.Presentation
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(configs =>
+            {
+                configs.AddProfile(new AlgoritmoMappingProfile());
+            }, AppDomain.CurrentDomain.GetAssemblies());
         }
     }
 }

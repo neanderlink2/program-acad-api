@@ -15,7 +15,7 @@ namespace ProgramAcad.Infra.Data.Mappings
             builder.Property(x => x.Id).HasColumnName("id");
             builder.Property(x => x.EntradaEsperada).HasColumnName("entrada_esperada").HasMaxLength(100);
             builder.Property(x => x.SaidaEsperada).HasColumnName("saida_esperada").HasMaxLength(100);
-            builder.Property(x => x.TempoMaximoDeExecucao).HasColumnName("tempo_execucao");
+            builder.Property(x => x.TempoMaximoDeExecucao).HasColumnName("tempo_maximo_execucao");
             builder.Property(x => x.IdAlgoritmo).HasColumnName("id_algoritmo");
 
             builder.HasOne(x => x.AlgoritmoVinculado)

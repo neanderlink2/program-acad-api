@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Notifications;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -33,15 +34,15 @@ namespace ProgramAcad.API.Presentation.Controllers
             await _notifyManager.Notify(reason, details);
         }
 
-        protected Response<T> GetOkResponse<T>(T data) where T : class =>
-            new Response<T>(true, data, null);
+        protected Response<T, object> GetOkResponse<T>(T data) where T : class =>
+            new Response<T, object>(true, data, null);
 
-        protected Response<object> GetBadRequestResponse()
+        protected Response<object, IEnumerable<ExpectedError>> GetBadRequestResponse()
         {
             var errors = _notifyManager.GetNotifications()
                 .Select(notif => new ExpectedError(HttpStatusCode.BadRequest, notif.Reason, notif.Details));
 
-            return new Response<object>(false, null, errors);
+            return new Response<object, IEnumerable<ExpectedError>>(false, null, errors);
         }
     }
 }
