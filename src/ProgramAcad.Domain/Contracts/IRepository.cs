@@ -11,7 +11,7 @@ namespace ProgramAcad.Domain.Contracts
         Task UpdateAsync(TModel entity);
         Task DeleteAsync(TModel entity);
 
-        IQueryable<TRetorno> FromSql<TRetorno>(string sql);
+        IQueryable<TQuery> FromSql<TQuery>(string sql);
 
         IQueryable<TModel> GetAll();
         Task<IQueryable<TModel>> GetAllAsync();

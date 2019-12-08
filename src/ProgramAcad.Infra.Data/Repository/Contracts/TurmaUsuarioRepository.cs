@@ -6,7 +6,7 @@ namespace ProgramAcad.Infra.Data.Repository.Contracts
 {
     public class TurmaUsuarioRepository : Repository<TurmaUsuario>, ITurmaUsuarioRepository
     {
-        public TurmaUsuarioRepository(ProgramAcadContext dbContext) : base(dbContext)
+        public TurmaUsuarioRepository(ProgramAcadDataContext dbContext) : base(dbContext)
         {
         }
     }

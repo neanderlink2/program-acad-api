@@ -28,7 +28,7 @@ namespace ProgramAcad.API.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
         public async Task<IActionResult> GetById(Guid idAlgoritmo)
         {
-            var algoritmo = await _algoritmoAppService.ObterAlgoritmoPorId(idAlgoritmo);
+            var algoritmo = await _algoritmoAppService.ObterAlgoritmoPorIdAsync(idAlgoritmo);
             return Response(algoritmo);
         }
 
@@ -37,7 +37,7 @@ namespace ProgramAcad.API.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
         public async Task<IActionResult> GetAllByTurma(Guid idTurma)
         {
-            var algoritmos = await _algoritmoAppService.ObterTodosAlgoritmosPorTurma(idTurma);
+            var algoritmos = await _algoritmoAppService.ObterTodosAlgoritmosPorTurmaAsync(idTurma);
             return Response(algoritmos);
         }
 
@@ -46,7 +46,7 @@ namespace ProgramAcad.API.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
         public async Task<IActionResult> GetLinguagensDisponiveisFiltro(Guid idTurma)
         {
-            var linguagens = await _algoritmoAppService.ObterLinguagensDisponiveis(idTurma);
+            var linguagens = await _algoritmoAppService.ObterLinguagensDisponiveisAsync(idTurma);
             return Response(linguagens);
         }
 
@@ -55,7 +55,7 @@ namespace ProgramAcad.API.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
         public async Task<IActionResult> GetNiveisDificuldadesFiltro(Guid idTurma)
         {
-            var linguagens = await _algoritmoAppService.ObterNiveisDificuldadeDisponiveis(idTurma);
+            var linguagens = await _algoritmoAppService.ObterNiveisDificuldadeDisponiveisAsync(idTurma);
             return Response(linguagens);
         }   
 
@@ -64,7 +64,7 @@ namespace ProgramAcad.API.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
         public async Task<IActionResult> CreateAlgoritmo(CriarAlgoritmoDTO algoritmo)
         {
-            await _algoritmoAppService.CriarAlgoritmo(algoritmo);
+            await _algoritmoAppService.CriarAlgoritmoAsync(algoritmo);
             return Response("Algoritmo criado com sucesso.");
         }
 
@@ -73,7 +73,7 @@ namespace ProgramAcad.API.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
         public async Task<IActionResult> EditAlgoritmo(AtualizarAlgoritmoDTO algoritmo)
         {
-            await _algoritmoAppService.AtualizarAlgoritmo(algoritmo);
+            await _algoritmoAppService.AtualizarAlgoritmoAsync(algoritmo);
             return Response("Algoritmo atualizado com sucesso.");
         }
 
@@ -82,7 +82,7 @@ namespace ProgramAcad.API.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
         public async Task<IActionResult> DeletarAlgoritmo(Guid idAlgoritmo)
         {
-            await _algoritmoAppService.DeletarAlgoritmo(idAlgoritmo);
+            await _algoritmoAppService.DeletarAlgoritmoAsync(idAlgoritmo);
             return Response("Algoritmo foi deletado com sucesso.");
         }
     }

@@ -18,18 +18,18 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
             _algoritmoRepository = algoritmoRepository;
         }
 
-        public override async Task<bool> Execute(Guid idAlgoritmo)
+        public override async Task<bool> ExecuteAsync(Guid idAlgoritmo)
         {
             var algoritmo = await _algoritmoRepository.GetSingleAsync(x => x.Id == idAlgoritmo);
 
             if (algoritmo == null)
             {
-                await Notify(NotifyReasons.NOT_FOUND, "Algoritmo não foi encontrado.");
+                await NotifyAsync(NotifyReasons.NOT_FOUND, "Algoritmo não foi encontrado.");
                 return false;
             }
 
             await _algoritmoRepository.DeleteAsync(algoritmo);
-            return await CommitChanges();
+            return await CommitChangesAsync();
         }
     }
 }

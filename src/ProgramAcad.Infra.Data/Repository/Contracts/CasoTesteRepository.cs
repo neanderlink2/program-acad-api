@@ -6,7 +6,7 @@ namespace ProgramAcad.Infra.Data.Repository.Contracts
 {
     public class CasoTesteRepository : Repository<CasoTeste>, ICasoTesteRepository
     {
-        public CasoTesteRepository(ProgramAcadContext dbContext) : base(dbContext)
+        public CasoTesteRepository(ProgramAcadDataContext dbContext) : base(dbContext)
         {
         }
     }

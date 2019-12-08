@@ -13,12 +13,6 @@ namespace ProgramAcad.Services.Modules.Algoritmos.DTOs
         public int IdNivelDificuldade { get; set; }
         public int NivelDificuldade { get; set; }
         public IEnumerable<string> LinguagensDisponiveis { get; set; }
-
-        public bool IsResolvido { get; protected set; }
-
-        public void SetIsResolvido(bool isResolvido)
-        {
-            IsResolvido = isResolvido;
-        }
+        public bool IsResolvido { get; set; }
     }
 }

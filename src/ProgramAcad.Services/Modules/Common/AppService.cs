@@ -2,7 +2,6 @@
 using FluentValidation.Results;
 using ProgramAcad.Common.Constants;
 using ProgramAcad.Common.Notifications;
-using ProgramAcad.Domain.Workers;
 using System.Threading.Tasks;
 
 namespace ProgramAcad.Services.Modules.Common
@@ -18,21 +17,21 @@ namespace ProgramAcad.Services.Modules.Common
             _notifyManager = notifyManager;
         }
 
-        protected virtual Task Notify(string key, string value)
+        protected virtual Task NotifyAsync(string reason, string details)
         {
-            return Notify(new DomainNotification(key, value));
+            return NotifyAsync(new DomainNotification(reason, details));
         }
 
-        protected virtual Task Notify(DomainNotification notification)
+        protected virtual Task NotifyAsync(DomainNotification notification)
         {
             return _notifyManager.Notify(notification);
         }
 
-        protected virtual async Task NotifyValidationErrors(ValidationResult validationResult)
+        protected virtual async Task NotifyValidationErrorsAsync(ValidationResult validationResult)
         {
             foreach (var error in validationResult.Errors)
             {
-                await Notify(NotifyReasons.VALIDATION_ERROR, error.ErrorMessage);
+                await NotifyAsync(NotifyReasons.VALIDATION_ERROR, error.ErrorMessage);
             }
         }
     }

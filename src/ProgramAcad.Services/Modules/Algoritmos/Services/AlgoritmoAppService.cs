@@ -31,33 +31,33 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             _deletarAlgoritmo = deletarAlgoritmoCommand;
         }
 
-        public async Task<bool> AtualizarAlgoritmo(AtualizarAlgoritmoDTO algoritmo)
+        public async Task<bool> AtualizarAlgoritmoAsync(AtualizarAlgoritmoDTO algoritmo)
         {
-            return await _atualizarAlgoritmo.Execute(algoritmo);
+            return await _atualizarAlgoritmo.ExecuteAsync(algoritmo);
         }
 
-        public async Task<bool> CriarAlgoritmo(CriarAlgoritmoDTO algoritmo)
+        public async Task<bool> CriarAlgoritmoAsync(CriarAlgoritmoDTO algoritmo)
         {
-            return await _criarAlgoritmo.Execute(algoritmo);
+            return await _criarAlgoritmo.ExecuteAsync(algoritmo);
         }
 
-        public async Task<bool> DeletarAlgoritmo(Guid idAlgoritmo)
+        public async Task<bool> DeletarAlgoritmoAsync(Guid idAlgoritmo)
         {
-            return await _deletarAlgoritmo.Execute(idAlgoritmo);
+            return await _deletarAlgoritmo.ExecuteAsync(idAlgoritmo);
         }
 
-        public async Task<ListarAlgoritmoDTO> ObterAlgoritmoPorId(Guid idAlgoritmo)
+        public async Task<ListarAlgoritmoDTO> ObterAlgoritmoPorIdAsync(Guid idAlgoritmo)
         {
             var algoritmo = await _algoritmoRepository.GetSingleAsync(x => x.Id == idAlgoritmo, "LinguagensPermitidas", "NivelDificuldade", "TurmaPertencente");
             if (algoritmo == null)
             {
-                await Notify(NotifyReasons.NOT_FOUND, "Algoritmo não foi encontrado.");
+                await NotifyAsync(NotifyReasons.NOT_FOUND, "Algoritmo não foi encontrado.");
                 return null;
             }
             return _mapper.Map<ListarAlgoritmoDTO>(algoritmo);
         }
 
-        public async Task<IEnumerable<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagem(Guid idTurma, LinguagensProgramacao linguagensProgramacao)
+        public async Task<IEnumerable<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(Guid idTurma, LinguagensProgramacao linguagensProgramacao)
         {
             var algoritmo = await _algoritmoRepository
                 .GetManyAsync(x => x.LinguagensPermitidas.Any(x => x.IdLinguagem == linguagensProgramacao),
@@ -65,7 +65,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             return _mapper.Map<ICollection<ListarAlgoritmoDTO>>(algoritmo);
         }
 
-        public async Task<IEnumerable<ListarAlgoritmoDTO>> ObterAlgoritmosPorNivelDificuldade(Guid idTurma, int nivel)
+        public async Task<IEnumerable<ListarAlgoritmoDTO>> ObterAlgoritmosPorNivelDificuldadeAsync(Guid idTurma, int nivel)
         {
             var algoritmo = await _algoritmoRepository
                 .GetManyAsync(x => x.IdNivelDificuldade == nivel,
@@ -73,13 +73,13 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             return _mapper.Map<IEnumerable<ListarAlgoritmoDTO>>(algoritmo);
         }
 
-        public async Task<IEnumerable<ListarAlgoritmoDTO>> ObterTodosAlgoritmosPorTurma(Guid idTurma)
+        public async Task<IEnumerable<ListarAlgoritmoDTO>> ObterTodosAlgoritmosPorTurmaAsync(Guid idTurma)
         {
             var algoritmos = await _algoritmoRepository.GetManyAsync(x => x.IdTurma == idTurma, "LinguagensPermitidas", "NivelDificuldade", "TurmaPertencente");
             return _mapper.Map<IEnumerable<ListarAlgoritmoDTO>>(algoritmos);
         }
 
-        public Task<IQueryable<KeyValueModel>> ObterLinguagensDisponiveis(Guid idTurma) => _algoritmoRepository.GetLingugagensProgramacaoFilter(idTurma);
-        public Task<IQueryable<KeyValueModel>> ObterNiveisDificuldadeDisponiveis(Guid idTurma) => _algoritmoRepository.GetNiveisDificuldadeFilter(idTurma);
+        public Task<IQueryable<KeyValueModel>> ObterLinguagensDisponiveisAsync(Guid idTurma) => _algoritmoRepository.GetLingugagensProgramacaoFilterAsync(idTurma);
+        public Task<IQueryable<KeyValueModel>> ObterNiveisDificuldadeDisponiveisAsync(Guid idTurma) => _algoritmoRepository.GetNiveisDificuldadeFilterAsync(idTurma);
     }
 }

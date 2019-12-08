@@ -6,7 +6,7 @@ namespace ProgramAcad.Infra.Data.Repository.Contracts
 {
     public class UsuarioRepository : Repository<Usuario>, IUsuarioRepository
     {
-        public UsuarioRepository(ProgramAcadContext dbContext) : base(dbContext)
+        public UsuarioRepository(ProgramAcadDataContext dbContext) : base(dbContext)
         {
         }
     }

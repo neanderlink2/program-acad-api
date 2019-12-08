@@ -19,7 +19,7 @@ namespace ProgramAcad.API.Presentation.Controllers
             _notifyManager = notifyManager;
         }
 
-        public bool IsValidResponse => !_notifyManager.HasNotifications();
+        protected bool IsValidResponse => !_notifyManager.HasNotifications();
 
         protected new IActionResult Response<T>(T response = null) where T : class
         {

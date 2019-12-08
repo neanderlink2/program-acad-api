@@ -9,7 +9,7 @@ namespace ProgramAcad.Infra.Data.Workers
     {
         private readonly DbContext _dataContext;
 
-        public UnitOfWork(ProgramAcadContext dataContext)
+        public UnitOfWork(ProgramAcadDataContext dataContext)
         {
             _dataContext = dataContext;
         }

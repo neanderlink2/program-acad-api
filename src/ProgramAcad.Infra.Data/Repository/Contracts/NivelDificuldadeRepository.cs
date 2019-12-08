@@ -6,7 +6,7 @@ namespace ProgramAcad.Infra.Data.Repository.Contracts
 {
     public class NivelDificuldadeRepository : Repository<NivelDificuldade>, INivelDificuldadeRepository
     {
-        public NivelDificuldadeRepository(ProgramAcadContext dbContext) : base(dbContext)
+        public NivelDificuldadeRepository(ProgramAcadDataContext dbContext) : base(dbContext)
         {
         }
     }

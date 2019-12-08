@@ -24,10 +24,10 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
             _nivelDificuldadeRepository = nivelDificuldadeRepository;
         }
 
-        public override async Task<bool> Execute(CriarAlgoritmoDTO algoritmo)
+        public override async Task<bool> ExecuteAsync(CriarAlgoritmoDTO algoritmo)
         {
             var validacoes = new CriarAlgoritmoValidator(_nivelDificuldadeRepository).Validate(algoritmo);
-            await NotifyValidationErrors(validacoes);
+            await NotifyValidationErrorsAsync(validacoes);
 
             if (_notifyManager.HasNotifications()) return false;
 
@@ -44,7 +44,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
 
             await _algoritmoRepository.AddAsync(entity);
 
-            return await CommitChanges();
+            return await CommitChangesAsync();
         }
 
         private IEnumerable<AlgoritmoLinguagemDisponivel> ObterLinguagensFromString(IEnumerable<string> linguagens, Guid idAlgoritmo)

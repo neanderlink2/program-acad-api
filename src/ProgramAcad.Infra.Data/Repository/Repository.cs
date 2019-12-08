@@ -12,10 +12,10 @@ namespace ProgramAcad.Infra.Data.Repository
 {
     public abstract class Repository<TModel> : IRepository<TModel> where TModel : class
     {
-        private readonly DbSet<TModel> _dbSet;
-        protected ProgramAcadContext _dataContext;
+        protected readonly DbSet<TModel> _dbSet;
+        protected ProgramAcadDataContext _dataContext;
 
-        protected Repository(ProgramAcadContext dbContext)
+        protected Repository(ProgramAcadDataContext dbContext)
         {            
             _dbSet = dbContext.Set<TModel>();
             _dataContext = dbContext;

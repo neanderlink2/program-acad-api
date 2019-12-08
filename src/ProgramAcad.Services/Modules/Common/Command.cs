@@ -11,30 +11,30 @@ namespace ProgramAcad.Services.Modules.Common
         protected readonly DomainNotificationManager _notifyManager;
         protected readonly IUnitOfWork _unitOfWork;
 
-        public Command(DomainNotificationManager notifyManager, IUnitOfWork unitOfWork)
+        protected Command(DomainNotificationManager notifyManager, IUnitOfWork unitOfWork)
         {
             _notifyManager = notifyManager;
             _unitOfWork = unitOfWork;
         }
 
-        protected virtual Task Notify(string reason, string details)
+        protected virtual Task NotifyAsync(string reason, string details)
         {
             return _notifyManager.Notify(new DomainNotification(reason, details));
         }
 
-        protected virtual async Task NotifyValidationErrors(ValidationResult validationResult)
+        protected virtual async Task NotifyValidationErrorsAsync(ValidationResult validationResult)
         {
             foreach (var error in validationResult.Errors)
             {
-                await Notify(NotifyReasons.VALIDATION_ERROR, error.ErrorMessage);
+                await NotifyAsync(NotifyReasons.VALIDATION_ERROR, error.ErrorMessage);
             }
         }
 
-        protected virtual Task<bool> CommitChanges()
+        protected virtual Task<bool> CommitChangesAsync()
         {
             return _unitOfWork.Commit();
         }
 
-        public abstract Task<bool> Execute(TExecutionModel executionModel);
+        public abstract Task<bool> ExecuteAsync(TExecutionModel executionModel);
     }
 }

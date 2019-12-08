@@ -10,11 +10,11 @@ namespace ProgramAcad.Infra.Data.Repository.Contracts
 {
     public class AlgoritmoRepository : Repository<Algoritmo>, IAlgoritmoRepository
     {
-        public AlgoritmoRepository(ProgramAcadContext dbContext) : base(dbContext)
+        public AlgoritmoRepository(ProgramAcadDataContext dbContext) : base(dbContext)
         {
         }
 
-        public Task<IQueryable<KeyValueModel>> GetLingugagensProgramacaoFilter(Guid idTurma)
+        public Task<IQueryable<KeyValueModel>> GetLingugagensProgramacaoFilterAsync(Guid idTurma)
         {
             var query = $@"SELECT l.id AS 'Key', l.nome AS 'Value' FROM TB_ALGORITMO a
 	                          INNER JOIN TB_ALGORITMO_LINGUAGEM_DISPONIVEL al ON a.id = al.id_algoritmo
@@ -23,7 +23,7 @@ namespace ProgramAcad.Infra.Data.Repository.Contracts
             return Task.FromResult(FromSql<KeyValueModel>(query));
         }
 
-        public Task<IQueryable<KeyValueModel>> GetNiveisDificuldadeFilter(Guid idTurma)
+        public Task<IQueryable<KeyValueModel>> GetNiveisDificuldadeFilterAsync(Guid idTurma)
         {
             var query = $@"SELECT n.id AS 'Key', n.descricao AS 'Value' FROM TB_ALGORITMO a
 	                          INNER JOIN TB_NIVEL_DIFICULDADE n ON a.id_nivel_dificuldade = n.id

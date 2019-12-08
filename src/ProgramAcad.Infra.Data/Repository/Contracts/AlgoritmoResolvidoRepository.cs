@@ -6,7 +6,7 @@ namespace ProgramAcad.Infra.Data.Repository.Contracts
 {
     public class AlgoritmoResolvidoRepository : Repository<AlgoritmoResolvido>, IAlgoritmoResolvidoRepository
     {
-        public AlgoritmoResolvidoRepository(ProgramAcadContext dbContext) : base(dbContext)
+        public AlgoritmoResolvidoRepository(ProgramAcadDataContext dbContext) : base(dbContext)
         {
         }
     }

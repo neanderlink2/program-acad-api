@@ -8,7 +8,7 @@ namespace ProgramAcad.Domain.Contracts.Repositories
 {
     public interface IAlgoritmoRepository : IRepository<Algoritmo>
     {
-        Task<IQueryable<KeyValueModel>> GetLingugagensProgramacaoFilter(Guid idTurma);
-        Task<IQueryable<KeyValueModel>> GetNiveisDificuldadeFilter(Guid idTurma);
+        Task<IQueryable<KeyValueModel>> GetLingugagensProgramacaoFilterAsync(Guid idTurma);
+        Task<IQueryable<KeyValueModel>> GetNiveisDificuldadeFilterAsync(Guid idTurma);
     }
 }

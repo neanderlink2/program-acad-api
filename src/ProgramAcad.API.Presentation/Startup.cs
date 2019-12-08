@@ -53,7 +53,7 @@ namespace ProgramAcad.API.Presentation
                                  .Build();
                 configs.Filters.Add(new AuthorizeFilter(policy));
             });
-            services.AddDbContext<ProgramAcadContext>(options =>
+            services.AddDbContext<ProgramAcadDataContext>(options =>
             {
                 options.UseSqlServer(ConfigurationRoot.GetConnectionString("ProgramAcadDatabase"));
             });

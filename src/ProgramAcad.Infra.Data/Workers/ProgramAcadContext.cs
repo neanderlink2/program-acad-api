@@ -2,9 +2,9 @@
 
 namespace ProgramAcad.Infra.Data.Workers
 {
-    public class ProgramAcadContext : DbContext
+    public class ProgramAcadDataContext : DbContext
     {
-        public ProgramAcadContext(DbContextOptions options) : base(options)
+        public ProgramAcadDataContext(DbContextOptions options) : base(options)
         {
 
         }

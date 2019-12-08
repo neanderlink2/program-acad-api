@@ -23,10 +23,10 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
             _casoTesteRepository = casoTesteRepository;
         }
 
-        public override async Task<bool> Execute(AtualizarAlgoritmoDTO algoritmo)
+        public override async Task<bool> ExecuteAsync(AtualizarAlgoritmoDTO algoritmo)
         {
             var validacoes = new AtualizarAlgoritmoValidator(_algoritmoRepository, _nivelDificuldadeRepository).Validate(algoritmo);
-            await NotifyValidationErrors(validacoes);
+            await NotifyValidationErrorsAsync(validacoes);
 
             if (_notifyManager.HasNotifications()) return false;
 
@@ -48,7 +48,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
 
             await _algoritmoRepository.UpdateAsync(algoritmoEntity);
 
-            return await CommitChanges();
+            return await CommitChangesAsync();
         }
     }
 }
