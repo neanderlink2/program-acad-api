@@ -13,6 +13,9 @@ namespace ProgramAcad.Domain.Entities
             CapacidadeAlunos = capacidadeAlunos;
             UrlImagemTurma = urlImagemTurma;
             DataCriacao = dataCriacao;
+
+            UsuariosInscritos = new List<TurmaUsuario>();
+            AlgoritmosDisponiveis = new List<Algoritmo>();
         }
 
         public Guid Id { get; protected set; }
@@ -26,5 +29,17 @@ namespace ProgramAcad.Domain.Entities
 
         public ICollection<Algoritmo> AlgoritmosDisponiveis { get; set; }
         public ICollection<TurmaUsuario> UsuariosInscritos { get; set; }        
+
+        public void AddUsuarioInscrito(Usuario estudante, DateTime dataIngresso)
+        {
+            UsuariosInscritos.Add(new TurmaUsuario(estudante.Id, Id, dataIngresso, true));
+        }
+
+        public void EditTurma(string nome, int capacidadeTurma, string urlImagemTurma)
+        {
+            Nome = nome;
+            CapacidadeAlunos = capacidadeTurma;
+            UrlImagemTurma = urlImagemTurma;
+        }
     }
 }

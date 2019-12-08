@@ -23,7 +23,7 @@ namespace ProgramAcad.Domain.Entities
         public Usuario Estudante { get; set; }
         public Turma Turma { get; set; }
 
-        public void AdicionarPontos(int pontos)
+        public void AddPontos(int pontos)
         {
             PontosUsuario += pontos;
         }

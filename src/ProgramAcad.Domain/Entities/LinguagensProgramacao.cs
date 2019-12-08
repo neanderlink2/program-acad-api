@@ -6,7 +6,7 @@ namespace ProgramAcad.Domain.Entities
     public enum LinguagensProgramacao
     {
         [Description("csharp")]
-        [CompilerType("2")]
+        [CompilerType("3")]
         CSharp = 1,
 
         [Description("python3")]
@@ -19,6 +19,10 @@ namespace ProgramAcad.Domain.Entities
 
         [Description("java")]
         [CompilerType("3")]
-        Java = 4
+        Java = 4,
+
+        [Description("nodejs")]
+        [CompilerType("3")]
+        JavaScript = 5
     }
 }

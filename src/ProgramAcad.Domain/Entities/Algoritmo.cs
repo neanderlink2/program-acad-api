@@ -20,7 +20,7 @@ namespace ProgramAcad.Domain.Entities
         }
 
         public Guid Id { get; protected set; }
-        public Guid IdTurma { get; set; }
+        public Guid IdTurma { get; protected set; }
         public DateTime DataCriacao { get; protected set; }
         public string Titulo { get; protected set; }
         public string HtmlDescricao { get; protected set; }
@@ -31,9 +31,7 @@ namespace ProgramAcad.Domain.Entities
 
         public ICollection<CasoTeste> CasosDeTeste { get; set; }
         public ICollection<AlgoritmoLinguagemDisponivel> LinguagensPermitidas { get; set; }
-        public ICollection<AlgoritmoResolvido> AlgoritmosResolvidos { get; set; }
-
-        public void SetDataCriacao(DateTime data) => DataCriacao = data;
+        public ICollection<AlgoritmoResolvido> AlgoritmosResolvidos { get; set; }        
 
         public void EditAlgoritmo(string titulo, string htmlDescricao, int idNivelDificuldade)
         {

@@ -30,11 +30,24 @@ namespace ProgramAcad.Domain.Entities
         public ICollection<AlgoritmoResolvido> AlgoritmosResolvidos { get; set; }
         public ICollection<ExecucaoTeste> TestesExecutados { get; set; }
         public ICollection<TurmaUsuario> TurmasInscritas { get; set; }
-        public ICollection<Turma> TurmasCriadas { get; set; }
+        public ICollection<Turma> TurmasCriadas { get; set; }        
 
-        public virtual void Deactivate()
+        public void EditUsuario(string nomeCompleto, string cpf, string cep, string sexo)
+        {
+            NomeCompleto = nomeCompleto;
+            Cpf = cpf;
+            Cep = cep;
+            Sexo = sexo;
+        }
+
+        public void UpdateEmail(string email)
+        {
+            Email = email;
+        }
+
+        public void DesativarUsuario()
         {
             IsAtivo = false;
-        }
+        }        
     }
 }
