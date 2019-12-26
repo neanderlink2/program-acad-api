@@ -10,7 +10,7 @@ namespace ProgramAcad.API.Presentation.Helpers
         {
             FirebaseApp.Create(new AppOptions
             {
-                Credential = GoogleCredential.FromFile(".\\program-acad-google-credentials.json")
+                Credential = GoogleCredential.FromFile(".\\google-credentials.json")
             });
             return services;
         }
