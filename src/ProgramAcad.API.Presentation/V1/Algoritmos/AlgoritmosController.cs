@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProgramAcad.API.Presentation.Controllers;
 using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Models;
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace ProgramAcad.API.Presentation.Controllers
+namespace ProgramAcad.API.Presentation.V1.Algoritmos
 {
     [ApiController]
     [Route("api/algoritmos")]
@@ -25,7 +26,7 @@ namespace ProgramAcad.API.Presentation.Controllers
 
         [HttpGet("{idAlgoritmo}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<ListarAlgoritmoDTO, object>))]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> GetById(Guid idAlgoritmo)
         {
             var algoritmo = await _algoritmoAppService.ObterAlgoritmoPorIdAsync(idAlgoritmo);
@@ -34,16 +35,16 @@ namespace ProgramAcad.API.Presentation.Controllers
 
         [HttpGet("turma/{idTurma}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<IEnumerable<ListarAlgoritmoDTO>, object>))]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
-        public async Task<IActionResult> GetAllByTurma(Guid idTurma)
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
+        public async Task<IActionResult> GetAllByTurma(Guid idTurma, int numPagina = 1, int qtdePorPagina = 6)
         {
-            var algoritmos = await _algoritmoAppService.ObterTodosAlgoritmosPorTurmaAsync(idTurma);
+            var algoritmos = await _algoritmoAppService.ObterTodosAlgoritmosPorTurmaAsync(idTurma, numPagina, qtdePorPagina);
             return Response(algoritmos);
         }
 
         [HttpGet("turma/{idTurma}/filtro/linguagens")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<IEnumerable<KeyValueModel>, object>))]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> GetLinguagensDisponiveisFiltro(Guid idTurma)
         {
             var linguagens = await _algoritmoAppService.ObterLinguagensDisponiveisAsync(idTurma);
@@ -52,38 +53,39 @@ namespace ProgramAcad.API.Presentation.Controllers
 
         [HttpGet("turma/{idTurma}/filtro/dificuldades")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<IEnumerable<KeyValueModel>, object>))]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> GetNiveisDificuldadesFiltro(Guid idTurma)
         {
             var linguagens = await _algoritmoAppService.ObterNiveisDificuldadeDisponiveisAsync(idTurma);
             return Response(linguagens);
-        }   
+        }
 
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<string, object>))]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
+        [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(ListarAlgoritmoDTO))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> CreateAlgoritmo(CriarAlgoritmoDTO algoritmo)
         {
-            await _algoritmoAppService.CriarAlgoritmoAsync(algoritmo);
-            return Response("Algoritmo criado com sucesso.");
+            var algoritmoCriado = await _algoritmoAppService.CriarAlgoritmoAsync(algoritmo);
+            var rota = Url.Action("GetById", "Algoritmos", new { idAlgoritmo = algoritmoCriado.Id }, Request.Scheme);
+            return ResponseCreated(rota, algoritmoCriado);
         }
 
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<string, object>))]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> EditAlgoritmo(AtualizarAlgoritmoDTO algoritmo)
         {
-            await _algoritmoAppService.AtualizarAlgoritmoAsync(algoritmo);
-            return Response("Algoritmo atualizado com sucesso.");
+            var atualizacao = await _algoritmoAppService.AtualizarAlgoritmoAsync(algoritmo);
+            return Response(atualizacao);
         }
 
         [HttpDelete("{idAlgoritmo}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<string, object>))]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Response<object, IEnumerable<ExpectedError>>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> DeletarAlgoritmo(Guid idAlgoritmo)
         {
             await _algoritmoAppService.DeletarAlgoritmoAsync(idAlgoritmo);
-            return Response("Algoritmo foi deletado com sucesso.");
+            return Response(new { });
         }
     }
 }

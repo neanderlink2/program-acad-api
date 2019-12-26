@@ -58,9 +58,11 @@ namespace ProgramAcad.API.Presentation
                 options.UseSqlServer(ConfigurationRoot.GetConnectionString("ProgramAcadDatabase"));
             });
 
-            services.AddAppSettingsConfigs(ConfigurationRoot);
-            services.AddSwaggerDocumentation();
-            services.AddApiClients(ConfigurationRoot);
+            services
+                .AddAppSettingsConfigs(ConfigurationRoot)
+                .AddSwaggerDocumentation()
+                .AddApiClients(ConfigurationRoot)
+                .AddFirebaseApp();
 
             services.AddAuthentication(authOptions =>
             {

@@ -20,6 +20,9 @@ namespace ProgramAcad.Infra.Data.Mappings
             builder.Property(x => x.Email).HasColumnName("email").HasMaxLength(256);
             builder.Property(x => x.Sexo).HasColumnName("sexo").HasMaxLength(1);
             builder.Property(x => x.Role).HasColumnName("role").HasMaxLength(50).HasDefaultValue("ESTUDANTE");
+            builder.Property(x => x.DataNascimento).HasColumnName("data_nascimento");
+            builder.Property(x => x.DataCriacao).HasColumnName("data_criacao");
+            builder.Property(x => x.IsAtivo).HasColumnName("bl_ativo");
 
             builder.HasMany(x => x.AlgoritmosResolvidos)
                 .WithOne(x => x.Usuario)

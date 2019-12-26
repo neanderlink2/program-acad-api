@@ -7,5 +7,7 @@ namespace ProgramAcad.Common.Models.PagedList
         public int TotalPages { get; set; }
         public int Page { get; set; }
         public IQueryable<T> Items { get; set; }
+        public bool HasNextPage { get; set; }
+        public bool HasPreviousPage { get; set; }
     }
 }

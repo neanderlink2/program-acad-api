@@ -27,20 +27,25 @@ namespace ProgramAcad.Common.Extensions
 
         public static IPagedList<T> ToPagedList<T>(this IEnumerable<T> query, int itemsPerPage, int pageNum)
         {
-            var skip = itemsPerPage * pageNum <= itemsPerPage ? 0 : itemsPerPage * pageNum;
-            var list = query.Skip(skip).Take(itemsPerPage);
+            var list = query.Skip(pageNum <= 1 ? 0 : itemsPerPage * pageNum - 1).Take(itemsPerPage);
 
-            if (pageNum <= 0)
-            {
-                throw new ArgumentOutOfRangeException("Page number must be greater than zero.");
-            }
-
+            var totalPages = (int)Math.Ceiling((double)(query.Count() / itemsPerPage));
             return new PagedList<T>()
             {
                 Page = pageNum,
                 Items = list.AsQueryable(),
-                TotalPages = (int)Math.Ceiling((double)(query.Count() / itemsPerPage))
+                TotalPages = totalPages < 1 ? 1 : totalPages,
+                HasNextPage = pageNum < totalPages,
+                HasPreviousPage = pageNum > 1
             };
         }
+
+        public static TResult Match<T, TResult>(this IEnumerable<T> enumerable,
+            Func<IEnumerable<T>, TResult> methodWhenSome,
+            Func<TResult> methodWhenNone) => enumerable.Any() ? methodWhenSome(enumerable) : methodWhenNone();
+
+        public static TResult Match<T, TResult>(this IPagedList<T> pagedList,
+            Func<IPagedList<T>, TResult> methodWhenSome,
+            Func<TResult> methodWhenNone) => pagedList.Items.Any() ? methodWhenSome(pagedList) : methodWhenNone();
     }
 }

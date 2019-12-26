@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using ProgramAcad.Common.Constants;
+using ProgramAcad.Common.Extensions;
+using ProgramAcad.Common.Models.PagedList;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Contracts.Repositories;
 using ProgramAcad.Domain.Entities;
@@ -9,7 +11,6 @@ using ProgramAcad.Services.Modules.Algoritmos.Commands;
 using ProgramAcad.Services.Modules.Algoritmos.DTOs;
 using ProgramAcad.Services.Modules.Common;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,14 +32,20 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             _deletarAlgoritmo = deletarAlgoritmoCommand;
         }
 
-        public async Task<bool> AtualizarAlgoritmoAsync(AtualizarAlgoritmoDTO algoritmo)
+        public async Task<ListarAlgoritmoDTO> AtualizarAlgoritmoAsync(AtualizarAlgoritmoDTO algoritmo)
         {
-            return await _atualizarAlgoritmo.ExecuteAsync(algoritmo);
+            await _atualizarAlgoritmo.ExecuteAsync(algoritmo);
+            var alg = await _algoritmoRepository.GetSingleAsync(x => x.Id == algoritmo.Id);
+            return _mapper.Map<ListarAlgoritmoDTO>(alg);
         }
 
-        public async Task<bool> CriarAlgoritmoAsync(CriarAlgoritmoDTO algoritmo)
+        public async Task<ListarAlgoritmoDTO> CriarAlgoritmoAsync(CriarAlgoritmoDTO algoritmo)
         {
-            return await _criarAlgoritmo.ExecuteAsync(algoritmo);
+            await _criarAlgoritmo.ExecuteAsync(algoritmo);
+            var alg = await _algoritmoRepository.GetSingleAsync(x => x.IdTurma == algoritmo.IdTurma &&
+                x.Titulo.ToUpper() == algoritmo.Titulo.ToUpper() && x.NivelDificuldade.Nivel == algoritmo.NivelDificuldade &&
+                x.HtmlDescricao == algoritmo.HtmlDescricao);
+            return _mapper.Map<ListarAlgoritmoDTO>(alg);
         }
 
         public async Task<bool> DeletarAlgoritmoAsync(Guid idAlgoritmo)
@@ -57,26 +64,82 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             return _mapper.Map<ListarAlgoritmoDTO>(algoritmo);
         }
 
-        public async Task<IEnumerable<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(Guid idTurma, LinguagensProgramacao linguagensProgramacao)
+        public async Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(Guid idTurma, LinguagensProgramacao linguagensProgramacao,
+            int numPagina, int qtdePorPagina)
         {
-            var algoritmo = await _algoritmoRepository
-                .GetManyAsync(x => x.LinguagensPermitidas.Any(x => x.IdLinguagem == linguagensProgramacao),
-                    "LinguagensPermitidas", "NivelDificuldade", "TurmaPertencente");
-            return _mapper.Map<ICollection<ListarAlgoritmoDTO>>(algoritmo);
+            var algoritmos = await _algoritmoRepository.GetPagedListAsync(
+                selecao: x => new ListarAlgoritmoDTO()
+                {
+                    NivelDificuldade = x.NivelDificuldade.Nivel,
+                    HtmlDescricao = x.HtmlDescricao,
+                    Id = x.Id,
+                    IdNivelDificuldade = x.IdNivelDificuldade,
+                    IdTurmaPertencente = x.IdTurma,
+                    IsResolvido = false,
+                    NomeTurma = x.TurmaPertencente.Nome,
+                    Titulo = x.Titulo,
+                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(x => x.IdLinguagem.GetDescription())
+                },
+                condicao: x => x.IdTurma == idTurma && x.LinguagensPermitidas.Any(l => l.IdLinguagem == linguagensProgramacao),
+                ordenacao: x => x.OrderBy(a => a.Titulo),
+                numPagina: numPagina,
+                tamanhoPagina: qtdePorPagina,
+                isTracking: false,
+                includes: new[] { "NivelDificuldade", "TurmaPertencente", "LinguagensPermitidas" });
+
+            return algoritmos;
         }
 
-        public async Task<IEnumerable<ListarAlgoritmoDTO>> ObterAlgoritmosPorNivelDificuldadeAsync(Guid idTurma, int nivel)
+        public async Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorNivelDificuldadeAsync(Guid idTurma, int nivel,
+            int numPagina, int qtdePorPagina)
         {
-            var algoritmo = await _algoritmoRepository
-                .GetManyAsync(x => x.IdNivelDificuldade == nivel,
-                    "LinguagensPermitidas", "NivelDificuldade", "TurmaPertencente");
-            return _mapper.Map<IEnumerable<ListarAlgoritmoDTO>>(algoritmo);
+            var algoritmos = await _algoritmoRepository.GetPagedListAsync(
+                selecao: x => new ListarAlgoritmoDTO()
+                {
+                    NivelDificuldade = x.NivelDificuldade.Nivel,
+                    HtmlDescricao = x.HtmlDescricao,
+                    Id = x.Id,
+                    IdNivelDificuldade = x.IdNivelDificuldade,
+                    IdTurmaPertencente = x.IdTurma,
+                    IsResolvido = false,
+                    NomeTurma = x.TurmaPertencente.Nome,
+                    Titulo = x.Titulo,
+                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(x => x.IdLinguagem.GetDescription())
+                },
+                condicao: x => x.IdTurma == idTurma && x.IdNivelDificuldade == nivel,
+                ordenacao: x => x.OrderBy(a => a.Titulo),
+                numPagina: numPagina,
+                tamanhoPagina: qtdePorPagina,
+                isTracking: false,
+                includes: new[] { "NivelDificuldade", "TurmaPertencente", "LinguagensPermitidas" });
+
+            return algoritmos;
         }
 
-        public async Task<IEnumerable<ListarAlgoritmoDTO>> ObterTodosAlgoritmosPorTurmaAsync(Guid idTurma)
+        public async Task<IPagedList<ListarAlgoritmoDTO>> ObterTodosAlgoritmosPorTurmaAsync(Guid idTurma,
+            int numPagina, int qtdePorPagina)
         {
-            var algoritmos = await _algoritmoRepository.GetManyAsync(x => x.IdTurma == idTurma, "LinguagensPermitidas", "NivelDificuldade", "TurmaPertencente");
-            return _mapper.Map<IEnumerable<ListarAlgoritmoDTO>>(algoritmos);
+            var algoritmos = await _algoritmoRepository.GetPagedListAsync(
+                selecao: x => new ListarAlgoritmoDTO()
+                {
+                    NivelDificuldade = x.NivelDificuldade.Nivel,
+                    HtmlDescricao = x.HtmlDescricao,
+                    Id = x.Id,
+                    IdNivelDificuldade = x.IdNivelDificuldade,
+                    IdTurmaPertencente = x.IdTurma,
+                    IsResolvido = false,
+                    NomeTurma = x.TurmaPertencente.Nome,
+                    Titulo = x.Titulo,
+                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(x => x.IdLinguagem.GetDescription())
+                },
+                condicao: x => x.IdTurma == idTurma,
+                ordenacao: x => x.OrderBy(a => a.Titulo),
+                numPagina: numPagina,
+                tamanhoPagina: qtdePorPagina,
+                isTracking: false,
+                includes: new[] { "NivelDificuldade", "TurmaPertencente", "LinguagensPermitidas" });
+
+            return algoritmos;
         }
 
         public Task<IQueryable<KeyValueModel>> ObterLinguagensDisponiveisAsync(Guid idTurma) => _algoritmoRepository.GetLingugagensProgramacaoFilterAsync(idTurma);

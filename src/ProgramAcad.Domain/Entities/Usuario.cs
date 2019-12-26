@@ -5,15 +5,15 @@ namespace ProgramAcad.Domain.Entities
 {
     public class Usuario
     {
-        public Usuario(string nickname, string email, string cpf)
+        public Usuario(string nickname, string email)
         {
             Id = Guid.NewGuid();
             DataCriacao = DateTime.Now;
             IsAtivo = true;
             Role = "ESTUDANTE";
+
             Email = email;
             Nickname = nickname;
-            Cpf = cpf;
         }
 
         public Guid Id { get; protected set; }
@@ -24,20 +24,27 @@ namespace ProgramAcad.Domain.Entities
         public string Cep { get; protected set; }
         public string Sexo { get; protected set; }
         public string Role { get; protected set; }
+        public DateTime? DataNascimento { get; protected set; }
         public DateTime DataCriacao { get; protected set; }
         public bool IsAtivo { get; protected set; }
 
         public ICollection<AlgoritmoResolvido> AlgoritmosResolvidos { get; set; }
         public ICollection<ExecucaoTeste> TestesExecutados { get; set; }
         public ICollection<TurmaUsuario> TurmasInscritas { get; set; }
-        public ICollection<Turma> TurmasCriadas { get; set; }        
+        public ICollection<Turma> TurmasCriadas { get; set; }
 
-        public void EditUsuario(string nomeCompleto, string cpf, string cep, string sexo)
+        public void EditUsuario(string nomeCompleto, string cpf, string cep, string sexo, DateTime dataNascimento)
         {
             NomeCompleto = nomeCompleto;
             Cpf = cpf;
             Cep = cep;
             Sexo = sexo;
+            DataNascimento = dataNascimento;
+        }
+
+        public void SetNomeCompleto(string nomeCompleto)
+        {
+            NomeCompleto = nomeCompleto;
         }
 
         public void UpdateEmail(string email)
@@ -48,6 +55,6 @@ namespace ProgramAcad.Domain.Entities
         public void DesativarUsuario()
         {
             IsAtivo = false;
-        }        
+        }
     }
 }

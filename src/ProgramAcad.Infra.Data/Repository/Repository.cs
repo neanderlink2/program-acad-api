@@ -1,11 +1,15 @@
 ﻿using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using ProgramAcad.Common.Extensions;
+using ProgramAcad.Common.Models.PagedList;
 using ProgramAcad.Domain.Contracts;
 using ProgramAcad.Infra.Data.Workers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ProgramAcad.Infra.Data.Repository
@@ -16,7 +20,7 @@ namespace ProgramAcad.Infra.Data.Repository
         protected ProgramAcadDataContext _dataContext;
 
         protected Repository(ProgramAcadDataContext dbContext)
-        {            
+        {
             _dbSet = dbContext.Set<TModel>();
             _dataContext = dbContext;
         }
@@ -84,6 +88,70 @@ namespace ProgramAcad.Infra.Data.Repository
         public Task<IQueryable<TModel>> GetManyAsync(Expression<Func<TModel, bool>> condicao, params string[] includes)
         {
             return Task.Run(() => _dbSet.IncludeMultiple(includes).Where(condicao));
+        }
+
+        public IPagedList<TResultado> GetPagedList<TResultado>(Expression<Func<TModel, TResultado>> selecao,
+                                                               Expression<Func<TModel, bool>> condicao = null,
+                                                               Func<IQueryable<TModel>, IOrderedQueryable<TModel>> ordenacao = null,
+                                                               int numPagina = 1,
+                                                               int tamanhoPagina = 20,
+                                                               bool isTracking = false,
+                                                               params string[] includes) where TResultado : class
+        {
+            IQueryable<TModel> query = _dbSet;
+            if (!isTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (includes != null && includes.Any())
+            {
+                query = query.IncludeMultiple(includes);
+            }
+
+            if (condicao != null)
+            {
+                query = query.Where(condicao);
+            }
+
+            if (ordenacao != null)
+            {
+                query = ordenacao(query);
+            }
+            var result = query.Select(selecao);
+            return result.ToPagedList(tamanhoPagina, numPagina);
+        }
+
+        public Task<IPagedList<TResultado>> GetPagedListAsync<TResultado>(Expression<Func<TModel, TResultado>> selecao,
+                                                                      Expression<Func<TModel, bool>> condicao = null,
+                                                                      Func<IQueryable<TModel>, IOrderedQueryable<TModel>> ordenacao = null,
+                                                                      int numPagina = 1,
+                                                                      int tamanhoPagina = 20,
+                                                                      bool isTracking = false,
+                                                                      params string[] includes) where TResultado : class
+        {
+            IQueryable<TModel> query = _dbSet;
+            if (!isTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (includes != null && includes.Any())
+            {
+                query = query.IncludeMultiple(includes);
+            }
+
+            if (condicao != null)
+            {
+                query = query.Where(condicao);
+            }
+
+            if (ordenacao != null)
+            {
+                query = ordenacao(query);
+            }
+            var result = query.Select(selecao);
+            return Task.Run(() => result.ToPagedList(tamanhoPagina, numPagina));
         }
 
         public TModel GetSingle(Expression<Func<TModel, bool>> where)

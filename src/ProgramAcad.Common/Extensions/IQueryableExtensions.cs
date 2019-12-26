@@ -10,18 +10,16 @@ namespace ProgramAcad.Common.Extensions
     {
         public static IPagedList<T> ToPagedList<T>(this IQueryable<T> query, int itemsPerPage, int pageNum)
         {
-            var list = query.Skip(itemsPerPage * pageNum).Take(itemsPerPage);
+            var list = query.Skip(pageNum <= 1 ? 0 : itemsPerPage * pageNum - 1).Take(itemsPerPage);
 
-            if (pageNum <= 0)
-            {
-                throw new ArgumentOutOfRangeException("Page number must be greater than zero.");
-            }
-
+            var totalPages = (int)Math.Ceiling((double)(query.Count() / itemsPerPage));
             return new PagedList<T>()
             {
                 Page = pageNum,
                 Items = list,
-                TotalPages = (int)Math.Ceiling((double)(query.Count() / itemsPerPage))
+                TotalPages = totalPages < 1 ? 1 : totalPages,
+                HasNextPage = pageNum < totalPages,
+                HasPreviousPage = pageNum > 1
             };
         }
 
@@ -39,7 +37,7 @@ namespace ProgramAcad.Common.Extensions
 
         public static IQueryable<T> IncludeMultiple<T>(this IQueryable<T> query, params string[] includes)
             where T : class
-        {            
+        {
             if (includes != null)
             {
                 query = includes.Aggregate(query,

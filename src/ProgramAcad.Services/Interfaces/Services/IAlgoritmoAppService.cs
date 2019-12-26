@@ -1,4 +1,5 @@
-﻿using ProgramAcad.Domain.Entities;
+﻿using ProgramAcad.Common.Models.PagedList;
+using ProgramAcad.Domain.Entities;
 using ProgramAcad.Domain.Models;
 using ProgramAcad.Services.Modules.Algoritmos.DTOs;
 using System;
@@ -10,13 +11,13 @@ namespace ProgramAcad.Services.Interfaces.Services
 {
     public interface IAlgoritmoAppService
     {
-        Task<bool> CriarAlgoritmoAsync(CriarAlgoritmoDTO algoritmo);
-        Task<bool> AtualizarAlgoritmoAsync(AtualizarAlgoritmoDTO algoritmo);
+        Task<ListarAlgoritmoDTO> CriarAlgoritmoAsync(CriarAlgoritmoDTO algoritmo);
+        Task<ListarAlgoritmoDTO> AtualizarAlgoritmoAsync(AtualizarAlgoritmoDTO algoritmo);
         Task<bool> DeletarAlgoritmoAsync(Guid idAlgoritmo);
-        Task<IEnumerable<ListarAlgoritmoDTO>> ObterTodosAlgoritmosPorTurmaAsync(Guid idTurma);
+        Task<IPagedList<ListarAlgoritmoDTO>> ObterTodosAlgoritmosPorTurmaAsync(Guid idTurma, int numPagina, int qtdePorPagina);
         Task<ListarAlgoritmoDTO> ObterAlgoritmoPorIdAsync(Guid idAlgoritmo);
-        Task<IEnumerable<ListarAlgoritmoDTO>> ObterAlgoritmosPorNivelDificuldadeAsync(Guid idTurma, int nivel);
-        Task<IEnumerable<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(Guid idTurma, LinguagensProgramacao linguagensProgramacao);
+        Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorNivelDificuldadeAsync(Guid idTurma, int nivel, int numPagina, int qtdePorPagina);
+        Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(Guid idTurma, LinguagensProgramacao linguagensProgramacao, int numPagina, int qtdePorPagina);
         Task<IQueryable<KeyValueModel>> ObterNiveisDificuldadeDisponiveisAsync(Guid idTurma);
         Task<IQueryable<KeyValueModel>> ObterLinguagensDisponiveisAsync(Guid idTurma);
     }

@@ -11,9 +11,9 @@ namespace ProgramAcad.Domain.Exceptions
             Response = response;
         }
 
-        public CompilingFailedException(string error, HttpStatusCode statusCode)
+        public CompilingFailedException(string error, string message) : base(message)
         {
-            Response = new ExpectedError(statusCode, "Compiling Error", error);
+            Response = new ExpectedError("Compiling Error", error);
         }
 
         public ExpectedError Response { get; private set; }

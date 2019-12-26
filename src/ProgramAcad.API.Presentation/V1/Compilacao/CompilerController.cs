@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProgramAcad.API.Presentation.Controllers;
 using ProgramAcad.Common.Constants;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Entities;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace ProgramAcad.API.Presentation.Controllers
+namespace ProgramAcad.API.Presentation.V1.Compilacao
 {
     [ApiController]
     [Route("api/compiler")]
@@ -42,7 +43,7 @@ namespace ProgramAcad.API.Presentation.Controllers
                     $"Houve um problema durante a requisição para compilação do código. Detalhes: {ex.Message}");
             }
 
-            return Response("Failed");
+            return Response(result: "Failed");
         }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace ProgramAcad.API.Presentation.Controllers
                     $"Houve um problema durante a requisição para compilação do código. Detalhes: {ex.Message}");
             }
 
-            return Response("Failed");
+            return Response(result: "Failed");
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace ProgramAcad.API.Presentation.Controllers
                     $"Houve um problema durante a requisição para compilação do código. Detalhes: {ex.Message}");
             }
 
-            return Response("Failed");
+            return Response(result: "Failed");
         }
 
         /// <summary>
@@ -111,7 +112,7 @@ namespace ProgramAcad.API.Presentation.Controllers
                     $"Houve um problema durante a requisição para compilação do código. Detalhes: {ex.Message}");
             }
 
-            return Response("Failed");
+            return Response(result: "Failed");
         }
     }
 }

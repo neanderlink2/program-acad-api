@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProgramAcad.Common.Extensions;
 using ProgramAcad.Common.Models;
+using ProgramAcad.Common.Models.PagedList;
 using ProgramAcad.Common.Notifications;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Tango.Types;
 
 namespace ProgramAcad.API.Presentation.Controllers
 {
@@ -13,21 +16,17 @@ namespace ProgramAcad.API.Presentation.Controllers
     public abstract class ApiBaseController : Controller
     {
         protected readonly DomainNotificationManager _notifyManager;
-
+    
         protected ApiBaseController(DomainNotificationManager notifyManager)
         {
             _notifyManager = notifyManager;
         }
 
+        private IActionResult MethodWhenSome(object obj) => IsValidResponse ? Ok(obj) : ResponseBadRequest();
+        private IActionResult MethodWhenNone() { return IsValidResponse ? NotFound() : ResponseBadRequest(); }
+        private IActionResult MethodWhenSome(string uri, object obj) => IsValidResponse ? Created(uri, obj) : ResponseBadRequest();
+
         protected bool IsValidResponse => !_notifyManager.HasNotifications();
-
-        protected new IActionResult Response<T>(T response = null) where T : class
-        {
-            if (IsValidResponse)
-                return Ok(GetOkResponse<T>(response));
-
-            return BadRequest(GetBadRequestResponse());
-        }
 
         protected virtual async Task Notify(string reason, string details)
         {
@@ -37,12 +36,59 @@ namespace ProgramAcad.API.Presentation.Controllers
         protected Response<T, object> GetOkResponse<T>(T data) where T : class =>
             new Response<T, object>(true, data, null);
 
-        protected Response<object, IEnumerable<ExpectedError>> GetBadRequestResponse()
+        protected IEnumerable<ExpectedError> GetBadRequestResponse()
         {
             var errors = _notifyManager.GetNotifications()
-                .Select(notif => new ExpectedError(HttpStatusCode.BadRequest, notif.Reason, notif.Details));
+                .Select(notif => new ExpectedError(notif.Reason, notif.Details));
 
-            return new Response<object, IEnumerable<ExpectedError>>(false, null, errors);
+            return errors;
+        }
+
+        protected IActionResult ResponseBadRequest()
+        {
+            return BadRequest(GetBadRequestResponse());
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        protected new IActionResult Response(Option<object> result)
+        {
+            return result.Match(MethodWhenSome, MethodWhenNone);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        protected IActionResult ResponseCreated(string uri, Option<object> result)
+        {
+            return result.Match(value => MethodWhenSome(uri, value), MethodWhenNone);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pagedList"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        protected new IActionResult Response<T>(IPagedList<T> pagedList)
+        {
+            return pagedList.Match(MethodWhenSome, MethodWhenNone);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        protected new IActionResult Response<T>(IEnumerable<T> enumerable)
+        {
+            return enumerable.Match(MethodWhenSome, MethodWhenNone);
         }
     }
 }
