@@ -48,7 +48,7 @@ namespace ProgramAcad.Services.Modules.Usuarios.Commands
             };
 
             await _authService.SetCustomUserClaimsAsync(createdUser.Uid, claims);
-            var usuarioEntity = new Usuario(usuario.Nickname, usuario.Email);
+            var usuarioEntity = new Usuario(usuario.Nickname, usuario.Email, false);
             usuarioEntity.SetNomeCompleto(usuario.NomeCompleto);
             await _usuarioRepository.AddAsync(usuarioEntity);
 

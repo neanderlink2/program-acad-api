@@ -2,13 +2,11 @@
 using FirebaseAdmin.Auth;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Contracts.Repositories;
-using ProgramAcad.Domain.Entities;
 using ProgramAcad.Services.Interfaces.Services;
 using ProgramAcad.Services.Modules.Common;
 using ProgramAcad.Services.Modules.Usuarios.Commands;
 using ProgramAcad.Services.Modules.Usuarios.DTOs;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProgramAcad.Services.Modules.Usuarios.Services
@@ -18,16 +16,22 @@ namespace ProgramAcad.Services.Modules.Usuarios.Services
         private readonly FirebaseAuth _authService;
         private readonly CriarUsuarioExternoCommand _criarUsuarioExterno;
         private readonly CriarUsuarioSenhaCommand _criarUsuarioSenha;
+        private readonly AtualizarUsuarioCommand _atualizarUsuario;
+        private readonly TrocarSenhaCommand _trocarSenha;
         private readonly IUsuarioRepository _usuarioRepository;
 
         public AuthAdminAppService(CriarUsuarioExternoCommand criarUsuarioExterno,
             CriarUsuarioSenhaCommand criarUsuarioSenha,
+            AtualizarUsuarioCommand atualizarUsuario,
+            TrocarSenhaCommand trocarSenha,
             IUsuarioRepository usuarioRepository,
             IMapper mapper, DomainNotificationManager notifyManager) : base(mapper, notifyManager)
         {
             _authService = FirebaseAuth.DefaultInstance;
             _criarUsuarioExterno = criarUsuarioExterno;
             _criarUsuarioSenha = criarUsuarioSenha;
+            _atualizarUsuario = atualizarUsuario;
+            _trocarSenha = trocarSenha;
             _usuarioRepository = usuarioRepository;
         }
 
@@ -37,9 +41,9 @@ namespace ProgramAcad.Services.Modules.Usuarios.Services
             throw new NotImplementedException();
         }
 
-        public Task ChangePasswordAsync(string email, string novaSenha)
+        public async Task ChangePasswordAsync(TrocaSenhaDTO trocaSenha)
         {
-            throw new NotImplementedException();
+            await _trocarSenha.ExecuteAsync(trocaSenha);
         }
 
         public Task ConfirmEmailAsync(string email)
@@ -61,9 +65,10 @@ namespace ProgramAcad.Services.Modules.Usuarios.Services
             return _mapper.Map<ListarUsuarioDTO>(usuarioSaved);
         }
 
-        public Task UpdateUserAsync(AtualizarUsuarioDTO usuario)
+        public async Task UpdateUserAsync(string email, AtualizarUsuarioDTO usuario)
         {
-            throw new NotImplementedException();
+            usuario.EmailBuscar = email;
+            await _atualizarUsuario.ExecuteAsync(usuario);
         }
     }
 }

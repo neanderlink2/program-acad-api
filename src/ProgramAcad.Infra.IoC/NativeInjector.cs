@@ -13,7 +13,6 @@ namespace ProgramAcad.Infra.IoC
     {
         public static ContainerBuilder RegisterDependencies(this ContainerBuilder builder)
         {
-
             builder
                .RegisterType<DomainNotificationManager>()
                .InstancePerLifetimeScope();

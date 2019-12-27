@@ -25,7 +25,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
         }
 
         [HttpGet("{idAlgoritmo}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<ListarAlgoritmoDTO, object>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ListarAlgoritmoDTO))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> GetById(Guid idAlgoritmo)
         {
@@ -34,7 +34,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
         }
 
         [HttpGet("turma/{idTurma}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<IEnumerable<ListarAlgoritmoDTO>, object>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<ListarAlgoritmoDTO>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> GetAllByTurma(Guid idTurma, int numPagina = 1, int qtdePorPagina = 6)
         {
@@ -43,7 +43,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
         }
 
         [HttpGet("turma/{idTurma}/filtro/linguagens")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<IEnumerable<KeyValueModel>, object>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<KeyValueModel>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> GetLinguagensDisponiveisFiltro(Guid idTurma)
         {
@@ -52,7 +52,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
         }
 
         [HttpGet("turma/{idTurma}/filtro/dificuldades")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<IEnumerable<KeyValueModel>, object>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<KeyValueModel>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> GetNiveisDificuldadesFiltro(Guid idTurma)
         {
@@ -71,7 +71,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
         }
 
         [HttpPut]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<string, object>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ListarAlgoritmoDTO))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> EditAlgoritmo(AtualizarAlgoritmoDTO algoritmo)
         {
@@ -80,12 +80,12 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
         }
 
         [HttpDelete("{idAlgoritmo}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Response<string, object>))]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> DeletarAlgoritmo(Guid idAlgoritmo)
         {
             await _algoritmoAppService.DeletarAlgoritmoAsync(idAlgoritmo);
-            return Response(new { });
+            return ResponseNoContent();
         }
     }
 }

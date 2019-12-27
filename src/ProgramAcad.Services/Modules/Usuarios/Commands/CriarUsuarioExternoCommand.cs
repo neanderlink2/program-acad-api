@@ -49,7 +49,7 @@ namespace ProgramAcad.Services.Modules.Usuarios.Commands
             await _authService.UpdateUserAsync(userRecord);
             await _authService.SetCustomUserClaimsAsync(userRecord.Uid, claims);
 
-            var usuarioEntity = new Usuario(usuario.Nickname, usuario.Email);
+            var usuarioEntity = new Usuario(usuario.Nickname, usuario.Email, true);
             usuarioEntity.SetNomeCompleto(usuario.NomeCompleto);
             await _usuarioRepository.AddAsync(usuarioEntity);
 

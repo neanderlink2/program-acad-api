@@ -27,8 +27,8 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
                 await NotifyAsync(NotifyReasons.NOT_FOUND, "Algoritmo não foi encontrado.");
                 return false;
             }
-
-            await _algoritmoRepository.DeleteAsync(algoritmo);
+            algoritmo.Deactivate();
+            await _algoritmoRepository.UpdateAsync(algoritmo);
             return await CommitChangesAsync();
         }
     }

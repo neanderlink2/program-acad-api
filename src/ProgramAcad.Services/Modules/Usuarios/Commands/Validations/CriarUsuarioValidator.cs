@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using ProgramAcad.Common.Extensions;
 using ProgramAcad.Domain.Contracts.Repositories;
 using ProgramAcad.Services.Modules.Usuarios.DTOs;
 
@@ -46,13 +47,7 @@ namespace ProgramAcad.Services.Modules.Usuarios.Commands.Validations
 
         private void ValidateSenha()
         {
-            RuleFor(x => x.Senha)
-                .NotNull().WithMessage("A senha é obrigatória.")
-                .Matches("[A-Z]").WithMessage("A senha deve conter uma letra maiúscula.")
-                .Matches("[a-z]").WithMessage("A senha deve conter uma letra minúscula.")
-                .Matches("[0-9]").WithMessage("A senha deve conter um número.")
-                .Matches("[!@#$%&*)(]").WithMessage("A senha deve conter um caracter especial.")
-                .MinimumLength(8).WithMessage("A senha deve possuir no mínimo 8 caracteres.");
+            RuleFor(x => x.Senha).Senha();
         }
 
         private void ValidateNickname()

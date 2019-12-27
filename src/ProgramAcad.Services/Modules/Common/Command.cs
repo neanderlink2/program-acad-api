@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProgramAcad.Services.Modules.Common
 {
-    public abstract class Command<TExecutionModel>
+    public abstract class Command<TCommandModel>
     {
         protected readonly DomainNotificationManager _notifyManager;
         protected readonly IUnitOfWork _unitOfWork;
@@ -35,6 +35,6 @@ namespace ProgramAcad.Services.Modules.Common
             return _unitOfWork.Commit();
         }
 
-        public abstract Task<bool> ExecuteAsync(TExecutionModel executionModel);
+        public abstract Task<bool> ExecuteAsync(TCommandModel commandModel);
     }
 }

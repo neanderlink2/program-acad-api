@@ -23,6 +23,7 @@ namespace ProgramAcad.Infra.Data.Mappings
             builder.Property(x => x.DataNascimento).HasColumnName("data_nascimento");
             builder.Property(x => x.DataCriacao).HasColumnName("data_criacao");
             builder.Property(x => x.IsAtivo).HasColumnName("bl_ativo");
+            builder.Property(x => x.IsUsuarioExterno).HasColumnName("bl_usuario_externo");
 
             builder.HasMany(x => x.AlgoritmosResolvidos)
                 .WithOne(x => x.Usuario)

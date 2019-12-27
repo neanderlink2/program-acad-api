@@ -18,6 +18,7 @@ namespace ProgramAcad.Infra.Data.Mappings
             builder.Property(x => x.HtmlDescricao).HasColumnName("html_descricao");
             builder.Property(x => x.DataCriacao).HasColumnName("data_criacao");
             builder.Property(x => x.IdNivelDificuldade).HasColumnName("id_nivel_dificuldade");
+            builder.Property(x => x.IsAtivo).HasColumnName("bl_ativo");
 
             builder.HasOne(x => x.NivelDificuldade)
                 .WithMany(x => x.AlgoritmosDesseNivel)

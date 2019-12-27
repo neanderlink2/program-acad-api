@@ -7,8 +7,8 @@ namespace ProgramAcad.Services.Interfaces.Services
     {
         Task<ListarUsuarioDTO> RegisterUserPasswordAsync(CadastrarUsuarioDTO usuario);
         Task<ListarUsuarioDTO> RegisterUserExternalAsync(CadastrarUsuarioDTO usuario);
-        Task UpdateUserAsync(AtualizarUsuarioDTO usuario);
-        Task ChangePasswordAsync(string email, string novaSenha);
+        Task UpdateUserAsync(string email, AtualizarUsuarioDTO usuario);
+        Task ChangePasswordAsync(TrocaSenhaDTO trocaSenha);
         Task ChangeEmailAsync(string emailAntigo, string novoEmail);
         Task ConfirmEmailAsync(string email);
     }

@@ -2,14 +2,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProgramAcad.API.Presentation.Controllers;
+using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Services.Interfaces.Services;
 using ProgramAcad.Services.Modules.Usuarios.DTOs;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ProgramAcad.API.Presentation.V1.Autenticacao
 {
@@ -26,6 +27,8 @@ namespace ProgramAcad.API.Presentation.V1.Autenticacao
 
         [HttpPost]
         [AllowAnonymous]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ListarUsuarioDTO))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> CreateAccount(CadastrarUsuarioDTO usuario)
         {
             if (User.Identity.IsAuthenticated)
@@ -33,10 +36,29 @@ namespace ProgramAcad.API.Presentation.V1.Autenticacao
                 usuario.Email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
                 usuario.NomeCompleto = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name).Value;
                 var usuarioCriado = await _authAdminAppService.RegisterUserExternalAsync(usuario);
-                return Response(usuario);
+                return Response(usuarioCriado);
             }
             var usuarioCriadoSenha = await _authAdminAppService.RegisterUserPasswordAsync(usuario);
-            return Response(usuario);
+            return Response(usuarioCriadoSenha);
+        }
+
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
+        public async Task<IActionResult> UpdateUser(AtualizarUsuarioDTO usuario)
+        {
+            var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+            await _authAdminAppService.UpdateUserAsync(email, usuario);
+            return ResponseNoContent();
+        }
+
+        [HttpPatch("password")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
+        public async Task<IActionResult> ChangePassword(TrocaSenhaDTO trocaSenha)
+        {
+            await _authAdminAppService.ChangePasswordAsync(trocaSenha);
+            return ResponseNoContent();
         }
     }
 }

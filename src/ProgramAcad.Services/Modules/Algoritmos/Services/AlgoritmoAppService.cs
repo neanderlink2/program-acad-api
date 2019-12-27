@@ -35,14 +35,14 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
         public async Task<ListarAlgoritmoDTO> AtualizarAlgoritmoAsync(AtualizarAlgoritmoDTO algoritmo)
         {
             await _atualizarAlgoritmo.ExecuteAsync(algoritmo);
-            var alg = await _algoritmoRepository.GetSingleAsync(x => x.Id == algoritmo.Id);
+            var alg = await _algoritmoRepository.GetSingleAsync(x => x.IsAtivo && x.Id == algoritmo.Id);
             return _mapper.Map<ListarAlgoritmoDTO>(alg);
         }
 
         public async Task<ListarAlgoritmoDTO> CriarAlgoritmoAsync(CriarAlgoritmoDTO algoritmo)
         {
             await _criarAlgoritmo.ExecuteAsync(algoritmo);
-            var alg = await _algoritmoRepository.GetSingleAsync(x => x.IdTurma == algoritmo.IdTurma &&
+            var alg = await _algoritmoRepository.GetSingleAsync(x => x.IsAtivo && x.IdTurma == algoritmo.IdTurma &&
                 x.Titulo.ToUpper() == algoritmo.Titulo.ToUpper() && x.NivelDificuldade.Nivel == algoritmo.NivelDificuldade &&
                 x.HtmlDescricao == algoritmo.HtmlDescricao);
             return _mapper.Map<ListarAlgoritmoDTO>(alg);
@@ -55,7 +55,8 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
 
         public async Task<ListarAlgoritmoDTO> ObterAlgoritmoPorIdAsync(Guid idAlgoritmo)
         {
-            var algoritmo = await _algoritmoRepository.GetSingleAsync(x => x.Id == idAlgoritmo, "LinguagensPermitidas", "NivelDificuldade", "TurmaPertencente");
+            var algoritmo = await _algoritmoRepository.GetSingleAsync(x => x.IsAtivo && x.Id == idAlgoritmo, 
+                "LinguagensPermitidas", "NivelDificuldade", "TurmaPertencente");
             if (algoritmo == null)
             {
                 await NotifyAsync(NotifyReasons.NOT_FOUND, "Algoritmo não foi encontrado.");
@@ -80,7 +81,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                     Titulo = x.Titulo,
                     LinguagensDisponiveis = x.LinguagensPermitidas.Select(x => x.IdLinguagem.GetDescription())
                 },
-                condicao: x => x.IdTurma == idTurma && x.LinguagensPermitidas.Any(l => l.IdLinguagem == linguagensProgramacao),
+                condicao: x => x.IsAtivo && x.IdTurma == idTurma && x.LinguagensPermitidas.Any(l => l.IdLinguagem == linguagensProgramacao),
                 ordenacao: x => x.OrderBy(a => a.Titulo),
                 numPagina: numPagina,
                 tamanhoPagina: qtdePorPagina,
@@ -106,7 +107,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                     Titulo = x.Titulo,
                     LinguagensDisponiveis = x.LinguagensPermitidas.Select(x => x.IdLinguagem.GetDescription())
                 },
-                condicao: x => x.IdTurma == idTurma && x.IdNivelDificuldade == nivel,
+                condicao: x => x.IsAtivo && x.IdTurma == idTurma && x.IdNivelDificuldade == nivel,
                 ordenacao: x => x.OrderBy(a => a.Titulo),
                 numPagina: numPagina,
                 tamanhoPagina: qtdePorPagina,
@@ -132,7 +133,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                     Titulo = x.Titulo,
                     LinguagensDisponiveis = x.LinguagensPermitidas.Select(x => x.IdLinguagem.GetDescription())
                 },
-                condicao: x => x.IdTurma == idTurma,
+                condicao: x => x.IsAtivo && x.IdTurma == idTurma,
                 ordenacao: x => x.OrderBy(a => a.Titulo),
                 numPagina: numPagina,
                 tamanhoPagina: qtdePorPagina,

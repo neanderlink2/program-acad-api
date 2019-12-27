@@ -22,6 +22,7 @@ namespace ProgramAcad.API.Presentation.Controllers
             _notifyManager = notifyManager;
         }
 
+        private IActionResult MethodWhenSome() => IsValidResponse ? NoContent() : ResponseBadRequest();
         private IActionResult MethodWhenSome(object obj) => IsValidResponse ? Ok(obj) : ResponseBadRequest();
         private IActionResult MethodWhenNone() { return IsValidResponse ? NotFound() : ResponseBadRequest(); }
         private IActionResult MethodWhenSome(string uri, object obj) => IsValidResponse ? Created(uri, obj) : ResponseBadRequest();
@@ -65,6 +66,16 @@ namespace ProgramAcad.API.Presentation.Controllers
         protected IActionResult ResponseCreated(string uri, Option<object> result)
         {
             return result.Match(value => MethodWhenSome(uri, value), MethodWhenNone);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        protected IActionResult ResponseNoContent()
+        {
+            return MethodWhenSome();
         }
 
         /// <summary>
