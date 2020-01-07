@@ -52,7 +52,7 @@ namespace ProgramAcad.Services.Modules.Usuarios.Commands
             usuarioEntity.SetNomeCompleto(usuario.NomeCompleto);
             await _usuarioRepository.AddAsync(usuarioEntity);
 
-            return true;
+            return await CommitChangesAsync();
         }
     }
 }

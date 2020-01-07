@@ -14,6 +14,7 @@ using ProgramAcad.API.Presentation.Helpers;
 using ProgramAcad.Infra.Data.Workers;
 using ProgramAcad.Infra.IoC;
 using ProgramAcad.Services.Modules.Algoritmos.MappingProfile;
+using ProgramAcad.Services.Modules.Usuarios.MappingProfile;
 using System;
 
 namespace ProgramAcad.API.Presentation
@@ -122,6 +123,7 @@ namespace ProgramAcad.API.Presentation
             services.AddAutoMapper(configs =>
             {
                 configs.AddProfile(new AlgoritmoMappingProfile());
+                configs.AddProfile(new UsuarioMappingProfile());
             }, AppDomain.CurrentDomain.GetAssemblies());
         }
     }
