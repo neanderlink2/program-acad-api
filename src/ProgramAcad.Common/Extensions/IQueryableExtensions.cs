@@ -8,18 +8,20 @@ namespace ProgramAcad.Common.Extensions
 {
     public static class IQueryableExtensions
     {
-        public static IPagedList<T> ToPagedList<T>(this IQueryable<T> query, int itemsPerPage, int pageNum)
+        public static IPagedList<T> ToPagedList<T>(this IQueryable<T> query, int itemsPerPage, int pageIndex)
         {
-            var list = query.Skip(pageNum <= 1 ? 0 : itemsPerPage * pageNum - 1).Take(itemsPerPage);
+            var totalItems = query.Count();
+            var list = query.Skip(pageIndex <= 0 ? 0 : itemsPerPage * pageIndex).Take(itemsPerPage);
 
-            var totalPages = (int)Math.Ceiling((double)(query.Count() / itemsPerPage));
+            var totalPages = Math.Ceiling((double)totalItems / itemsPerPage);
             return new PagedList<T>()
             {
-                Page = pageNum,
-                Items = list,
-                TotalPages = totalPages < 1 ? 1 : totalPages,
-                HasNextPage = pageNum < totalPages,
-                HasPreviousPage = pageNum > 1
+                PageIndex = pageIndex,
+                Items = list.ToList(),
+                TotalItems = totalItems,
+                TotalPages = totalPages <= 0 ? 1 : (int)totalPages,
+                HasNextPage = pageIndex + 1 < totalPages,
+                HasPreviousPage = pageIndex > 0
             };
         }
 

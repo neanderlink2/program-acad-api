@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 namespace ProgramAcad.API.Presentation.V1.Algoritmos
 {
     [ApiController]
-    [Route("api/algoritmos")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/algoritmos")]
     public class AlgoritmosController : ApiBaseController
     {
         private readonly IAlgoritmoAppService _algoritmoAppService;

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\ProgramAcad.Domain\ProgramAcad.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Modules\Turmas\MappingProfile\" />
+  </ItemGroup>
+
 </Project>

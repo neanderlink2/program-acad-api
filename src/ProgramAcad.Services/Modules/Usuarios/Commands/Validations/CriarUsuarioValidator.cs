@@ -17,7 +17,7 @@ namespace ProgramAcad.Services.Modules.Usuarios.Commands.Validations
 
         public ValidationResult ValidateForExternal(CadastrarUsuarioDTO usuario)
         {
-            ValidateNickname();
+            ValidateNickname();            
             return Validate(usuario);
         }
 
@@ -42,7 +42,9 @@ namespace ProgramAcad.Services.Modules.Usuarios.Commands.Validations
             RuleFor(x => x.Email)
                 .NotNull().WithMessage("O e-mail é obrigatório.")
                 .EmailAddress().WithMessage("O e-mail digitado é inválido.")
-                .MinimumLength(3).WithMessage("O e-mail deve conter no mínimo 3 caracteres.");
+                .MinimumLength(3).WithMessage("O e-mail deve conter no mínimo 3 caracteres.")
+                .MustAsync(async (email, cancel) => !await _usuarioRepository.AnyAsync(u => u.Email.ToUpper() == email.ToUpper()))
+                    .WithMessage("O e-mail já está sendo utilizado."); ;
         }
 
         private void ValidateSenha()
@@ -54,6 +56,7 @@ namespace ProgramAcad.Services.Modules.Usuarios.Commands.Validations
         {
             RuleFor(x => x.Nickname)
                 .NotNull().WithMessage("O nickname é obrigatório.")
+                .NotEmpty().WithMessage("O nickname é obrigatório.")
                 .MustAsync(async (nickname, cancel) => !await _usuarioRepository.AnyAsync(u => u.Nickname == nickname))
                     .WithMessage("O nickname já está sendo utilizado.");
         }

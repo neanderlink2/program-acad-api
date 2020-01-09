@@ -12,6 +12,17 @@ namespace ProgramAcad.API.Presentation.Helpers
     {
         public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
         {
+            services.AddApiVersioning(
+                  options =>
+                  {
+                      options.ReportApiVersions = true;
+                  });
+            services.AddVersionedApiExplorer(
+                options =>
+                {
+                    options.GroupNameFormat = "'v'VVV";
+                    options.SubstituteApiVersionInUrl = true;
+                });
             services.AddSwaggerGen(configs =>
             {
                 configs.SwaggerDoc("v1", new OpenApiInfo { Title = "ProgramAcad Web API", Version = "v1" });

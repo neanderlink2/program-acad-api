@@ -83,7 +83,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                 },
                 condicao: x => x.IsAtivo && x.IdTurma == idTurma && x.LinguagensPermitidas.Any(l => l.IdLinguagem == linguagensProgramacao),
                 ordenacao: x => x.OrderBy(a => a.Titulo),
-                numPagina: numPagina,
+                indicePagina: numPagina,
                 tamanhoPagina: qtdePorPagina,
                 isTracking: false,
                 includes: new[] { "NivelDificuldade", "TurmaPertencente", "LinguagensPermitidas" });
@@ -109,7 +109,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                 },
                 condicao: x => x.IsAtivo && x.IdTurma == idTurma && x.IdNivelDificuldade == nivel,
                 ordenacao: x => x.OrderBy(a => a.Titulo),
-                numPagina: numPagina,
+                indicePagina: numPagina,
                 tamanhoPagina: qtdePorPagina,
                 isTracking: false,
                 includes: new[] { "NivelDificuldade", "TurmaPertencente", "LinguagensPermitidas" });
@@ -135,7 +135,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                 },
                 condicao: x => x.IsAtivo && x.IdTurma == idTurma,
                 ordenacao: x => x.OrderBy(a => a.Titulo),
-                numPagina: numPagina,
+                indicePagina: numPagina,
                 tamanhoPagina: qtdePorPagina,
                 isTracking: false,
                 includes: new[] { "NivelDificuldade", "TurmaPertencente", "LinguagensPermitidas" });

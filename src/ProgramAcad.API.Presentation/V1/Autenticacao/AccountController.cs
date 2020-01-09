@@ -14,7 +14,9 @@ using System.Threading.Tasks;
 
 namespace ProgramAcad.API.Presentation.V1.Autenticacao
 {
-    [Route("api/account")]
+    [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/account")]
     public class AccountController : ApiBaseController
     {
         private readonly IAuthAdminAppService _authAdminAppService;

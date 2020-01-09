@@ -93,7 +93,7 @@ namespace ProgramAcad.Infra.Data.Repository
         public IPagedList<TResultado> GetPagedList<TResultado>(Expression<Func<TModel, TResultado>> selecao,
                                                                Expression<Func<TModel, bool>> condicao = null,
                                                                Func<IQueryable<TModel>, IOrderedQueryable<TModel>> ordenacao = null,
-                                                               int numPagina = 1,
+                                                               int indicePagina = 0,
                                                                int tamanhoPagina = 20,
                                                                bool isTracking = false,
                                                                params string[] includes) where TResultado : class
@@ -119,13 +119,13 @@ namespace ProgramAcad.Infra.Data.Repository
                 query = ordenacao(query);
             }
             var result = query.Select(selecao);
-            return result.ToPagedList(tamanhoPagina, numPagina);
+            return result.ToPagedList(tamanhoPagina, indicePagina);
         }
 
         public Task<IPagedList<TResultado>> GetPagedListAsync<TResultado>(Expression<Func<TModel, TResultado>> selecao,
                                                                       Expression<Func<TModel, bool>> condicao = null,
                                                                       Func<IQueryable<TModel>, IOrderedQueryable<TModel>> ordenacao = null,
-                                                                      int numPagina = 1,
+                                                                      int indicePagina = 0,
                                                                       int tamanhoPagina = 20,
                                                                       bool isTracking = false,
                                                                       params string[] includes) where TResultado : class
@@ -151,7 +151,7 @@ namespace ProgramAcad.Infra.Data.Repository
                 query = ordenacao(query);
             }
             var result = query.Select(selecao);
-            return Task.Run(() => result.ToPagedList(tamanhoPagina, numPagina));
+            return Task.Run(() => result.ToPagedList(tamanhoPagina, indicePagina));
         }
 
         public TModel GetSingle(Expression<Func<TModel, bool>> where)

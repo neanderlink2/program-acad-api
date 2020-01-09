@@ -32,8 +32,8 @@ namespace ProgramAcad.Common.Extensions
             var totalPages = (int)Math.Ceiling((double)(query.Count() / itemsPerPage));
             return new PagedList<T>()
             {
-                Page = pageNum,
-                Items = list.AsQueryable(),
+                PageIndex = pageNum,
+                Items = list.ToList(),
                 TotalPages = totalPages < 1 ? 1 : totalPages,
                 HasNextPage = pageNum < totalPages,
                 HasPreviousPage = pageNum > 1

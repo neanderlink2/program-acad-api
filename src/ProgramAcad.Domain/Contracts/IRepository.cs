@@ -22,18 +22,18 @@ namespace ProgramAcad.Domain.Contracts
 
         IPagedList<TResultado> GetPagedList<TResultado>(Expression<Func<TModel, TResultado>> selecao,
                                                     Expression<Func<TModel, bool>> condicao = null,
-                                                    Func<IQueryable<TModel>, IOrderedQueryable<TModel>> ordenacao = null,                                                    
-                                                    int numPagina = 1,
+                                                    Func<IQueryable<TModel>, IOrderedQueryable<TModel>> ordenacao = null,
+                                                    int indicePagina = 0,
                                                     int tamanhoPagina = 20,
                                                     bool isTracking = false,
                                                     params string[] includes) where TResultado : class;
         Task<IPagedList<TResultado>> GetPagedListAsync<TResultado>(Expression<Func<TModel, TResultado>> selecao,
                                                     Expression<Func<TModel, bool>> condicao = null,
-                                                    Func<IQueryable<TModel>, IOrderedQueryable<TModel>> ordenacao = null,                                                    
-                                                    int numPagina = 1,
+                                                    Func<IQueryable<TModel>, IOrderedQueryable<TModel>> ordenacao = null,
+                                                    int indicePagina = 0,
                                                     int tamanhoPagina = 20,
                                                     bool isTracking = false,
-                                                    params string[] includes) where TResultado : class;        
+                                                    params string[] includes) where TResultado : class;
 
         IQueryable<TModel> GetMany(Expression<Func<TModel, bool>> condicao);
         Task<IQueryable<TModel>> GetManyAsync(Expression<Func<TModel, bool>> condicao);

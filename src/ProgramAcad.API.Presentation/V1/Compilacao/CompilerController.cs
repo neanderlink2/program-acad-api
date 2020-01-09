@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 namespace ProgramAcad.API.Presentation.V1.Compilacao
 {
     [ApiController]
-    [Route("api/compiler")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/compiler")]
     [Produces("application/json")]
     public class CompilerController : ApiBaseController
     {
