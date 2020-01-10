@@ -7,8 +7,8 @@ namespace ProgramAcad.Common.Models.PagedList
         int TotalPages { get; set; }
         int PageIndex { get; set; }
         IList<T> Items { get; set; }
-        public int TotalItems { get; set; }
-        public bool HasNextPage { get; set; }
-        public bool HasPreviousPage { get; set; }
+        int TotalItems { get; set; }
+        bool HasNextPage { get; set; }
+        bool HasPreviousPage { get; set; }
     }
 }

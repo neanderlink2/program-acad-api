@@ -79,7 +79,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                     IsResolvido = false,
                     NomeTurma = x.TurmaPertencente.Nome,
                     Titulo = x.Titulo,
-                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(x => x.IdLinguagem.GetDescription())
+                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(l => l.IdLinguagem.GetDescription())
                 },
                 condicao: x => x.IsAtivo && x.IdTurma == idTurma && x.LinguagensPermitidas.Any(l => l.IdLinguagem == linguagensProgramacao),
                 ordenacao: x => x.OrderBy(a => a.Titulo),
@@ -105,7 +105,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                     IsResolvido = false,
                     NomeTurma = x.TurmaPertencente.Nome,
                     Titulo = x.Titulo,
-                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(x => x.IdLinguagem.GetDescription())
+                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(l => l.IdLinguagem.GetDescription())
                 },
                 condicao: x => x.IsAtivo && x.IdTurma == idTurma && x.IdNivelDificuldade == nivel,
                 ordenacao: x => x.OrderBy(a => a.Titulo),
@@ -131,7 +131,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                     IsResolvido = false,
                     NomeTurma = x.TurmaPertencente.Nome,
                     Titulo = x.Titulo,
-                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(x => x.IdLinguagem.GetDescription())
+                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(l => l.IdLinguagem.GetDescription())
                 },
                 condicao: x => x.IsAtivo && x.IdTurma == idTurma,
                 ordenacao: x => x.OrderBy(a => a.Titulo),
