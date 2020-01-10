@@ -14,10 +14,13 @@ namespace ProgramAcad.Services.Interfaces.Services
         Task<ListarAlgoritmoDTO> CriarAlgoritmoAsync(CriarAlgoritmoDTO algoritmo);
         Task<ListarAlgoritmoDTO> AtualizarAlgoritmoAsync(AtualizarAlgoritmoDTO algoritmo);
         Task<bool> DeletarAlgoritmoAsync(Guid idAlgoritmo);
-        Task<IPagedList<ListarAlgoritmoDTO>> ObterTodosAlgoritmosPorTurmaAsync(Guid idTurma, int numPagina, int qtdePorPagina);
+        Task<IPagedList<ListarAlgoritmoDTO>> ObterTodosAlgoritmosPorTurmaAsync(Guid idTurma, string emailUsuario, string busca, int numPagina, int qtdePorPagina,
+            ColunasOrdenacaoAlgoritmo colunasOrdenacao, string direcaoOrdenacao);
         Task<ListarAlgoritmoDTO> ObterAlgoritmoPorIdAsync(Guid idAlgoritmo);
-        Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorNivelDificuldadeAsync(Guid idTurma, int nivel, int numPagina, int qtdePorPagina);
-        Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(Guid idTurma, LinguagensProgramacao linguagensProgramacao, int numPagina, int qtdePorPagina);
+        Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorNivelDificuldadeAsync(int nivel, Guid idTurma, string emailUsuario, string busca, int numPagina, int qtdePorPagina,
+            ColunasOrdenacaoAlgoritmo colunasOrdenacao, string direcaoOrdenacao);
+        Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(LinguagensProgramacao linguagem, Guid idTurma, string emailUsuario, string busca, int numPagina, int qtdePorPagina,
+            ColunasOrdenacaoAlgoritmo colunasOrdenacao, string direcaoOrdenacao);
         Task<IQueryable<KeyValueModel>> ObterNiveisDificuldadeDisponiveisAsync(Guid idTurma);
         Task<IQueryable<KeyValueModel>> ObterLinguagensDisponiveisAsync(Guid idTurma);
     }

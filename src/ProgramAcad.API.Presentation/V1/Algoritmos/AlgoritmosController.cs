@@ -7,7 +7,9 @@ using ProgramAcad.Services.Interfaces.Services;
 using ProgramAcad.Services.Modules.Algoritmos.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ProgramAcad.API.Presentation.V1.Algoritmos
@@ -37,9 +39,35 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
         [HttpGet("turma/{idTurma}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<ListarAlgoritmoDTO>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
-        public async Task<IActionResult> GetAllByTurma(Guid idTurma, int numPagina = 1, int qtdePorPagina = 6)
+        public async Task<IActionResult> GetAllByTurma(Guid idTurma, string busca, int numPagina = 0, int qtdePorPagina = 6,
+            ColunasOrdenacaoAlgoritmo colunasOrdenacao = ColunasOrdenacaoAlgoritmo.Nome, string direcaoOrdenacao = "asc")
         {
-            var algoritmos = await _algoritmoAppService.ObterTodosAlgoritmosPorTurmaAsync(idTurma, numPagina, qtdePorPagina);
+            var emailUsuario = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "";
+            var algoritmos = await _algoritmoAppService.ObterTodosAlgoritmosPorTurmaAsync(idTurma,
+                emailUsuario,
+                busca,
+                numPagina,
+                qtdePorPagina,
+                colunasOrdenacao,
+                direcaoOrdenacao);
+            return Response(algoritmos);
+        }
+
+        [HttpGet("turma/{idTurma}/nivel/{nivel}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<ListarAlgoritmoDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
+        public async Task<IActionResult> GetAllByTurma(int nivel, Guid idTurma, string busca, int numPagina = 0, int qtdePorPagina = 6,
+            ColunasOrdenacaoAlgoritmo colunasOrdenacao = ColunasOrdenacaoAlgoritmo.Nome, string direcaoOrdenacao = "asc")
+        {
+            var emailUsuario = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "";
+            var algoritmos = await _algoritmoAppService.ObterAlgoritmosPorNivelDificuldadeAsync(nivel,
+                idTurma,
+                emailUsuario,
+                busca,
+                numPagina,
+                qtdePorPagina,
+                colunasOrdenacao,
+                direcaoOrdenacao);
             return Response(algoritmos);
         }
 
