@@ -11,7 +11,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.MappingProfile
         public AlgoritmoMappingProfile()
         {
             CreateMap<Algoritmo, ListarAlgoritmoDTO>()
-                .ForMember(x => x.NivelDificuldade, opt => opt.MapFrom(x => x.NivelDificuldade.Nivel))
+                .ForMember(x => x.NivelDificuldade, opt => opt.MapFrom(x => x.NivelDificuldade.Descricao))
                 .ForMember(x => x.LinguagensDisponiveis, opt => opt.MapFrom(x => x.LinguagensPermitidas.Select(l => l.IdLinguagem.GetDescription())))
                 .ForMember(x => x.IdTurmaPertencente, opt => opt.MapFrom(x => x.IdTurma))
                 .ForMember(x => x.NomeTurma, opt => opt.MapFrom(x => x.TurmaPertencente.Nome));
