@@ -21,16 +21,19 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
     {
         private readonly IAlgoritmoRepository _algoritmoRepository;
         private readonly IAlgoritmoResolvidoRepository _algoritmoResolvidoRepository;
+        private readonly ITurmaUsuarioRepository _turmaUsuarioRepository;
         private readonly CriarAlgoritmoCommand _criarAlgoritmo;
         private readonly AtualizarAlgoritmoCommand _atualizarAlgoritmo;
         private readonly DeletarAlgoritmoCommand _deletarAlgoritmo;
 
         public AlgoritmoAppService(IAlgoritmoRepository algoritmoRepository, IAlgoritmoResolvidoRepository algoritmoResolvidoRepository,
+            ITurmaUsuarioRepository turmaUsuarioRepository,
             CriarAlgoritmoCommand criarAlgoritmoCommand, AtualizarAlgoritmoCommand atualizarAlgoritmoCommand,
             DeletarAlgoritmoCommand deletarAlgoritmoCommand, IMapper mapper, DomainNotificationManager notifyManager) : base(mapper, notifyManager)
         {
             _algoritmoRepository = algoritmoRepository;
             _algoritmoResolvidoRepository = algoritmoResolvidoRepository;
+            _turmaUsuarioRepository = turmaUsuarioRepository;
             _criarAlgoritmo = criarAlgoritmoCommand;
             _atualizarAlgoritmo = atualizarAlgoritmoCommand;
             _deletarAlgoritmo = deletarAlgoritmoCommand;
@@ -76,7 +79,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             var algoritmos = await _algoritmoRepository.GetPagedListAsync(
                 selecao: x => new ListarAlgoritmoDTO()
                 {
-                    NivelDificuldade = x.NivelDificuldade.Nivel,
+                    NivelDificuldade = x.NivelDificuldade.Descricao,
                     HtmlDescricao = x.HtmlDescricao,
                     Id = x.Id,
                     IdNivelDificuldade = x.IdNivelDificuldade,
@@ -99,6 +102,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             foreach (var algoritmo in algoritmos.Items)
             {
                 algoritmo.IsResolvido = await _algoritmoResolvidoRepository.AnyAsync(x => x.IdAlgoritmo == algoritmo.Id && x.Usuario.Email.ToUpper() == emailUsuario.ToUpper());
+                algoritmo.PontosNessaTurma = _turmaUsuarioRepository.GetSingle(x => x.IdTurma == algoritmo.IdTurmaPertencente && x.Estudante.Email.ToUpper() == emailUsuario.ToUpper()).PontosUsuario;
                 listaAtualizada.Add(algoritmo);
             }
             algoritmos.Items = listaAtualizada;
@@ -112,7 +116,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             var algoritmos = await _algoritmoRepository.GetPagedListAsync(
                 selecao: x => new ListarAlgoritmoDTO()
                 {
-                    NivelDificuldade = x.NivelDificuldade.Nivel,
+                    NivelDificuldade = x.NivelDificuldade.Descricao,
                     HtmlDescricao = x.HtmlDescricao,
                     Id = x.Id,
                     IdNivelDificuldade = x.IdNivelDificuldade,
@@ -135,6 +139,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             foreach (var algoritmo in algoritmos.Items)
             {
                 algoritmo.IsResolvido = await _algoritmoResolvidoRepository.AnyAsync(x => x.IdAlgoritmo == algoritmo.Id && x.Usuario.Email.ToUpper() == emailUsuario.ToUpper());
+                algoritmo.PontosNessaTurma = _turmaUsuarioRepository.GetSingle(x => x.IdTurma == algoritmo.IdTurmaPertencente && x.Estudante.Email.ToUpper() == emailUsuario.ToUpper()).PontosUsuario;
                 listaAtualizada.Add(algoritmo);
             }
             algoritmos.Items = listaAtualizada;
@@ -148,14 +153,14 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             var lista = await _algoritmoRepository.GetPagedListAsync(
                 selecao: x => new ListarAlgoritmoDTO()
                 {
-                    NivelDificuldade = x.NivelDificuldade.Nivel,
+                    NivelDificuldade = x.NivelDificuldade.Descricao,
                     HtmlDescricao = x.HtmlDescricao,
                     Id = x.Id,
                     IdNivelDificuldade = x.IdNivelDificuldade,
                     IdTurmaPertencente = x.IdTurma,
                     IsResolvido = false,
                     NomeTurma = x.TurmaPertencente.Nome,
-                    Titulo = x.Titulo,
+                    Titulo = x.Titulo,                    
                     LinguagensDisponiveis = x.LinguagensPermitidas.Select(l => l.IdLinguagem.GetDescription())
                 },
                 condicao: algoritmo => (algoritmo.IsAtivo && algoritmo.IdTurma == idTurma) && (string.IsNullOrEmpty(term) || algoritmo.Titulo.ToUpper().Contains(term) ||
@@ -171,6 +176,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             foreach (var algoritmo in lista.Items)
             {
                 algoritmo.IsResolvido = await _algoritmoResolvidoRepository.AnyAsync(x => x.IdAlgoritmo == algoritmo.Id && x.Usuario.Email.ToUpper() == emailUsuario.ToUpper());
+                algoritmo.PontosNessaTurma = _turmaUsuarioRepository.GetSingle(x => x.IdTurma == algoritmo.IdTurmaPertencente && x.Estudante.Email.ToUpper() == emailUsuario.ToUpper()).PontosUsuario;
                 listaAtualizada.Add(algoritmo);
             }
             lista.Items = listaAtualizada;

@@ -90,9 +90,6 @@ namespace ProgramAcad.API.Presentation.V1.Compilacao
                 var execucoesSalvas = await _casoTesteAppService.SalvarExecucoesCasoTeste(testes);
                 var rota = Url.Content("~/api/v1/account/concluidos/algoritmo");
                 return ResponseCreated(rota, execucoesSalvas);
-            }
-
-            return ResponseBadRequest();
         }
 
         private IEnumerable<ExecucaoCasoTesteDTO> TestarCasos(string codigo, LinguagensProgramacao linguagem, Guid idUsuario, IEnumerable<CasoTeste> casoTestes)
