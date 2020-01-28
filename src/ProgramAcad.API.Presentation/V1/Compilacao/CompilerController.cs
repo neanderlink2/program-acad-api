@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProgramAcad.API.Presentation.Controllers;
 using ProgramAcad.Common.Constants;
+using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Entities;
 using ProgramAcad.Domain.Exceptions;
 using ProgramAcad.Services.Interfaces.Clients;
+using ProgramAcad.Services.Modules.Compiling.Models;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -31,6 +35,8 @@ namespace ProgramAcad.API.Presentation.V1.Compilacao
         /// <param name="inputs"></param>
         /// <returns></returns>
         [HttpPost("csharp")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CompilerResponse))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> CompileCSharp([FromForm]string code, [FromForm]string[] inputs)
         {
             try
@@ -54,6 +60,8 @@ namespace ProgramAcad.API.Presentation.V1.Compilacao
         /// <param name="inputs"></param>
         /// <returns></returns>
         [HttpPost("java")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CompilerResponse))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> CompileJava([FromForm]string code, [FromForm]string[] inputs)
         {
             try
@@ -77,11 +85,38 @@ namespace ProgramAcad.API.Presentation.V1.Compilacao
         /// <param name="inputs"></param>
         /// <returns></returns>
         [HttpPost("python")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CompilerResponse))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> CompilePython([FromForm]string code, [FromForm]string[] inputs)
         {
             try
             {
                 var output = await _compilerApiClient.Compile(code, inputs, LinguagensProgramacao.Python);
+                return Response(output);
+            }
+            catch (CompilingFailedException ex)
+            {
+                await Notify(NotifyReasons.BAD_GATEWAY,
+                    $"Houve um problema durante a requisição para compilação do código. Detalhes: {ex.Message}");
+            }
+
+            return Response(result: "Failed");
+        }
+
+        /// <summary>
+        /// Compila o código para JavaScript (Node JS) e retorna a saída.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        [HttpPost("nodejs")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CompilerResponse))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
+        public async Task<IActionResult> CompileJavascript([FromForm]string code, [FromForm]string[] inputs)
+        {
+            try
+            {
+                var output = await _compilerApiClient.Compile(code, inputs, LinguagensProgramacao.JavaScript);
                 return Response(output);
             }
             catch (CompilingFailedException ex)
@@ -100,6 +135,8 @@ namespace ProgramAcad.API.Presentation.V1.Compilacao
         /// <param name="inputs"></param>
         /// <returns></returns>
         [HttpPost("c")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CompilerResponse))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> CompileC([FromForm]string code, [FromForm]string[] inputs)
         {
             try

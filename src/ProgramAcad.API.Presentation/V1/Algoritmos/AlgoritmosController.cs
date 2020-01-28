@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProgramAcad.API.Presentation.Controllers;
 using ProgramAcad.Common.Models;
+using ProgramAcad.Common.Models.PagedList;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Models;
 using ProgramAcad.Services.Interfaces.Services;
@@ -37,7 +38,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
         }
 
         [HttpGet("turma/{idTurma}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<ListarAlgoritmoDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedList<ListarAlgoritmoDTO>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> GetAllByTurma(Guid idTurma, string busca, int numPagina = 0, int qtdePorPagina = 6,
             ColunasOrdenacaoAlgoritmo colunasOrdenacao = ColunasOrdenacaoAlgoritmo.Nome, string direcaoOrdenacao = "asc")
@@ -54,7 +55,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
         }
 
         [HttpGet("turma/{idTurma}/nivel/{nivel}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<ListarAlgoritmoDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedList<ListarAlgoritmoDTO>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> GetAllByTurma(int nivel, Guid idTurma, string busca, int numPagina = 0, int qtdePorPagina = 6,
             ColunasOrdenacaoAlgoritmo colunasOrdenacao = ColunasOrdenacaoAlgoritmo.Nome, string direcaoOrdenacao = "asc")
