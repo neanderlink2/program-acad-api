@@ -10,8 +10,9 @@ namespace ProgramAcad.Infra.Data.Mappings
         {
             builder.ToTable("TB_TESTE_PRIMEIRA_EXECUCAO");
 
-            builder.HasKey(x => new { x.IdCasoTeste, x.IdUsuario });
+            builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.Id).HasColumnName("id");
             builder.Property(x => x.IdCasoTeste).HasColumnName("id_caso_teste");
             builder.Property(x => x.IdUsuario).HasColumnName("id_usuario");
             builder.Property(x => x.IdLinguagem).HasColumnName("id_linguagem_programacao");

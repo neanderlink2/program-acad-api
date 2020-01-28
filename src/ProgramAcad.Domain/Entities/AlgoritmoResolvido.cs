@@ -7,12 +7,14 @@ namespace ProgramAcad.Domain.Entities
         public AlgoritmoResolvido(Guid idUsuario, Guid idAlgoritmo, LinguagensProgramacao idLinguagem, 
             DateTime dataConclusao)
         {
+            Id = Guid.NewGuid();
             IdUsuario = idUsuario;
             IdAlgoritmo = idAlgoritmo;
             IdLinguagem = idLinguagem;
             DataConclusao = dataConclusao;
         }
 
+        public Guid Id { get; protected set; }
         public Guid IdUsuario { get; protected set; }
         public Guid IdAlgoritmo { get; protected set; }
         public LinguagensProgramacao IdLinguagem { get; protected set; }

@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProgramAcad.API.Presentation.Controllers;
+using ProgramAcad.Common.Extensions;
 using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Notifications;
+using ProgramAcad.Domain.Contracts.Repositories;
 using ProgramAcad.Services.Interfaces.Services;
+using ProgramAcad.Services.Modules.CasosTeste.DTOs;
 using ProgramAcad.Services.Modules.Usuarios.DTOs;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +28,28 @@ namespace ProgramAcad.API.Presentation.V1.Autenticacao
              : base(notifyManager)
         {
             _authAdminAppService = authAdminAppService;
+        }
+
+        [HttpGet("concluidos/algoritmo")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ListarAlgoritmoResolvidoDTO[]))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
+        public IActionResult GetAlgoritmosResolvidos([FromServices]IAlgoritmoResolvidoRepository algoritmoResolvidoRepository)
+        {
+            var emailUsuario = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value.ToUpper();
+            var algoritmosResolvidos = algoritmoResolvidoRepository
+                .GetMany(x => x.Usuario.Email.ToUpper() == emailUsuario)
+                .Select(x => new ListarAlgoritmoResolvidoDTO
+                {
+                    
+                    DataConclusao =x.DataConclusao,
+                    LinguagemUtilizada = x.IdLinguagem.GetDescription(),
+                    NomeAlgoritmo = x.Algoritmo.Titulo,
+                    DescricaoNivelDificuldade = x.Algoritmo.NivelDificuldade.Descricao,
+                    NomeTurma = x.Algoritmo.TurmaPertencente.Nome,
+                    NomeUsuario = x.Usuario.NomeCompleto
+                });
+
+            return Response(algoritmosResolvidos);
         }
 
         [HttpPost]

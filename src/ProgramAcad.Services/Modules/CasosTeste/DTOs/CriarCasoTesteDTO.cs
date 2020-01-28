@@ -1,9 +1,11 @@
-﻿namespace ProgramAcad.Services.Modules.CasosTeste.DTOs
+﻿using System.Collections.Generic;
+
+namespace ProgramAcad.Services.Modules.CasosTeste.DTOs
 {
     public class CriarCasoTesteDTO
     {
-        public string EntradaEsperada { get; set; }
-        public string SaidaEsperada { get; set; }
+        public IEnumerable<string> EntradaEsperada { get; set; }
+        public IEnumerable<string> SaidaEsperada { get; set; }
         public int TempoMaximoExecucao { get; set; }
     }
 }

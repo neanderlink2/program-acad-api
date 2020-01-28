@@ -71,6 +71,18 @@ namespace ProgramAcad.API.Presentation.Controllers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        protected IActionResult ResponseCreated<T>(string uri, IEnumerable<T> result)
+        {
+            return result.Match(value => MethodWhenSome(uri, value), MethodWhenNone);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         [ApiExplorerSettings(IgnoreApi = true)]
         protected IActionResult ResponseNoContent()
@@ -98,6 +110,18 @@ namespace ProgramAcad.API.Presentation.Controllers
         /// <returns></returns>
         [ApiExplorerSettings(IgnoreApi = true)]
         protected new IActionResult Response<T>(IEnumerable<T> enumerable)
+        {
+            return enumerable.Match(MethodWhenSome, MethodWhenNone);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerator"></param>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        protected new IActionResult Response<T>(IEnumerator<T> enumerable)
         {
             return enumerable.Match(MethodWhenSome, MethodWhenNone);
         }

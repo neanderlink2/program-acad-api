@@ -7,6 +7,7 @@ namespace ProgramAcad.Domain.Entities
         public ExecucaoTeste(Guid idCasoTeste, Guid idUsuario, LinguagensProgramacao idLinguagem, 
             bool sucesso, int tempoExecucao)
         {
+            Id = Guid.NewGuid();
             IdCasoTeste = idCasoTeste;
             IdUsuario = idUsuario;
             IdLinguagem = idLinguagem;
@@ -14,6 +15,7 @@ namespace ProgramAcad.Domain.Entities
             TempoExecucao = tempoExecucao;
         }
 
+        public Guid Id { get; protected set; }
         public Guid IdCasoTeste { get; protected set; }
         public Guid IdUsuario { get; protected set; }
         public LinguagensProgramacao IdLinguagem { get; protected set; }
