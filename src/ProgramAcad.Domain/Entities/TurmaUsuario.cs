@@ -27,5 +27,10 @@ namespace ProgramAcad.Domain.Entities
         {
             PontosUsuario += pontos;
         }
+
+        public void AceitarInscricao()
+        {
+            Aceito = true;
+        }
     }
 }

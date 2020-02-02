@@ -15,18 +15,21 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
 {
     public class CriarAlgoritmoCommand : Command<CriarAlgoritmoDTO>
     {
+        private readonly CriarAlgoritmoValidator _validation;
         private readonly IAlgoritmoRepository _algoritmoRepository;
         private readonly INivelDificuldadeRepository _nivelDificuldadeRepository;        
 
-        public CriarAlgoritmoCommand(IAlgoritmoRepository algoritmoRepository, INivelDificuldadeRepository nivelDificuldadeRepository, DomainNotificationManager notifyManager, IUnitOfWork unitOfWork) : base(notifyManager, unitOfWork)
+        public CriarAlgoritmoCommand(CriarAlgoritmoValidator validation,
+            IAlgoritmoRepository algoritmoRepository, INivelDificuldadeRepository nivelDificuldadeRepository, DomainNotificationManager notifyManager, IUnitOfWork unitOfWork) : base(notifyManager, unitOfWork)
         {
+            _validation = validation;
             _algoritmoRepository = algoritmoRepository;
             _nivelDificuldadeRepository = nivelDificuldadeRepository;
         }
 
         public override async Task<bool> ExecuteAsync(CriarAlgoritmoDTO algoritmo)
         {
-            var validacoes = new CriarAlgoritmoValidator(_nivelDificuldadeRepository).Validate(algoritmo);
+            var validacoes = _validation.Validate(algoritmo);
             await NotifyValidationErrorsAsync(validacoes);
 
             if (_notifyManager.HasNotifications()) return false;

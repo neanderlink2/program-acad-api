@@ -14,19 +14,22 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
         private readonly IAlgoritmoRepository _algoritmoRepository;
         private readonly INivelDificuldadeRepository _nivelDificuldadeRepository;
         private readonly ICasoTesteRepository _casoTesteRepository;
+        private readonly AtualizarAlgoritmoValidator _validation;
 
         public AtualizarAlgoritmoCommand(IAlgoritmoRepository algoritmoRepository, INivelDificuldadeRepository nivelDificuldadeRepository,
-            ICasoTesteRepository casoTesteRepository, DomainNotificationManager notifyManager, IUnitOfWork unitOfWork) : base(notifyManager, unitOfWork)
+            ICasoTesteRepository casoTesteRepository, AtualizarAlgoritmoValidator validation,
+            DomainNotificationManager notifyManager, IUnitOfWork unitOfWork) : base(notifyManager, unitOfWork)
         {
             _algoritmoRepository = algoritmoRepository;
             _nivelDificuldadeRepository = nivelDificuldadeRepository;
             _casoTesteRepository = casoTesteRepository;
+            _validation = validation;
         }
 
         public override async Task<bool> ExecuteAsync(AtualizarAlgoritmoDTO algoritmo)
         {
-            var validacoes = new AtualizarAlgoritmoValidator(_algoritmoRepository, _nivelDificuldadeRepository).Validate(algoritmo);
-            await NotifyValidationErrorsAsync(validacoes);
+            var result = _validation.Validate(algoritmo);
+            await NotifyValidationErrorsAsync(result);
 
             if (_notifyManager.HasNotifications()) return false;
 

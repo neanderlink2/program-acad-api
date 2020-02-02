@@ -5,6 +5,7 @@ using ProgramAcad.Common.Models.PagedList;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Services.Interfaces.Services;
 using ProgramAcad.Services.Modules.Turmas.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -34,6 +35,30 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
             var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "";
             var response = await _turmaAppService.GetTurmasPagedByUsuario(email, busca, pageIndex, totalItems, colunaOrdenacao, direcaoOrdenacao);
             return Response(response);
+        }
+
+        [HttpPost("{idTurma}/acesso")]
+        public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery]DateTime dataEnvio)
+        {
+            var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "";
+            await _turmaAppService.SolicitarAcesso(new SolicitarAcessoTurmaDTO()
+            {
+                EmailUsuario = email,
+                DataIngresso = dataEnvio,
+                IdTurma = idTurma
+            });
+            return ResponseNoContent();
+        }
+
+        [HttpPut("{idTurma}/acesso")]
+        public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery]string emailUsuario)
+        {
+            await _turmaAppService.AceitarSolicitacaoAcesso(new SolicitarAcessoTurmaDTO()
+            {
+                EmailUsuario = emailUsuario,
+                IdTurma = idTurma
+            });
+            return ResponseNoContent();
         }
     }
 }

@@ -1,5 +1,6 @@
 using Autofac;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using ProgramAcad.API.Presentation.Helpers;
 using ProgramAcad.Infra.Data.Workers;
 using ProgramAcad.Infra.IoC;
+using ProgramAcad.Services.Modules.Algoritmos.Commands.Validations;
 using ProgramAcad.Services.Modules.Algoritmos.MappingProfile;
 using ProgramAcad.Services.Modules.Usuarios.MappingProfile;
 using System;
@@ -53,7 +55,10 @@ namespace ProgramAcad.API.Presentation
                                  .RequireAuthenticatedUser()
                                  .Build();
                 configs.Filters.Add(new AuthorizeFilter(policy));
-            });
+            })
+                .AddFluentValidation(config =>
+                    config.RegisterValidatorsFromAssemblyContaining<AtualizarAlgoritmoValidator>());
+
             services.AddDbContext<ProgramAcadDataContext>(options =>
             {
                 options.UseSqlServer(ConfigurationRoot.GetConnectionString("ProgramAcadDatabase"));
@@ -96,7 +101,7 @@ namespace ProgramAcad.API.Presentation
         {
             //if (env.IsDevelopment())
             //{
-                app.UseDeveloperExceptionPage();
+            app.UseDeveloperExceptionPage();
             //}
             app.UseCors("AllowAnyOrigin");
             app.UseSwagger();

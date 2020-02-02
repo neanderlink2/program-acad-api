@@ -5,8 +5,8 @@ using ProgramAcad.Domain.Contracts.Repositories;
 using ProgramAcad.Domain.Entities;
 using ProgramAcad.Services.Interfaces.Services;
 using ProgramAcad.Services.Modules.Common;
+using ProgramAcad.Services.Modules.Turmas.Commands;
 using ProgramAcad.Services.Modules.Turmas.DTOs;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,15 +15,26 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
 {
     public class TurmaAppService : AppService, ITurmaAppService
     {
+        private readonly SolicitarAcessoTurmaCommand _solicitarAcesso;
+        private readonly AceitarSolicitacaoAcessoCommand _aceitarSolicitacaoAcesso;
         private readonly ITurmaRepository _turmaRepository;
         private readonly ITurmaUsuarioRepository _turmaUsuarioRepository;
 
-        public TurmaAppService(ITurmaRepository turmaRepository, ITurmaUsuarioRepository turmaUsuarioRepository,
+        public TurmaAppService(SolicitarAcessoTurmaCommand solicitarAcesso,
+            AceitarSolicitacaoAcessoCommand aceitarSolicitacaoAcesso,
+            ITurmaRepository turmaRepository, ITurmaUsuarioRepository turmaUsuarioRepository,
             IMapper mapper, DomainNotificationManager notifyManager)
             : base(mapper, notifyManager)
         {
+            this._solicitarAcesso = solicitarAcesso;
+            this._aceitarSolicitacaoAcesso = aceitarSolicitacaoAcesso;
             _turmaRepository = turmaRepository;
             _turmaUsuarioRepository = turmaUsuarioRepository;
+        }
+
+        public async Task AceitarSolicitacaoAcesso(SolicitarAcessoTurmaDTO acesso)
+        {
+            await _aceitarSolicitacaoAcesso.ExecuteAsync(acesso);
         }
 
         public async Task<IPagedList<ListarTurmaDTO>> GetTurmasPaged(string busca, int pageIndex, int totalItems,
@@ -81,6 +92,11 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
             }
             lista.Items = listaAtualizada;
             return lista;
+        }
+
+        public async Task SolicitarAcesso(SolicitarAcessoTurmaDTO acesso)
+        {
+            await _solicitarAcesso.ExecuteAsync(acesso);
         }
 
         private IOrderedQueryable<Turma> OrdenarListaTurmas(IQueryable<Turma> source, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao)
