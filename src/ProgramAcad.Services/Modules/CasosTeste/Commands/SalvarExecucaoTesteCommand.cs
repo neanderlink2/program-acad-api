@@ -21,7 +21,7 @@ namespace ProgramAcad.Services.Modules.CasosTeste.Commands
 
         public override async Task<bool> ExecuteAsync(ExecucaoCasoTesteDTO execucaoTeste)
         {
-            var execucao = new ExecucaoTeste(execucaoTeste.IdCasoTeste, execucaoTeste.IdUsuario, execucaoTeste.LinguagemUtilizada.GetLinguagemProgramacaoFromCompiler(), execucaoTeste.Sucesso, (int)execucaoTeste.TempoExecucao.Value);
+            var execucao = new ExecucaoTeste(execucaoTeste.IdCasoTeste, execucaoTeste.IdUsuario, execucaoTeste.LinguagemUtilizada.GetLinguagemProgramacaoFromCompiler(), execucaoTeste.Sucesso, execucaoTeste.TempoExecucao.Value);
             await _execucaoTesteRepository.AddAsync(execucao);
 
             return await CommitChangesAsync();

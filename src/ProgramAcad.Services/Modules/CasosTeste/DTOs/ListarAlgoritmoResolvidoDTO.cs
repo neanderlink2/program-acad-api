@@ -1,5 +1,5 @@
-﻿using ProgramAcad.Domain.Entities;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ProgramAcad.Services.Modules.CasosTeste.DTOs
 {
@@ -11,5 +11,6 @@ namespace ProgramAcad.Services.Modules.CasosTeste.DTOs
         public string NomeTurma { get; set; }
         public string LinguagemUtilizada { get; set; }
         public DateTime DataConclusao { get; set; }
+        public IEnumerable<ExecucaoCasoTesteDTO> Testes { get; set; }
     }
 }

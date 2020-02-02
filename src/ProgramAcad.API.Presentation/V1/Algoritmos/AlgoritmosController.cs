@@ -47,7 +47,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
             var algoritmos = await _algoritmoAppService.ObterTodosAlgoritmosPorTurmaAsync(idTurma,
                 emailUsuario,
                 busca,
-                numPagina,
+                numPagina, 
                 qtdePorPagina,
                 colunasOrdenacao,
                 direcaoOrdenacao);

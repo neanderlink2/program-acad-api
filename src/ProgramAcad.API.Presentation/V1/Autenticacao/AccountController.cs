@@ -1,14 +1,17 @@
 ﻿using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProgramAcad.API.Presentation.Controllers;
 using ProgramAcad.Common.Extensions;
 using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Contracts.Repositories;
+using ProgramAcad.Domain.Entities;
 using ProgramAcad.Services.Interfaces.Services;
 using ProgramAcad.Services.Modules.CasosTeste.DTOs;
 using ProgramAcad.Services.Modules.Usuarios.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -38,15 +41,27 @@ namespace ProgramAcad.API.Presentation.V1.Autenticacao
             var emailUsuario = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value.ToUpper();
             var algoritmosResolvidos = algoritmoResolvidoRepository
                 .GetMany(x => x.Usuario.Email.ToUpper() == emailUsuario)
+                .Include(x => x.Algoritmo)
+                    .ThenInclude(x => x.CasosDeTeste)
+                        .ThenInclude((CasoTeste c) => c.ExecucoesTeste)
                 .Select(x => new ListarAlgoritmoResolvidoDTO
                 {
-                    
-                    DataConclusao =x.DataConclusao,
+                    DataConclusao = x.DataConclusao,
                     LinguagemUtilizada = x.IdLinguagem.GetDescription(),
                     NomeAlgoritmo = x.Algoritmo.Titulo,
                     DescricaoNivelDificuldade = x.Algoritmo.NivelDificuldade.Descricao,
                     NomeTurma = x.Algoritmo.TurmaPertencente.Nome,
-                    NomeUsuario = x.Usuario.NomeCompleto
+                    NomeUsuario = x.Usuario.NomeCompleto,
+                    Testes = x.Algoritmo.CasosDeTeste.SelectMany(c => c.ExecucoesTeste)
+                        .Select(c => new ExecucaoCasoTesteDTO
+                        {
+                            IdAlgoritmo = x.IdAlgoritmo,
+                            IdCasoTeste = c.IdCasoTeste,
+                            IdUsuario = c.IdUsuario,
+                            LinguagemUtilizada = x.IdLinguagem.GetDescription(),
+                            Sucesso = c.Sucesso,
+                            TempoExecucao = Math.Round(c.TempoExecucao, 2)
+                        })
                 });
 
             return Response(algoritmosResolvidos);
