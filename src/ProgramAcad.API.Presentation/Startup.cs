@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -57,7 +58,14 @@ namespace ProgramAcad.API.Presentation
                 configs.Filters.Add(new AuthorizeFilter(policy));
             })
                 .AddFluentValidation(config =>
-                    config.RegisterValidatorsFromAssemblyContaining<AtualizarAlgoritmoValidator>());
+                {                    
+                    config.RegisterValidatorsFromAssemblyContaining<AtualizarAlgoritmoValidator>();
+                });
+
+            services.Configure<ApiBehaviorOptions>(configs =>
+            {
+                configs.SuppressModelStateInvalidFilter = true;
+            });
 
             services.AddDbContext<ProgramAcadDataContext>(options =>
             {

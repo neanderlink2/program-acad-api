@@ -1,4 +1,5 @@
 ﻿using FirebaseAdmin.Auth;
+using ProgramAcad.Common.Extensions;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Contracts.Repositories;
 using ProgramAcad.Domain.Models;
@@ -37,12 +38,27 @@ namespace ProgramAcad.Services.Modules.Usuarios.Commands
                 Uid = userRecord.Uid
             };
 
-            var claims = new Dictionary<string, object> {
-                { ProgramAcadClaimTypes.Cep, usuario.Cep },
-                { ProgramAcadClaimTypes.Cpf, usuario.Cpf },
-                { ProgramAcadClaimTypes.DataNascimento, usuario.DataNascimento?.ToString("yyyy-MM-dd") },
-                { ProgramAcadClaimTypes.Sexo, usuario.Sexo }
-            };
+            var claims = new Dictionary<string, object>();
+
+            if (usuario.Cep.HasValue())
+            {
+                claims.Add(ProgramAcadClaimTypes.Cep, usuario.Cep);
+            }
+
+            if (usuario.Cpf.HasValue())
+            {
+                claims.Add(ProgramAcadClaimTypes.Cpf, usuario.Cpf);
+            }
+
+            if (usuario.DataNascimento.HasValue)
+            {
+                claims.Add(ProgramAcadClaimTypes.DataNascimento, usuario.DataNascimento?.ToString("yyyy-MM-dd"));
+            }
+
+            if (usuario.Sexo.HasValue())
+            {
+                claims.Add(ProgramAcadClaimTypes.Sexo, usuario.Sexo);
+            }
 
             await _authService.UpdateUserAsync(userArgs);
             await _authService.SetCustomUserClaimsAsync(userRecord.Uid, claims);

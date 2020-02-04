@@ -4,7 +4,7 @@ namespace ProgramAcad.Common.Extensions
 {
     public static class FluentValidationExtensions
     {
-        public static IRuleBuilder<T, string> Senha<T>(this IRuleBuilder<T, string> rule)
+        public static IRuleBuilderOptions<T, string> Senha<T>(this IRuleBuilder<T, string> rule)
         {
             return rule
                 .NotNull().WithMessage("A senha é obrigatória.")
@@ -15,7 +15,7 @@ namespace ProgramAcad.Common.Extensions
                 .MinimumLength(8).WithMessage("A senha deve possuir no mínimo 8 caracteres.");
         }
 
-        public static IRuleBuilder<T, string> Sexo<T>(this IRuleBuilder<T, string> rule)
+        public static IRuleBuilderOptions<T, string> Sexo<T>(this IRuleBuilder<T, string> rule)
         {
             return rule
                 .MinimumLength(1).WithMessage("O sexo deve possuir no mínimo 1 caracter.")
@@ -24,7 +24,7 @@ namespace ProgramAcad.Common.Extensions
                     .WithMessage("Sexo não identificado.");
         }
 
-        public static IRuleBuilder<T, string> Cep<T>(this IRuleBuilder<T, string> rule)
+        public static IRuleBuilderOptions<T, string> Cep<T>(this IRuleBuilder<T, string> rule)
         {
             return rule
                 .MinimumLength(9).WithMessage("O CEP deve possuir no mínimo 9 caracter.")
@@ -33,7 +33,7 @@ namespace ProgramAcad.Common.Extensions
                     .WithMessage(x => $"O CEP '{x}' não é válido.");
         }
 
-        public static IRuleBuilder<T, string> Cpf<T>(this IRuleBuilder<T, string> rule)
+        public static IRuleBuilderOptions<T, string> Cpf<T>(this IRuleBuilder<T, string> rule)
         {
             return rule
                 .MinimumLength(11).WithMessage("O CPF deve possuir no mínimo 11 caracter.")

@@ -12,5 +12,8 @@ namespace ProgramAcad.Services.Modules.CasosTeste.DTOs
         public string LinguagemUtilizada { get; set; }
         public DateTime DataConclusao { get; set; }
         public IEnumerable<ExecucaoCasoTesteDTO> Testes { get; set; }
+
+        public int PontosRecebidos { get; set; }
+        public double PercentAcertos { get; set; }
     }
 }

@@ -42,11 +42,15 @@ namespace ProgramAcad.API.Presentation.V1.Autenticacao
             var algoritmosResolvidos = algoritmoResolvidoRepository
                 .GetMany(x => x.Usuario.Email.ToUpper() == emailUsuario)
                 .Include(x => x.Algoritmo)
+                    .ThenInclude(x => x.NivelDificuldade)
+                .Include(x => x.Algoritmo)
                     .ThenInclude(x => x.CasosDeTeste)
                         .ThenInclude((CasoTeste c) => c.ExecucoesTeste)
                 .Select(x => new ListarAlgoritmoResolvidoDTO
                 {
                     DataConclusao = x.DataConclusao,
+                    PontosRecebidos = x.Algoritmo.NivelDificuldade.PontosReceber,
+                    //PercentAcertos = (x.Algoritmo.CasosDeTeste.SelectMany(c => c.ExecucoesTeste).Count(x => x.Sucesso) / x.Algoritmo.CasosDeTeste.SelectMany(c => c.ExecucoesTeste).Count()) * 100,
                     LinguagemUtilizada = x.IdLinguagem.GetDescription(),
                     NomeAlgoritmo = x.Algoritmo.Titulo,
                     DescricaoNivelDificuldade = x.Algoritmo.NivelDificuldade.Descricao,
