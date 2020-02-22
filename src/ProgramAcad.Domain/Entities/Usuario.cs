@@ -5,12 +5,12 @@ namespace ProgramAcad.Domain.Entities
 {
     public class Usuario
     {
-        public Usuario(string nickname, string email, bool isUsuarioExterno)
+        public Usuario(string nickname, string email, bool isUsuarioExterno, string role)
         {
             Id = Guid.NewGuid();
             DataCriacao = DateTime.Now;
             IsAtivo = true;
-            Role = "ESTUDANTE";
+            Role = role;
 
             Email = email;
             Nickname = nickname;
@@ -47,6 +47,11 @@ namespace ProgramAcad.Domain.Entities
         public void SetNomeCompleto(string nomeCompleto)
         {
             NomeCompleto = nomeCompleto;
+        }
+
+        public void UpdateRole(string role)
+        {
+            Role = role;
         }
 
         public void UpdateEmail(string email)

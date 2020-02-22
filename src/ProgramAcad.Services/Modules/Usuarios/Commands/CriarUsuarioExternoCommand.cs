@@ -42,14 +42,14 @@ namespace ProgramAcad.Services.Modules.Usuarios.Commands
             };
 
             var claims = new Dictionary<string, object> {
-                { ProgramAcadClaimTypes.Role, "ESTUDANTE" },
+                { ProgramAcadClaimTypes.Role, usuario.Role },
                 { ProgramAcadClaimTypes.Nickname, usuario.Nickname }
             };
 
             await _authService.UpdateUserAsync(userRecord);
             await _authService.SetCustomUserClaimsAsync(userRecord.Uid, claims);
 
-            var usuarioEntity = new Usuario(usuario.Nickname, usuario.Email, true);
+            var usuarioEntity = new Usuario(usuario.Nickname, usuario.Email, true, usuario.Role);
             usuarioEntity.SetNomeCompleto(usuario.NomeCompleto);
             await _usuarioRepository.AddAsync(usuarioEntity);
 
