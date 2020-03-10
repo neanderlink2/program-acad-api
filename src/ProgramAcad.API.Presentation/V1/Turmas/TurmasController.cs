@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProgramAcad.API.Presentation.Controllers;
 using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Models.PagedList;
@@ -35,6 +36,21 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
             var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "";
             var response = await _turmaAppService.GetTurmasPagedByUsuario(email, busca, pageIndex, totalItems, colunaOrdenacao, direcaoOrdenacao);
             return Response(response);
+        }
+
+        [Authorize]
+        [HttpGet("instrutor")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedList<ListarTurmaDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
+        public async Task<IActionResult> GetTurmasByInstrutorPaged(string busca = "", int pageIndex = 0, int totalItems = 4, TurmaColunasOrdenacao colunaOrdenacao = TurmaColunasOrdenacao.Nome, string direcaoOrdenacao = "asc")
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "";
+                var response = await _turmaAppService.GetTurmasPagedByInstrutor(email, busca, pageIndex, totalItems, colunaOrdenacao, direcaoOrdenacao);
+                return Response(response);
+            }
+            return Unauthorized();
         }
 
         [HttpPost("{idTurma}/acesso")]
