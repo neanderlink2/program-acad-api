@@ -88,6 +88,15 @@ namespace ProgramAcad.API.Presentation.V1.Autenticacao
             return Response(usuarioCriadoSenha);
         }
 
+        [HttpPut("{idUsuario}/instrutor")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ListarUsuarioDTO))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
+        public async Task<IActionResult> CreateTeacherAccount(Guid idUsuario)
+        {
+            var usuarioAtualizado = await _authAdminAppService.UpgradeToTeacherAccount(idUsuario);
+            return Response(usuarioAtualizado);
+        }
+
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using ProgramAcad.API.Presentation.Helpers;
 using ProgramAcad.Infra.Data.Workers;
 using ProgramAcad.Infra.IoC;
@@ -60,6 +61,11 @@ namespace ProgramAcad.API.Presentation
                 .AddFluentValidation(config =>
                 {                    
                     config.RegisterValidatorsFromAssemblyContaining<AtualizarAlgoritmoValidator>();
+                })
+                .AddNewtonsoftJson(config =>
+                {
+                    config.UseMemberCasing();
+                    config.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 });
 
             services.Configure<ApiBehaviorOptions>(configs =>
