@@ -34,30 +34,63 @@ namespace ProgramAcad.Services.Modules.Usuarios.Commands
 
             var userArgs = new UserRecordArgs
             {
-                DisplayName = usuario.NomeCompleto,
+                //DisplayName = usuario.NomeCompleto,
                 Uid = userRecord.Uid
             };
 
-            var claims = new Dictionary<string, object>();
+            var claims = new Dictionary<string, object>(userRecord.CustomClaims);
+
+            if (usuario.NomeCompleto.HasValue())
+            {
+                userArgs.DisplayName = usuario.NomeCompleto;
+            }
 
             if (usuario.Cep.HasValue())
             {
-                claims.Add(ProgramAcadClaimTypes.Cep, usuario.Cep);
+                if (claims.ContainsKey(ProgramAcadClaimTypes.Cep))
+                {
+                    claims[ProgramAcadClaimTypes.Cep] = usuario.Cep;
+                }
+                else
+                {
+                    claims.Add(ProgramAcadClaimTypes.Cep, usuario.Cep);
+                }
             }
 
             if (usuario.Cpf.HasValue())
             {
-                claims.Add(ProgramAcadClaimTypes.Cpf, usuario.Cpf);
+                if (claims.ContainsKey(ProgramAcadClaimTypes.Cpf))
+                {
+                    claims[ProgramAcadClaimTypes.Cpf] = usuario.Cpf;
+                }
+                else
+                {
+                    claims.Add(ProgramAcadClaimTypes.Cpf, usuario.Cpf);
+                }
             }
 
             if (usuario.DataNascimento.HasValue)
             {
-                claims.Add(ProgramAcadClaimTypes.DataNascimento, usuario.DataNascimento?.ToString("yyyy-MM-dd"));
+                if (claims.ContainsKey(ProgramAcadClaimTypes.DataNascimento))
+                {
+                    claims[ProgramAcadClaimTypes.DataNascimento] = usuario.DataNascimento?.ToString("yyyy-MM-dd");
+                }
+                else
+                {
+                    claims.Add(ProgramAcadClaimTypes.DataNascimento, usuario.DataNascimento?.ToString("yyyy-MM-dd"));
+                }
             }
 
             if (usuario.Sexo.HasValue())
             {
-                claims.Add(ProgramAcadClaimTypes.Sexo, usuario.Sexo);
+                if (claims.ContainsKey(ProgramAcadClaimTypes.Sexo))
+                {
+                    claims[ProgramAcadClaimTypes.Sexo] = usuario.Sexo;
+                }
+                else
+                {
+                    claims.Add(ProgramAcadClaimTypes.Sexo, usuario.Sexo);
+                }
             }
 
             await _authService.UpdateUserAsync(userArgs);
