@@ -48,7 +48,7 @@ namespace ProgramAcad.PoC.Compiler
                             Console.Write(i + "", "");
                         }
                     }
-                }", new string[] {  }, LinguagensProgramacao.CSharp);
+                }", new string[] {  }, LinguagemProgramacao.CSharp.Id);
         }
 
         private static async Task<CompilerResponse> CompilarJava(CompilerApiClient client)
@@ -62,14 +62,14 @@ namespace ProgramAcad.PoC.Compiler
                             System.out.print(i + "", "");
                         }
                     }
-                }", Array.Empty<string>(), LinguagensProgramacao.Java);
+                }", Array.Empty<string>(), LinguagemProgramacao.Java.Id);
         }
 
         private static async Task<CompilerResponse> CompilarPython(CompilerApiClient client)
         {
             return await client.Compile(@"print('Ola mundo');
 for x in range(100):
-    print('{}, '.format(x), end = '');", new string[] {  }, LinguagensProgramacao.Python);
+    print('{}, '.format(x), end = '');", new string[] {  }, LinguagemProgramacao.Python.Id);
         }
     }
 }

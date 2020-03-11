@@ -20,12 +20,12 @@ namespace ProgramAcad.UnitTests
 
             services.AddDbContext<ProgramAcadDataContext>(options =>
             {
-                var dbName = Guid.NewGuid().ToString();
-                options.UseInMemoryDatabase(dbName);
-            });
-            
+                //var dbName = Guid.NewGuid().ToString();
+                options.UseInMemoryDatabase("db");
+            }, ServiceLifetime.Singleton);
+
             builder.RegisterDependencies();
-            
+
             builder.Populate(services);
             var provider = new AutofacServiceProvider(builder.Build());
             EnsureSeedData<ProgramAcadDataContext>(provider).Wait();
@@ -40,10 +40,22 @@ namespace ProgramAcad.UnitTests
             var context = scope.ServiceProvider.GetRequiredService<TContext>();
             await SeedEnumeration<TContext, LinguagemProgramacao>(context);
             await SeedEnumeration<TContext, NivelDificuldade>(context);
+            await SeedInstrutorAdministrador(context);
         }
 
-        private static async Task SeedEnumeration<TContext, TEnumeration>(TContext context) 
-            where TContext : DbContext 
+        private static async Task SeedInstrutorAdministrador<TContext>(TContext context)
+            where TContext : DbContext
+        {
+            var usuarioSet = context.Set<Usuario>();
+            if (!await usuarioSet.AnyAsync(x => x.Nickname == "admin"))
+            {
+                var admin = new Usuario("admin", "admin@admin.com", false, "INSTRUTOR");
+                usuarioSet.Add(admin);
+            }
+        }
+
+        private static async Task SeedEnumeration<TContext, TEnumeration>(TContext context)
+            where TContext : DbContext
             where TEnumeration : Enumeration
         {
             var linguagensSet = context.Set<TEnumeration>();
