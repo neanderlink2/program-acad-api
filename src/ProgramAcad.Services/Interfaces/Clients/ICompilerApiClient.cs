@@ -7,6 +7,6 @@ namespace ProgramAcad.Services.Interfaces.Clients
 {
     public interface ICompilerApiClient
     {
-        Task<CompilerResponse> Compile(string code, IEnumerable<string> entradas, LinguagensProgramacao language);
+        Task<CompilerResponse> Compile(string code, IEnumerable<string> entradas, int language);
     }
 }

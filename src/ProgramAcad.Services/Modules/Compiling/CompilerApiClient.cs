@@ -25,9 +25,9 @@ namespace ProgramAcad.Services.Modules.Compiling
             _configs = configs.Value;
         }
 
-        public async Task<CompilerResponse> Compile(string code, IEnumerable<string> entradas, LinguagensProgramacao language)
+        public async Task<CompilerResponse> Compile(string code, IEnumerable<string> entradas, int language)
         {
-            var options = CreateCompilerOptions(code, language, entradas.Any() ? entradas.Aggregate((prev, str) => $"{prev}\n{str}") : "");
+            var options = CreateCompilerOptions(code, Enumeration.GetAll<LinguagemProgramacao>().FirstOrDefault(x => x.Id == language), entradas.Any() ? entradas.Aggregate((prev, str) => $"{prev}\n{str}") : "");
 
             var response = await _compilerApiCall.Execute(options);
 
@@ -40,10 +40,10 @@ namespace ProgramAcad.Services.Modules.Compiling
             return JsonConvert.DeserializeObject<CompilerResponse>(await response.Content.ReadAsStringAsync());
         }
 
-        private CompilerOptions CreateCompilerOptions(string code, LinguagensProgramacao language, string input)
+        private CompilerOptions CreateCompilerOptions(string code, LinguagemProgramacao language, string input)
         {
-            return new CompilerOptions(_configs.ClientId, _configs.ClientSecret, code, language.GetDescription(),
-                language.GetCompilerType(), input);
+            return new CompilerOptions(_configs.ClientId, _configs.ClientSecret, code, language.ApiIdentifier,
+                language.NumCompilador.ToString(), input);
         }
     }
 }

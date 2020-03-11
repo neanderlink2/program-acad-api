@@ -38,7 +38,7 @@ namespace ProgramAcad.Services.Modules.CasosTeste.Services
                         DataConclusao = DateTime.Now,
                         IdAlgoritmo = execucao.IdAlgoritmo,
                         IdUsuario = execucao.IdUsuario,
-                        LinguagemUtilizada = execucao.LinguagemUtilizada.GetLinguagemProgramacaoFromCompiler()
+                        LinguagemUtilizada = execucao.LinguagemUtilizada.GetLinguagemProgramacaoFromCompiler().Id
                     });
                 }
             }

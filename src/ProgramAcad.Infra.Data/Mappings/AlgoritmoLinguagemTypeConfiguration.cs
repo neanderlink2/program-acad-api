@@ -18,6 +18,10 @@ namespace ProgramAcad.Infra.Data.Mappings
             builder.HasOne(x => x.Algoritmo)
                 .WithMany(x => x.LinguagensPermitidas)
                 .HasForeignKey(x => x.IdAlgoritmo);
+
+            builder.HasOne(x => x.LinguagemProgramacao)
+                .WithMany(x => x.AlgoritmosDessaLinguagem)
+                .HasForeignKey(x => x.IdLinguagem);
         }
     }
 }

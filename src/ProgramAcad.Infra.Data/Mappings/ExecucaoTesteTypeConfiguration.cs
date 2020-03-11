@@ -26,6 +26,10 @@ namespace ProgramAcad.Infra.Data.Mappings
             builder.HasOne(x => x.UsuarioExecutou)
                 .WithMany(x => x.TestesExecutados)
                 .HasForeignKey(x => x.IdUsuario);
+
+            builder.HasOne(x => x.LinguagemProgramacao)
+                .WithMany(x => x.ExecucoesDessaLinguagem)
+                .HasForeignKey(x => x.IdLinguagem);
         }
     }
 }

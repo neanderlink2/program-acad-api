@@ -19,7 +19,7 @@ namespace ProgramAcad.Services.Interfaces.Services
         Task<ListarAlgoritmoDTO> ObterAlgoritmoPorIdAsync(Guid idAlgoritmo);
         Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorNivelDificuldadeAsync(int nivel, Guid idTurma, string emailUsuario, string busca, int numPagina, int qtdePorPagina,
             ColunasOrdenacaoAlgoritmo colunasOrdenacao, string direcaoOrdenacao);
-        Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(LinguagensProgramacao linguagem, Guid idTurma, string emailUsuario, string busca, int numPagina, int qtdePorPagina,
+        Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(int linguagem, Guid idTurma, string emailUsuario, string busca, int numPagina, int qtdePorPagina,
             ColunasOrdenacaoAlgoritmo colunasOrdenacao, string direcaoOrdenacao);
         Task<IQueryable<KeyValueModel>> ObterNiveisDificuldadeDisponiveisAsync(Guid idTurma);
         Task<IQueryable<KeyValueModel>> ObterLinguagensDisponiveisAsync(Guid idTurma);

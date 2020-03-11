@@ -53,7 +53,7 @@ namespace ProgramAcad.API.Presentation.V1.Compilacao
             try
             {
                 var linguagem = language.GetLinguagemProgramacaoFromCompiler();
-                var output = await _compilerApiClient.Compile(code, inputs, linguagem);
+                var output = await _compilerApiClient.Compile(code, inputs, linguagem.Id);
                 return Response(output);
             }
             catch (CompilingFailedException ex)
@@ -94,17 +94,17 @@ namespace ProgramAcad.API.Presentation.V1.Compilacao
             return Unauthorized();
         }
 
-        private IEnumerable<ExecucaoCasoTesteDTO> TestarCasos(string codigo, LinguagensProgramacao linguagem, Guid idUsuario, IEnumerable<CasoTeste> casoTestes)
+        private IEnumerable<ExecucaoCasoTesteDTO> TestarCasos(string codigo, LinguagemProgramacao linguagem, Guid idUsuario, IEnumerable<CasoTeste> casoTestes)
         {
             foreach (var teste in casoTestes)
             {
-                var result = _compilerApiClient.Compile(codigo, teste.EntradaEsperada, linguagem).Result;
+                var result = _compilerApiClient.Compile(codigo, teste.EntradaEsperada, linguagem.Id).Result;
                 yield return new ExecucaoCasoTesteDTO
                 {
                     IdCasoTeste = teste.Id,
                     IdAlgoritmo = teste.IdAlgoritmo,
                     IdUsuario = idUsuario,
-                    LinguagemUtilizada = linguagem.GetDescription(),
+                    LinguagemUtilizada = linguagem.ApiIdentifier,
                     Sucesso = result.HasCompilingError || result.CpuTime >= teste.TempoMaximoDeExecucao || teste.SaidaEsperada.SequenceEqual(result.Output.Split("\n").Where(s => !string.IsNullOrWhiteSpace(s))),
                     TempoExecucao = result.CpuTime
                 };

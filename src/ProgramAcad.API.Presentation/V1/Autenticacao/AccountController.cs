@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProgramAcad.API.Presentation.Controllers;
-using ProgramAcad.Common.Extensions;
 using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Contracts.Repositories;
@@ -51,9 +50,9 @@ namespace ProgramAcad.API.Presentation.V1.Autenticacao
                     DataConclusao = x.DataConclusao,
                     PontosRecebidos = x.Algoritmo.NivelDificuldade.PontosReceber,
                     //PercentAcertos = (x.Algoritmo.CasosDeTeste.SelectMany(c => c.ExecucoesTeste).Count(x => x.Sucesso) / x.Algoritmo.CasosDeTeste.SelectMany(c => c.ExecucoesTeste).Count()) * 100,
-                    LinguagemUtilizada = x.IdLinguagem.GetDescription(),
+                    LinguagemUtilizada = x.LinguagemProgramacao.ApiIdentifier,
                     NomeAlgoritmo = x.Algoritmo.Titulo,
-                    DescricaoNivelDificuldade = x.Algoritmo.NivelDificuldade.Descricao,
+                    DescricaoNivelDificuldade = x.Algoritmo.NivelDificuldade.Name,
                     NomeTurma = x.Algoritmo.TurmaPertencente.Nome,
                     NomeUsuario = x.Usuario.NomeCompleto,
                     Testes = x.Algoritmo.CasosDeTeste.SelectMany(c => c.ExecucoesTeste)
@@ -62,7 +61,7 @@ namespace ProgramAcad.API.Presentation.V1.Autenticacao
                             IdAlgoritmo = x.IdAlgoritmo,
                             IdCasoTeste = c.IdCasoTeste,
                             IdUsuario = c.IdUsuario,
-                            LinguagemUtilizada = x.IdLinguagem.GetDescription(),
+                            LinguagemUtilizada = x.LinguagemProgramacao.ApiIdentifier,
                             Sucesso = c.Sucesso,
                             TempoExecucao = Math.Round(c.TempoExecucao, 2)
                         })

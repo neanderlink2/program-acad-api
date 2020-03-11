@@ -75,8 +75,10 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
                     NomeInstrutor = x.Instrutor.NomeCompleto,
                     Titulo = x.Nome
                 },
-                condicao: x => string.IsNullOrWhiteSpace(term) || (x.Nome.ToUpper().Contains(term) ||
-                    x.Instrutor.Email.ToUpper().Contains(term) || x.DataTermino.Year.ToString().Contains(term)),
+                condicao: x => x.Instrutor.Email.ToUpper() == emailInstrutor && (
+                    string.IsNullOrWhiteSpace(term) || 
+                    x.Nome.ToUpper().Contains(term) ||
+                    x.DataTermino.Year.ToString().Contains(term)),
                 ordenacao: x => OrdenarListaTurmas(x, colunaOrdenacao, direcaoOrdenacao),
                 indicePagina: pageIndex,
                 tamanhoPagina: totalItems

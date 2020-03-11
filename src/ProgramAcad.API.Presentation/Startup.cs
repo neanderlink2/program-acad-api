@@ -64,7 +64,7 @@ namespace ProgramAcad.API.Presentation
                 })
                 .AddNewtonsoftJson(config =>
                 {
-                    config.UseMemberCasing();
+                    //config.use();
                     config.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 });
 

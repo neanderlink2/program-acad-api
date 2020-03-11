@@ -1,4 +1,5 @@
 ﻿using ProgramAcad.Common.Extensions;
+using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Contracts.Repositories;
 using ProgramAcad.Domain.Entities;
@@ -53,15 +54,16 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
         private IEnumerable<AlgoritmoLinguagemDisponivel> ObterLinguagensFromString(IEnumerable<string> linguagens, Guid idAlgoritmo)
         {
             //transforma o Enum em IEnumerable
-            var enumLinguagens = Enum.GetValues(typeof(LinguagensProgramacao)).Cast<LinguagensProgramacao>();
-            if (enumLinguagens.Any(x => linguagens.Contains(x.GetDescription())))
+            var enumLinguagens = Enumeration.GetAll<LinguagemProgramacao>();
+            if (enumLinguagens.Any(x => linguagens.Contains(x.ApiIdentifier)))
             {
                 foreach (var item in linguagens)
                 {
+                    var linguagem = enumLinguagens.FirstOrDefault(x => x.ApiIdentifier.Equals(item));
                     //Para cada linguagem solicitada, Busca o primeiro valor que está contido dentro do array de linguagens.
-                    if (enumLinguagens.Any(x => x.GetDescription().Equals(item)))
+                    if (linguagem != default)
                     {
-                        yield return new AlgoritmoLinguagemDisponivel(idAlgoritmo, enumLinguagens.FirstOrDefault(x => x.GetDescription().Equals(item)));
+                        yield return new AlgoritmoLinguagemDisponivel(idAlgoritmo, linguagem.Id);
                     }                    
                 }                
             }

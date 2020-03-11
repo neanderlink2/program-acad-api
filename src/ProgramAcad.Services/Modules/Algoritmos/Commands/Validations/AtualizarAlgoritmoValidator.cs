@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using ProgramAcad.Common.Extensions;
+using ProgramAcad.Common.Models;
 using ProgramAcad.Domain.Contracts.Repositories;
 using ProgramAcad.Domain.Entities;
 using ProgramAcad.Services.Modules.Algoritmos.DTOs;
 using ProgramAcad.Services.Modules.CasosTeste.Commands.Validations;
-using System;
 using System.Linq;
 
 namespace ProgramAcad.Services.Modules.Algoritmos.Commands.Validations
@@ -61,7 +60,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands.Validations
         public void ValidateLinguagensPermitidas()
         {
             RuleForEach(x => x.LinguagensPermitidas)
-                .Must(x => Enum.GetValues(typeof(LinguagensProgramacao)).Cast<LinguagensProgramacao>().Any(l => l.GetDescription() == x))
+                .Must(x => Enumeration.GetAll<LinguagemProgramacao>().Any(l => l.ApiIdentifier == x))
                     .WithMessage("Linguagem de programação inválida.");
         }
 
