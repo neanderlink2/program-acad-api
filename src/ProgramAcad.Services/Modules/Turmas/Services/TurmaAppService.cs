@@ -17,17 +17,23 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
     {
         private readonly SolicitarAcessoTurmaCommand _solicitarAcesso;
         private readonly AceitarSolicitacaoAcessoCommand _aceitarSolicitacaoAcesso;
+        private readonly CriarTurmaCommand _criarTurma;
+        private readonly EditarTurmaCommand _editarTurma;
         private readonly ITurmaRepository _turmaRepository;
         private readonly ITurmaUsuarioRepository _turmaUsuarioRepository;
 
         public TurmaAppService(SolicitarAcessoTurmaCommand solicitarAcesso,
             AceitarSolicitacaoAcessoCommand aceitarSolicitacaoAcesso,
+            CriarTurmaCommand criarTurma,
+            EditarTurmaCommand editarTurma,
             ITurmaRepository turmaRepository, ITurmaUsuarioRepository turmaUsuarioRepository,
             IMapper mapper, DomainNotificationManager notifyManager)
             : base(mapper, notifyManager)
         {
-            this._solicitarAcesso = solicitarAcesso;
-            this._aceitarSolicitacaoAcesso = aceitarSolicitacaoAcesso;
+            _solicitarAcesso = solicitarAcesso;
+            _aceitarSolicitacaoAcesso = aceitarSolicitacaoAcesso;
+            _criarTurma = criarTurma;
+            _editarTurma = editarTurma;
             _turmaRepository = turmaRepository;
             _turmaUsuarioRepository = turmaUsuarioRepository;
         }
@@ -35,6 +41,16 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
         public async Task AceitarSolicitacaoAcesso(SolicitarAcessoTurmaDTO acesso)
         {
             await _aceitarSolicitacaoAcesso.ExecuteAsync(acesso);
+        }
+
+        public async Task CriarTurma(CriarTurmaDTO criarTurma)
+        {
+            await _criarTurma.ExecuteAsync(criarTurma);
+        }
+
+        public async Task EditarTurma(EditarTurmaDTO editarTurma)
+        {
+            await _editarTurma.ExecuteAsync(editarTurma);
         }
 
         public async Task<IPagedList<ListarTurmaDTO>> GetTurmasPaged(string busca, int pageIndex, int totalItems,
@@ -76,7 +92,7 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
                     Titulo = x.Nome
                 },
                 condicao: x => x.Instrutor.Email.ToUpper() == emailInstrutor && (
-                    string.IsNullOrWhiteSpace(term) || 
+                    string.IsNullOrWhiteSpace(term) ||
                     x.Nome.ToUpper().Contains(term) ||
                     x.DataTermino.Year.ToString().Contains(term)),
                 ordenacao: x => OrdenarListaTurmas(x, colunaOrdenacao, direcaoOrdenacao),

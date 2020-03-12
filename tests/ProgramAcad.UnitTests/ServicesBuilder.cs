@@ -8,6 +8,7 @@ using ProgramAcad.Infra.Data.Workers;
 using ProgramAcad.Infra.IoC;
 using System;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
 
 namespace ProgramAcad.UnitTests
 {
@@ -18,11 +19,11 @@ namespace ProgramAcad.UnitTests
             var services = new ServiceCollection();
             var builder = new ContainerBuilder();
 
+            var dbName = Guid.NewGuid().ToString();
             services.AddDbContext<ProgramAcadDataContext>(options =>
-            {
-                //var dbName = Guid.NewGuid().ToString();
-                options.UseInMemoryDatabase("db");
-            }, ServiceLifetime.Singleton);
+            {                
+                options.UseInMemoryDatabase(dbName);
+            }, contextLifetime: ServiceLifetime.Singleton, optionsLifetime: ServiceLifetime.Singleton);
 
             builder.RegisterDependencies();
 
@@ -51,6 +52,7 @@ namespace ProgramAcad.UnitTests
             {
                 var admin = new Usuario("admin", "admin@admin.com", false, "INSTRUTOR");
                 usuarioSet.Add(admin);
+                await context.SaveChangesAsync();
             }
         }
 

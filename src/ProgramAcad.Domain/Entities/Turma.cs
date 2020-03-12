@@ -37,11 +37,12 @@ namespace ProgramAcad.Domain.Entities
             UsuariosInscritos.Add(new TurmaUsuario(estudante.Id, Id, dataIngresso, true));
         }
 
-        public void EditTurma(string nome, int capacidadeTurma, string urlImagemTurma)
+        public void EditTurma(string nome, int capacidadeTurma, string urlImagemTurma, DateTime dataTermino)
         {
             Nome = nome;
             CapacidadeAlunos = capacidadeTurma;
             UrlImagemTurma = urlImagemTurma;
+            DataTermino = dataTermino;
         }
     }
 }

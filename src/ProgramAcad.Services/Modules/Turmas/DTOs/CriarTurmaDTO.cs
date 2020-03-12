@@ -2,10 +2,9 @@
 
 namespace ProgramAcad.Services.Modules.Turmas.DTOs
 {
-    public class CriarTurmaDTO
+    public class CriarTurmaDTO : BaseTurmaDTO
     {
-        public string NomeTurma { get; set; }
-        public DateTime DataHoraTermino { get; set; }
-        public string UrlImagem { get; set; }
+        public Guid IdInstrutor { get; set; }
+        public DateTime DataCriacao { get; set; }
     }
 }

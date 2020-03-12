@@ -53,6 +53,13 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
             return Unauthorized();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateTurma([FromBody]CriarTurmaDTO criarTurma)
+        {
+            await _turmaAppService.CriarTurma(criarTurma);
+            return ResponseNoContent();
+        }
+
         [HttpPost("{idTurma}/acesso")]
         public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery]DateTime dataEnvio)
         {
@@ -63,6 +70,13 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
                 DataIngresso = dataEnvio,
                 IdTurma = idTurma
             });
+            return ResponseNoContent();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateTurma([FromBody]EditarTurmaDTO editarTurma)
+        {
+            await _turmaAppService.EditarTurma(editarTurma);
             return ResponseNoContent();
         }
 

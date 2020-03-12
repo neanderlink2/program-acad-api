@@ -5,14 +5,29 @@ using System;
 
 namespace ProgramAcad.Services.Modules.Turmas.Commands.Validations
 {
-    public class CriarTurmaValidator : AbstractValidator<CriarTurmaDTO>
+    public class TurmaValidator : AbstractValidator<BaseTurmaDTO>
     {
+        public TurmaValidator()
+        {
+            ValidateDataTermino();
+            ValidateNome();
+            ValidateUrlImagem();
+            ValidateCapacidadeAlunos();
+        }
+
         public void ValidateNome()
         {
             RuleFor(x => x.NomeTurma)
                 .NotEmpty().WithMessage("Nome da turma é obrigatório")
                 .MinimumLength(3).WithMessage("O nome da turma deve possuir no mínimo 3 caracteres.")
                 .MaximumLength(75).WithMessage("O nome da turma deve possuir no máximo 75 caracteres.");
+        }
+
+        public void ValidateCapacidadeAlunos()
+        {
+            RuleFor(x => x.CapacidadeAlunos)
+                .GreaterThan(0).WithMessage("A capacidade mínima de alunos deve ser maior que zero.")
+                .LessThanOrEqualTo(2000).WithMessage("A capacidade máxima de alunos deve ser menor que 2000.");
         }
 
         public void ValidateDataTermino()

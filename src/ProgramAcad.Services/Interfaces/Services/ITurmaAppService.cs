@@ -6,6 +6,8 @@ namespace ProgramAcad.Services.Interfaces.Services
 {
     public interface ITurmaAppService
     {
+        Task CriarTurma(CriarTurmaDTO criarTurma);
+        Task EditarTurma(EditarTurmaDTO editarTurmaDTO);
         Task AceitarSolicitacaoAcesso(SolicitarAcessoTurmaDTO acesso);
         Task SolicitarAcesso(SolicitarAcessoTurmaDTO acesso);
         Task<IPagedList<ListarTurmaDTO>> GetTurmasPaged(string busca, int pageIndex, int totalItems, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc");
