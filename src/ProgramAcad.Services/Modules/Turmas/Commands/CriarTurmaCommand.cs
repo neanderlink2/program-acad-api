@@ -13,13 +13,15 @@ namespace ProgramAcad.Services.Modules.Turmas.Commands
     {
         private readonly TurmaValidator _validation;
         private readonly ITurmaRepository _turmaRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public CriarTurmaCommand(TurmaValidator validation, ITurmaRepository turmaRepository,
-            DomainNotificationManager notifyManager, IUnitOfWork unitOfWork) 
+        public CriarTurmaCommand(TurmaValidator validation, ITurmaRepository turmaRepository, IUsuarioRepository usuarioRepository,
+            DomainNotificationManager notifyManager, IUnitOfWork unitOfWork)
             : base(notifyManager, unitOfWork)
         {
             _validation = validation;
             _turmaRepository = turmaRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         public override async Task<bool> ExecuteAsync(CriarTurmaDTO turma)
@@ -28,7 +30,9 @@ namespace ProgramAcad.Services.Modules.Turmas.Commands
             await NotifyValidationErrorsAsync(result);
             if (_notifyManager.HasNotifications()) return false;
 
-            var turmaEntity = new Turma(turma.IdInstrutor, turma.NomeTurma, turma.CapacidadeAlunos, turma.UrlImagem, turma.DataCriacao, turma.DataHoraTermino);
+            var instrutor = await _usuarioRepository.GetSingleAsync(x => x.Email.ToUpper() == turma.EmailInstrutor.ToUpper() && x.IsAtivo);
+
+            var turmaEntity = new Turma(instrutor.Id, turma.NomeTurma, turma.CapacidadeAlunos, turma.UrlImagem, turma.DataCriacao, turma.DataHoraTermino);
             await _turmaRepository.AddAsync(turmaEntity);
 
             return await CommitChangesAsync();

@@ -21,7 +21,7 @@ namespace ProgramAcad.UnitTests
             var admin = usuarioRepository.GetSingleAsync(x => x.Nickname == "admin");
             admin.Wait();
             var command = services.GetRequiredService<CriarTurmaCommand>();
-            var turma = TurmaFaker.CreateCriarTurmaDTO(admin.Result.Id);
+            var turma = TurmaFaker.CreateCriarTurmaDTO(admin.Result.Email);
             command.ExecuteAsync(turma).Wait();
 
             var turmaRepository = services.GetRequiredService<ProgramAcadDataContext>();
@@ -34,10 +34,10 @@ namespace ProgramAcad.UnitTests
             var services = ServicesBuilder.GetServices();
             var usuarioRepository = services.GetRequiredService<IUsuarioRepository>();
             var admin = usuarioRepository.GetSingleAsync(x => x.Nickname == "admin");
-            admin.Wait();            
+            admin.Wait();
             var command = services.GetRequiredService<CriarTurmaCommand>();
 
-            var turmas = TurmaFaker.CreateCriarTurmaDTO(admin.Result.Id).Generate(5);
+            var turmas = TurmaFaker.CreateCriarTurmaDTO(admin.Result.Email).Generate(5);
 
             foreach (var turma in turmas)
             {
@@ -58,7 +58,7 @@ namespace ProgramAcad.UnitTests
             var turmaRepository = services.GetRequiredService<ITurmaRepository>();
             var command = services.GetRequiredService<CriarTurmaCommand>();
 
-            var turma = TurmaFaker.CreateCriarTurmaDTO(admin.Result.Id).Generate();
+            var turma = TurmaFaker.CreateCriarTurmaDTO(admin.Result.Email).Generate();
             turma.NomeTurma = "a";
 
             command.ExecuteAsync(turma).Wait();
@@ -77,7 +77,7 @@ namespace ProgramAcad.UnitTests
             var admin = usuarioRepository.GetSingleAsync(x => x.Nickname == "admin");
             admin.Wait();
             var command = services.GetRequiredService<CriarTurmaCommand>();
-            var turma = TurmaFaker.CreateCriarTurmaDTO(admin.Result.Id).Generate();
+            var turma = TurmaFaker.CreateCriarTurmaDTO(admin.Result.Email).Generate();
             command.ExecuteAsync(turma).Wait();
 
             var turmaRepository = services.GetRequiredService<ITurmaRepository>();

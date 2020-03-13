@@ -26,7 +26,7 @@ namespace ProgramAcad.Services.Modules.Turmas.Commands.Validations
         public void ValidateCapacidadeAlunos()
         {
             RuleFor(x => x.CapacidadeAlunos)
-                .GreaterThan(0).WithMessage("A capacidade mínima de alunos deve ser maior que zero.")
+                .GreaterThan(5).WithMessage("A capacidade mínima de alunos deve ser maior que 5.")
                 .LessThanOrEqualTo(2000).WithMessage("A capacidade máxima de alunos deve ser menor que 2000.");
         }
 
