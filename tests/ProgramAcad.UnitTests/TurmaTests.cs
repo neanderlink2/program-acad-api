@@ -103,5 +103,29 @@ namespace ProgramAcad.UnitTests
             Assert.Equal(1, turmaRepository.Count());
             Assert.Equal("Turma editada", turmaEditadaSalva.Nome);
         }
+
+        [Fact]
+        public void AlternarEstado_Turma_Sucesso()
+        {
+            var services = ServicesBuilder.GetServices();
+            var usuarioRepository = services.GetRequiredService<IUsuarioRepository>();
+            var admin = usuarioRepository.GetSingleAsync(x => x.Nickname == "admin");
+            admin.Wait();
+            var command = services.GetRequiredService<CriarTurmaCommand>();
+            var turma = TurmaFaker.CreateCriarTurmaDTO(admin.Result.Email).Generate();
+            command.ExecuteAsync(turma).Wait();
+
+            var turmaRepository = services.GetRequiredService<ITurmaRepository>();
+
+            Assert.Equal(1, turmaRepository.Count());
+
+            var turmaSalva = turmaRepository.GetSingle(x => x.Nome.ToUpper() == turma.NomeTurma.ToUpper());
+
+            var commandAlternar = services.GetRequiredService<AlternarEstadoTurmaCommand>();
+            commandAlternar.ExecuteAsync(turmaSalva.Id).Wait();
+
+            var turmaAlterada = turmaRepository.GetSingle(x => x.Nome.ToUpper() == turma.NomeTurma.ToUpper());
+            Assert.False(turmaAlterada.Status);
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using ProgramAcad.Common.Models.PagedList;
 using ProgramAcad.Services.Modules.Turmas.DTOs;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProgramAcad.Services.Interfaces.Services
@@ -10,6 +12,9 @@ namespace ProgramAcad.Services.Interfaces.Services
         Task EditarTurma(EditarTurmaDTO editarTurmaDTO);
         Task AceitarSolicitacaoAcesso(SolicitarAcessoTurmaDTO acesso);
         Task SolicitarAcesso(SolicitarAcessoTurmaDTO acesso);
+        Task AlternarEstado(Guid idTurma);
+        Task<ListarTurmaDTO> GetTurmaById(Guid idTurma);
+        Task<IEnumerable<UsuarioInscritoDTO>> GetUsuariosInscritosByTurma(Guid idTurma);
         Task<IPagedList<ListarTurmaDTO>> GetTurmasPaged(string busca, int pageIndex, int totalItems, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc");
         Task<IPagedList<ListarTurmaDTO>> GetTurmasPagedByUsuario(string emailUsuario, string busca, int pageIndex, int totalItems, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc");
         Task<IPagedList<ListarTurmaDTO>> GetTurmasPagedByInstrutor(string emailInstrutor, string busca, int pageIndex, int totalItems, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc");

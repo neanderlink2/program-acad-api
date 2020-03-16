@@ -7,6 +7,7 @@ using ProgramAcad.Services.Interfaces.Services;
 using ProgramAcad.Services.Modules.Common;
 using ProgramAcad.Services.Modules.Turmas.Commands;
 using ProgramAcad.Services.Modules.Turmas.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
         private readonly AceitarSolicitacaoAcessoCommand _aceitarSolicitacaoAcesso;
         private readonly CriarTurmaCommand _criarTurma;
         private readonly EditarTurmaCommand _editarTurma;
+        private readonly AlternarEstadoTurmaCommand _alternarEstado;
         private readonly ITurmaRepository _turmaRepository;
         private readonly ITurmaUsuarioRepository _turmaUsuarioRepository;
 
@@ -26,6 +28,7 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
             AceitarSolicitacaoAcessoCommand aceitarSolicitacaoAcesso,
             CriarTurmaCommand criarTurma,
             EditarTurmaCommand editarTurma,
+            AlternarEstadoTurmaCommand alternarEstado,
             ITurmaRepository turmaRepository, ITurmaUsuarioRepository turmaUsuarioRepository,
             IMapper mapper, DomainNotificationManager notifyManager)
             : base(mapper, notifyManager)
@@ -34,6 +37,7 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
             _aceitarSolicitacaoAcesso = aceitarSolicitacaoAcesso;
             _criarTurma = criarTurma;
             _editarTurma = editarTurma;
+            _alternarEstado = alternarEstado;
             _turmaRepository = turmaRepository;
             _turmaUsuarioRepository = turmaUsuarioRepository;
         }
@@ -41,6 +45,11 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
         public async Task AceitarSolicitacaoAcesso(SolicitarAcessoTurmaDTO acesso)
         {
             await _aceitarSolicitacaoAcesso.ExecuteAsync(acesso);
+        }
+
+        public async Task AlternarEstado(Guid idTurma)
+        {
+            await _alternarEstado.ExecuteAsync(idTurma);
         }
 
         public async Task CriarTurma(CriarTurmaDTO criarTurma)
@@ -53,6 +62,12 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
             await _editarTurma.ExecuteAsync(editarTurma);
         }
 
+        public async Task<ListarTurmaDTO> GetTurmaById(Guid idTurma)
+        {
+            var turma = await _turmaRepository.GetSingleAsync(x => x.Id == idTurma, "Instrutor");
+            return new ListarTurmaDTO(turma);
+        }
+
         public async Task<IPagedList<ListarTurmaDTO>> GetTurmasPaged(string busca, int pageIndex, int totalItems,
             TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc")
         {
@@ -62,10 +77,10 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
                 {
                     Id = x.Id,
                     CapacidadeAlunos = x.CapacidadeAlunos,
-                    DataTermino = x.DataTermino,
-                    ImagemTurma = x.UrlImagemTurma,
+                    DataHoraTermino = x.DataTermino,
+                    UrlImagem = x.UrlImagemTurma,
                     NomeInstrutor = x.Instrutor.NomeCompleto,
-                    Titulo = x.Nome,
+                    NomeTurma = x.Nome,
                     IsUsuarioInscrito = false
                 },
                 condicao: x => string.IsNullOrWhiteSpace(term) || (x.Nome.ToUpper().Contains(term) || x.Instrutor.NomeCompleto.ToUpper().Contains(term) ||
@@ -86,10 +101,10 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
                 {
                     Id = x.Id,
                     CapacidadeAlunos = x.CapacidadeAlunos,
-                    DataTermino = x.DataTermino,
-                    ImagemTurma = x.UrlImagemTurma,
+                    DataHoraTermino = x.DataTermino,
+                    UrlImagem = x.UrlImagemTurma,
                     NomeInstrutor = x.Instrutor.NomeCompleto,
-                    Titulo = x.Nome
+                    NomeTurma = x.Nome
                 },
                 condicao: x => x.Instrutor.Email.ToUpper() == emailInstrutor && (
                     string.IsNullOrWhiteSpace(term) ||
@@ -112,10 +127,10 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
                 {
                     Id = x.Id,
                     CapacidadeAlunos = x.CapacidadeAlunos,
-                    DataTermino = x.DataTermino,
-                    ImagemTurma = x.UrlImagemTurma,
+                    DataHoraTermino = x.DataTermino,
+                    UrlImagem = x.UrlImagemTurma,
                     NomeInstrutor = x.Instrutor.NomeCompleto,
-                    Titulo = x.Nome
+                    NomeTurma = x.Nome
                 },
                 condicao: x => string.IsNullOrWhiteSpace(term) || (x.Nome.ToUpper().Contains(term) || x.Instrutor.NomeCompleto.ToUpper().Contains(term) ||
                     x.DataTermino.Year.ToString().Contains(term)),
@@ -133,6 +148,22 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
             }
             lista.Items = listaAtualizada;
             return lista;
+        }
+
+        public async Task<IEnumerable<UsuarioInscritoDTO>> GetUsuariosInscritosByTurma(Guid idTurma)
+        {
+            var usuarios = await _turmaUsuarioRepository.GetManyAsync(x => x.IdTurma == idTurma, "Estudante");
+            var dtos = usuarios
+                .Select(x => new UsuarioInscritoDTO
+                {
+                    Email = x.Estudante.Email,
+                    Nome = x.Estudante.NomeCompleto,
+                    DataInscricao = x.DataIngresso,
+                    IsAceito = x.Aceito,
+                })
+                .OrderByDescending(x => x.DataInscricao)
+                .ToList();
+            return dtos;
         }
 
         public async Task SolicitarAcesso(SolicitarAcessoTurmaDTO acesso)

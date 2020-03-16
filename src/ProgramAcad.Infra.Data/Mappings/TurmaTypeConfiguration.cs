@@ -19,6 +19,7 @@ namespace ProgramAcad.Infra.Data.Mappings
             builder.Property(x => x.UrlImagemTurma).HasColumnName("url_imagem_turma").HasMaxLength(500);
             builder.Property(x => x.DataCriacao).HasColumnName("data_criacao");
             builder.Property(x => x.DataTermino).HasColumnName("data_termino");
+            builder.Property(x => x.Status).HasColumnName("status");
 
             builder.HasOne(x => x.Instrutor)
                 .WithMany(x => x.TurmasCriadas)

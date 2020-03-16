@@ -38,6 +38,13 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
             return Response(response);
         }
 
+        [HttpGet("{idTurma}")]
+        public async Task<IActionResult> GetById(Guid idTurma)
+        {
+            var response = await _turmaAppService.GetTurmaById(idTurma);
+            return Response(response);
+        }
+
         [Authorize]
         [HttpGet("instrutor")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedList<ListarTurmaDTO>))]
@@ -51,6 +58,18 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
                 return Response(response);
             }
             return Unauthorized();
+        }
+
+        [Authorize]
+        [HttpGet("{idTurma}/inscritos")]
+        public async Task<IActionResult> GetUsuariosInscritosByTurma(Guid idTurma)
+        {
+            if (User.IsInRole("INSTRUTOR"))
+            {
+                var response = await _turmaAppService.GetUsuariosInscritosByTurma(idTurma);
+                return Response(response);
+            }
+            return Forbid();
         }
 
         [HttpPost]
@@ -88,6 +107,13 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
                 EmailUsuario = emailUsuario,
                 IdTurma = idTurma
             });
+            return ResponseNoContent();
+        }
+
+        [HttpPatch("{idTurma}/estado")]
+        public async Task<IActionResult> AlternarEstadoTurma(Guid idTurma)
+        {
+            await _turmaAppService.AlternarEstado(idTurma);
             return ResponseNoContent();
         }
     }
