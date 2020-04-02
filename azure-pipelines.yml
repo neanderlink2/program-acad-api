@@ -32,14 +32,14 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    
+
 - task: FtpUpload@2
   inputs:
     credentialsOption: 'serviceEndpoint'
     serverEndpoint: 'SmarterASP DNIT'
-    rootDirectory: 'gtikairos'
+    rootDirectory: '/'
     filePatterns: '**'
-    remoteDirectory: '/upload/$(Build.BuildId)/'
+    remoteDirectory: '/gtikairos'
     clean: false
     cleanContents: false
     preservePaths: false
