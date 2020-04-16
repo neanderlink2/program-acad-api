@@ -8,6 +8,7 @@ namespace ProgramAcad.Domain.Entities
         public Turma(Guid idInstrutor, string nome, int capacidadeAlunos, string urlImagemTurma, DateTime dataCriacao, DateTime dataTermino)
         {
             Id = Guid.NewGuid();
+            Status = true;
             IdInstrutor = idInstrutor;
             Nome = nome;
             CapacidadeAlunos = capacidadeAlunos;
@@ -26,6 +27,7 @@ namespace ProgramAcad.Domain.Entities
         public string UrlImagemTurma { get; protected set; }
         public DateTime DataCriacao { get; protected set; }
         public DateTime DataTermino { get; protected set; }
+        public bool Status { get; protected set; }
 
         public Usuario Instrutor { get; set; }
 
@@ -37,11 +39,22 @@ namespace ProgramAcad.Domain.Entities
             UsuariosInscritos.Add(new TurmaUsuario(estudante.Id, Id, dataIngresso, true));
         }
 
-        public void EditTurma(string nome, int capacidadeTurma, string urlImagemTurma)
+        public void EditTurma(string nome, int capacidadeTurma, string urlImagemTurma, DateTime dataTermino)
         {
             Nome = nome;
             CapacidadeAlunos = capacidadeTurma;
             UrlImagemTurma = urlImagemTurma;
+            DataTermino = dataTermino;
+        }
+
+        public void Desativar()
+        {
+            Status = false;
+        }
+
+        public void Ativar()
+        {
+            Status = true;
         }
     }
 }

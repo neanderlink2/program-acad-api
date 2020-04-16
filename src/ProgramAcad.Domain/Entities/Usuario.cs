@@ -5,6 +5,11 @@ namespace ProgramAcad.Domain.Entities
 {
     public class Usuario
     {
+        public Usuario()
+        {
+
+        }
+
         public Usuario(string nickname, string email, bool isUsuarioExterno, string role)
         {
             Id = Guid.NewGuid();

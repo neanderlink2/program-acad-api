@@ -38,6 +38,13 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
             return Response(response);
         }
 
+        [HttpGet("{idTurma}")]
+        public async Task<IActionResult> GetById(Guid idTurma)
+        {
+            var response = await _turmaAppService.GetTurmaById(idTurma);
+            return Response(response);
+        }
+
         [Authorize]
         [HttpGet("instrutor")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedList<ListarTurmaDTO>))]
@@ -53,6 +60,25 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
             return Unauthorized();
         }
 
+        [Authorize]
+        [HttpGet("{idTurma}/inscritos")]
+        public async Task<IActionResult> GetUsuariosInscritosByTurma(Guid idTurma)
+        {
+            if (User.IsInRole("INSTRUTOR"))
+            {
+                var response = await _turmaAppService.GetUsuariosInscritosByTurma(idTurma);
+                return Response(response);
+            }
+            return Forbid();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTurma([FromBody]CriarTurmaDTO criarTurma)
+        {
+            await _turmaAppService.CriarTurma(criarTurma);
+            return ResponseNoContent();
+        }
+
         [HttpPost("{idTurma}/acesso")]
         public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery]DateTime dataEnvio)
         {
@@ -66,6 +92,13 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
             return ResponseNoContent();
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateTurma([FromBody]EditarTurmaDTO editarTurma)
+        {
+            await _turmaAppService.EditarTurma(editarTurma);
+            return ResponseNoContent();
+        }
+
         [HttpPut("{idTurma}/acesso")]
         public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery]string emailUsuario)
         {
@@ -74,6 +107,13 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
                 EmailUsuario = emailUsuario,
                 IdTurma = idTurma
             });
+            return ResponseNoContent();
+        }
+
+        [HttpPatch("{idTurma}/estado")]
+        public async Task<IActionResult> AlternarEstadoTurma(Guid idTurma)
+        {
+            await _turmaAppService.AlternarEstado(idTurma);
             return ResponseNoContent();
         }
     }

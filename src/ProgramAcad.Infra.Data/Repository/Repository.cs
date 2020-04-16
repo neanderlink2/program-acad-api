@@ -42,11 +42,19 @@ namespace ProgramAcad.Infra.Data.Repository
 
         public int Count(Expression<Func<TModel, bool>> condicao = null)
         {
+            if (condicao == null)
+            {
+                return _dbSet.Count();
+            }
             return _dbSet.Count(condicao);
         }
 
         public Task<int> CountAsync(Expression<Func<TModel, bool>> condicao = null)
         {
+            if (condicao == null)
+            {
+                return _dbSet.CountAsync();
+            }
             return _dbSet.CountAsync(condicao);
         }
 

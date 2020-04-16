@@ -7,7 +7,7 @@ namespace ProgramAcad.Services.Modules.CasosTeste.DTOs
     {
         public Guid IdUsuario { get; set; }
         public Guid IdAlgoritmo { get; set; }
-        public LinguagensProgramacao LinguagemUtilizada { get; set; }
+        public int LinguagemUtilizada { get; set; }
         public DateTime DataConclusao { get; set; }
     }
 }

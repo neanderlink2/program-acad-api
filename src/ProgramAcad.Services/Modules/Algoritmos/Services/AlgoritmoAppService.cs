@@ -72,14 +72,14 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             return _mapper.Map<ListarAlgoritmoDTO>(algoritmo);
         }
 
-        public async Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(LinguagensProgramacao linguagemProgramacao, Guid idTurma, string emailUsuario, string busca,
+        public async Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(int linguagemProgramacao, Guid idTurma, string emailUsuario, string busca,
             int numPagina, int qtdePorPagina, ColunasOrdenacaoAlgoritmo colunasOrdenacao, string direcaoOrdenacao)
         {
             var term = busca?.ToUpper() ?? "";
             var algoritmos = await _algoritmoRepository.GetPagedListAsync(
                 selecao: x => new ListarAlgoritmoDTO()
                 {
-                    NivelDificuldade = x.NivelDificuldade.Descricao,
+                    NivelDificuldade = x.NivelDificuldade.Name,
                     HtmlDescricao = x.HtmlDescricao,
                     Id = x.Id,
                     IdNivelDificuldade = x.IdNivelDificuldade,
@@ -87,10 +87,10 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                     IsResolvido = false,
                     NomeTurma = x.TurmaPertencente.Nome,
                     Titulo = x.Titulo,
-                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(l => l.IdLinguagem.GetDescription())
+                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(l => l.LinguagemProgramacao.ApiIdentifier)
                 },
                 condicao: algoritmo => (algoritmo.IsAtivo && algoritmo.IdTurma == idTurma && algoritmo.LinguagensPermitidas.Any(l => l.IdLinguagem == linguagemProgramacao)) &&
-                    (string.IsNullOrEmpty(term) || algoritmo.Titulo.ToUpper().Contains(term) || algoritmo.NivelDificuldade.Descricao.ToUpper().Contains(term)),
+                    (string.IsNullOrEmpty(term) || algoritmo.Titulo.ToUpper().Contains(term) || algoritmo.NivelDificuldade.Name.ToUpper().Contains(term)),
                 ordenacao: x => x.OrderBy(a => a.Titulo),
                 indicePagina: numPagina,
                 tamanhoPagina: qtdePorPagina,
@@ -116,7 +116,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             var algoritmos = await _algoritmoRepository.GetPagedListAsync(
                 selecao: x => new ListarAlgoritmoDTO()
                 {
-                    NivelDificuldade = x.NivelDificuldade.Descricao,
+                    NivelDificuldade = x.NivelDificuldade.Name,
                     HtmlDescricao = x.HtmlDescricao,
                     Id = x.Id,
                     IdNivelDificuldade = x.IdNivelDificuldade,
@@ -124,7 +124,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                     IsResolvido = false,
                     NomeTurma = x.TurmaPertencente.Nome,
                     Titulo = x.Titulo,
-                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(l => l.IdLinguagem.GetDescription())
+                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(l => l.LinguagemProgramacao.ApiIdentifier)
                 },
                 condicao: algoritmo => (algoritmo.IsAtivo && algoritmo.IdTurma == idTurma && algoritmo.IdNivelDificuldade == nivel) && (string.IsNullOrEmpty(term) || 
                     algoritmo.Titulo.ToUpper().Contains(term)),
@@ -153,7 +153,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             var lista = await _algoritmoRepository.GetPagedListAsync(
                 selecao: x => new ListarAlgoritmoDTO()
                 {
-                    NivelDificuldade = x.NivelDificuldade.Descricao,
+                    NivelDificuldade = x.NivelDificuldade.Name,
                     HtmlDescricao = x.HtmlDescricao,
                     Id = x.Id,
                     IdNivelDificuldade = x.IdNivelDificuldade,
@@ -161,10 +161,10 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                     IsResolvido = false,
                     NomeTurma = x.TurmaPertencente.Nome,
                     Titulo = x.Titulo,                    
-                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(l => l.IdLinguagem.GetDescription())
+                    LinguagensDisponiveis = x.LinguagensPermitidas.Select(l => l.LinguagemProgramacao.ApiIdentifier)
                 },
                 condicao: algoritmo => (algoritmo.IsAtivo && algoritmo.IdTurma == idTurma) && (string.IsNullOrEmpty(term) || algoritmo.Titulo.ToUpper().Contains(term) ||
-                    algoritmo.NivelDificuldade.Descricao.ToUpper().Contains(term)),
+                    algoritmo.NivelDificuldade.Name.ToUpper().Contains(term)),
                 ordenacao: lista => OrdenarListaAlgoritmos(lista, colunasOrdenacao, direcaoOrdenacao),
                 indicePagina: numPagina,
                 tamanhoPagina: qtdePorPagina,

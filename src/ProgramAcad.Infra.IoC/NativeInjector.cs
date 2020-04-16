@@ -4,6 +4,7 @@ using ProgramAcad.Domain.Workers;
 using ProgramAcad.Infra.Data.Repository.Contracts;
 using ProgramAcad.Infra.Data.Workers;
 using ProgramAcad.Services.Modules.Algoritmos.Commands;
+using ProgramAcad.Services.Modules.Algoritmos.Commands.Validations;
 using ProgramAcad.Services.Modules.Algoritmos.Services;
 using ProgramAcad.Services.Modules.Compiling;
 
@@ -43,6 +44,10 @@ namespace ProgramAcad.Infra.IoC
             builder.RegisterAssemblyTypes(typeof(CriarAlgoritmoCommand).Assembly)
                .Where(t => t.Namespace.EndsWith("Commands"))
                .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(typeof(CriarAlgoritmoValidator).Assembly)
+                .Where(t => t.Namespace.EndsWith("Validations"))
+                .InstancePerLifetimeScope();
         }
 
         private static void RegisterAppServices(ContainerBuilder builder)

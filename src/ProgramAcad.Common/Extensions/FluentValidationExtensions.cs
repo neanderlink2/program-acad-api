@@ -41,5 +41,11 @@ namespace ProgramAcad.Common.Extensions
                 .Matches(@"\d{3}[.\s]?\d{3}[.\s]?\d{3}[-.\s]?\d{2}")
                     .WithMessage(x => $"O CPF '{x}' não é válido.");
         }
+
+        public static IRuleBuilderOptions<T, string> Url<T>(this IRuleBuilder<T, string> rule)
+        {
+            return rule
+                .Matches(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)");
+        }
     }
 }

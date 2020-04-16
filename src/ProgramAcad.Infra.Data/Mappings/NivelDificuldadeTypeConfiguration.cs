@@ -14,7 +14,7 @@ namespace ProgramAcad.Infra.Data.Mappings
 
             builder.Property(x => x.Id).HasColumnName("id");
             builder.Property(x => x.Nivel).HasColumnName("nivel");
-            builder.Property(x => x.Descricao).HasColumnName("descricao").HasMaxLength(50);
+            builder.Property(x => x.Name).HasColumnName("descricao").HasMaxLength(50);
             builder.Property(x => x.PontosReceber).HasColumnName("pontos_a_receber");
 
             builder.HasMany(x => x.AlgoritmosDesseNivel)
