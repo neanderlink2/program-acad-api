@@ -30,7 +30,7 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: FTP Deploy
-    - uses: SamKirkland/FTP-Deploy-Action@3.0.0
+      uses: SamKirkland/FTP-Deploy-Action@3.0.0
       with:
         # Deployment destination server & path. Formatted as protocol://domain.com:port/full/destination/path/
         ftp-server: ftp://waws-prod-dm1-117.ftp.azurewebsites.windows.net/site/wwwroot
