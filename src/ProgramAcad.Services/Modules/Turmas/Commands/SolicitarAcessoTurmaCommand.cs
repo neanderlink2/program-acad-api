@@ -41,7 +41,7 @@ namespace ProgramAcad.Services.Modules.Turmas.Commands
                 return false;
             }
 
-            var turmaUsuario = new TurmaUsuario(usuario.Id, solicitacao.IdTurma, solicitacao.DataIngresso.Value, false);
+            var turmaUsuario = new TurmaUsuario(usuario.Id, solicitacao.IdTurma, solicitacao.DataIngresso.Value, null);
             await _turmaUsuarioRepository.AddAsync(turmaUsuario);
             return await CommitChangesAsync();
         }

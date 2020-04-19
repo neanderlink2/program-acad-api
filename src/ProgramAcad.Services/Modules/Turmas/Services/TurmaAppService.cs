@@ -143,7 +143,7 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
 
             foreach (var turma in lista.Items)
             {
-                turma.IsUsuarioInscrito = await _turmaUsuarioRepository.AnyAsync(x => x.Estudante.Email.ToUpper() == emailUsuario.ToUpper() && x.IdTurma == turma.Id && x.Aceito);
+                turma.IsUsuarioInscrito = await _turmaUsuarioRepository.AnyAsync(x => x.Estudante.Email.ToUpper() == emailUsuario.ToUpper() && x.IdTurma == turma.Id && x.Aceito.HasValue && x.Aceito.Value);
                 listaAtualizada.Add(turma);
             }
             lista.Items = listaAtualizada;
