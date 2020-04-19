@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Build and Deploy to Azure
+name: Build e Deploy para o Azure
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -23,13 +23,13 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-    - name: Install dependencies
+    - name: Instala as dependências
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release
-    - name: Test
+    - name: Execução dos Testes
       run: dotnet test --no-restore --verbosity normal
-    - name: FTP Deploy
+    - name: FTP Deploy para o Azure
       uses: SamKirkland/FTP-Deploy-Action@3.0.0
       with:
         # Deployment destination server & path. Formatted as protocol://domain.com:port/full/destination/path/

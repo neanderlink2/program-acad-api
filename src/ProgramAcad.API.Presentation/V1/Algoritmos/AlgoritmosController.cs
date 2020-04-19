@@ -109,7 +109,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
             return Response(atualizacao);
         }
 
-        [HttpDelete("{idAlgoritmo}")]
+        [HttpDelete("{idAlgoritmo}")
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> DeletarAlgoritmo(Guid idAlgoritmo)
