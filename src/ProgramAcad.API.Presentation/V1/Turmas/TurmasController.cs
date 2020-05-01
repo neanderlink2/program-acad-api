@@ -100,12 +100,13 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
         }
 
         [HttpPut("{idTurma}/acesso")]
-        public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery]string emailUsuario)
+        public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery]string emailUsuario, [FromQuery]bool isAceito = true)
         {
             await _turmaAppService.AceitarSolicitacaoAcesso(new SolicitarAcessoTurmaDTO()
             {
                 EmailUsuario = emailUsuario,
-                IdTurma = idTurma
+                IdTurma = idTurma,
+                IsAceito = isAceito
             });
             return ResponseNoContent();
         }
