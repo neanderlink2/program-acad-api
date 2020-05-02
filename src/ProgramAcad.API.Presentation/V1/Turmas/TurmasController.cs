@@ -4,6 +4,7 @@ using ProgramAcad.API.Presentation.Controllers;
 using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Models.PagedList;
 using ProgramAcad.Common.Notifications;
+using ProgramAcad.Domain.Entities;
 using ProgramAcad.Services.Interfaces.Services;
 using ProgramAcad.Services.Modules.Turmas.DTOs;
 using System;
@@ -70,6 +71,20 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
                 return Response(response);
             }
             return Forbid();
+        }
+
+        [HttpGet("niveis-dificuldade")]
+        public IActionResult GetNiveisDificuldade()
+        {
+            var niveis = Enumeration.GetAll<NivelDificuldade>();
+            return Response(niveis);
+        }
+
+        [HttpGet("linguagens-programacao")]
+        public IActionResult GetLinguagensProgramacao()
+        {
+            var niveis = Enumeration.GetAll<LinguagemProgramacao>();
+            return Response(niveis);
         }
 
         [HttpPost]

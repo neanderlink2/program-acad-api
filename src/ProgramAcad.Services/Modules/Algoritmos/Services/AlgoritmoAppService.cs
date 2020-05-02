@@ -51,7 +51,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             await _criarAlgoritmo.ExecuteAsync(algoritmo);
             var alg = await _algoritmoRepository.GetSingleAsync(x => x.IsAtivo && x.IdTurma == algoritmo.IdTurma &&
                 x.Titulo.ToUpper() == algoritmo.Titulo.ToUpper() && x.NivelDificuldade.Nivel == algoritmo.NivelDificuldade &&
-                x.HtmlDescricao == algoritmo.HtmlDescricao);
+                x.HtmlDescricao == algoritmo.HtmlDescricao, "LinguagensPermitidas");
             return _mapper.Map<ListarAlgoritmoDTO>(alg);
         }
 
@@ -176,7 +176,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
             foreach (var algoritmo in lista.Items)
             {
                 algoritmo.IsResolvido = await _algoritmoResolvidoRepository.AnyAsync(x => x.IdAlgoritmo == algoritmo.Id && x.Usuario.Email.ToUpper() == emailUsuario.ToUpper());
-                algoritmo.PontosNessaTurma = _turmaUsuarioRepository.GetSingle(x => x.IdTurma == algoritmo.IdTurmaPertencente && x.Estudante.Email.ToUpper() == emailUsuario.ToUpper()).PontosUsuario;
+                algoritmo.PontosNessaTurma = _turmaUsuarioRepository.GetSingle(x => x.IdTurma == algoritmo.IdTurmaPertencente && x.Estudante.Email.ToUpper() == emailUsuario.ToUpper())?.PontosUsuario ?? 0;
                 listaAtualizada.Add(algoritmo);
             }
             lista.Items = listaAtualizada;
