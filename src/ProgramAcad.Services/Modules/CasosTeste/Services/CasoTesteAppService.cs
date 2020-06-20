@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ProgramAcad.Common.Notifications;
+using ProgramAcad.Domain.Contracts.Repositories;
 using ProgramAcad.Domain.Extensions;
 using ProgramAcad.Services.Interfaces.Services;
 using ProgramAcad.Services.Modules.CasosTeste.Commands;
@@ -14,15 +15,24 @@ namespace ProgramAcad.Services.Modules.CasosTeste.Services
 {
     public class CasoTesteAppService : AppService, ICasoTesteAppService
     {
+        private readonly ICasoTesteRepository _casoTesteRepository;
         private readonly SalvarExecucaoTesteCommand _salvarExecucaoTeste;
         private readonly SalvarAlgoritmoConcluidoCommand _salvarAlgoritmoConcluido;
 
-        public CasoTesteAppService(SalvarExecucaoTesteCommand salvarExecucaoTeste,
+        public CasoTesteAppService(ICasoTesteRepository casoTesteRepository,
+            SalvarExecucaoTesteCommand salvarExecucaoTeste,
             SalvarAlgoritmoConcluidoCommand salvarAlgoritmoConcluido,
             IMapper mapper, DomainNotificationManager notifyManager) : base(mapper, notifyManager)
         {
+            _casoTesteRepository = casoTesteRepository;
             _salvarExecucaoTeste = salvarExecucaoTeste;
             _salvarAlgoritmoConcluido = salvarAlgoritmoConcluido;
+        }
+
+        public async Task<IEnumerable<CasoTesteDTO>> ObterTestesPorAlgoritmo(Guid idAlgoritmo)
+        {
+            var casosTeste = await _casoTesteRepository.GetManyAsync(x => x.IdAlgoritmo == idAlgoritmo);
+            return _mapper.Map<IEnumerable<CasoTesteDTO>>(casosTeste);
         }
 
         public async Task<IEnumerable<ExecucaoCasoTesteDTO>> SalvarExecucoesCasoTeste(IEnumerable<ExecucaoCasoTesteDTO> execucaoCasos)

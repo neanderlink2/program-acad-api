@@ -25,9 +25,14 @@ namespace ProgramAcad.Services.Modules.Turmas.Commands.Validations
             RuleFor(x => x.NomeTurma)
                 .NotEmpty().WithMessage("Nome da turma é obrigatório")
                 .MinimumLength(3).WithMessage("O nome da turma deve possuir no mínimo 3 caracteres.")
-                .MaximumLength(75).WithMessage("O nome da turma deve possuir no máximo 75 caracteres.")
-                .MustAsync(async (nome, cancel) => !await _turmaRepository.AnyAsync(t => t.Nome.ToUpper() == nome.ToUpper()))
-                    .WithMessage("Uma turma com este nome já está cadastrado.");
+                .MaximumLength(75).WithMessage("O nome da turma deve possuir no máximo 75 caracteres.");
+        }
+
+        public void ValidateNomeExistente()
+        {
+            RuleFor(x => x.NomeTurma)
+                   .MustAsync(async (nome, cancel) => !await _turmaRepository.AnyAsync(t => t.Nome.ToUpper() == nome.ToUpper()))
+                       .WithMessage("Uma turma com este nome já está cadastrado.");
         }
 
         public void ValidateCapacidadeAlunos()

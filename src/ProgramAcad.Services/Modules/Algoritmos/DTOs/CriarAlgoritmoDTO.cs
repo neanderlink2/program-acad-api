@@ -12,6 +12,6 @@ namespace ProgramAcad.Services.Modules.Algoritmos.DTOs
         public string HtmlDescricao { get; set; }
         public int NivelDificuldade { get; set; }
         public IEnumerable<string> LinguagensPermitidas { get; set; }
-        public IEnumerable<CriarCasoTesteDTO> CasosTeste { get; set; }
+        public IEnumerable<CasoTesteDTO> CasosTeste { get; set; }
     }
 }

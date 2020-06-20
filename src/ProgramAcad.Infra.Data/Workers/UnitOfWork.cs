@@ -14,6 +14,8 @@ namespace ProgramAcad.Infra.Data.Workers
             _dataContext = dataContext;
         }
 
+        public DbContext Context => _dataContext;
+
         public async Task<bool> Commit()
         {
             try

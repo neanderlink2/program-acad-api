@@ -4,7 +4,11 @@ using ProgramAcad.Domain.Entities;
 using ProgramAcad.Domain.Workers;
 using ProgramAcad.Services.Modules.Algoritmos.Commands.Validations;
 using ProgramAcad.Services.Modules.Algoritmos.DTOs;
+using ProgramAcad.Services.Modules.CasosTeste.DTOs;
 using ProgramAcad.Services.Modules.Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProgramAcad.Services.Modules.Algoritmos.Commands
@@ -34,24 +38,62 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
             if (_notifyManager.HasNotifications()) return false;
 
             var nivelDificuldade = await _nivelDificuldadeRepository.GetSingleAsync(x => x.Nivel == algoritmo.NivelDificuldade);
-            var algoritmoEntity = await _algoritmoRepository.GetSingleAsync(x => x.Id == algoritmo.Id, "CasosDeTeste");
+            var algoritmoEntity = await _algoritmoRepository.GetSingleAsync(x => x.Id == algoritmo.Id);
+            var testesExistentes = await _casoTesteRepository.GetManyAsync(x => x.IdAlgoritmo == algoritmo.Id);
 
-            algoritmoEntity.EditAlgoritmo(algoritmoEntity.Titulo, algoritmoEntity.HtmlDescricao, algoritmoEntity.IdNivelDificuldade);
+            RemoverLinguagensDisponiveis(algoritmo.Id);
+            algoritmoEntity.EditAlgoritmo(algoritmo.Titulo, algoritmo.HtmlDescricao, algoritmo.NivelDificuldade);
+            algoritmoEntity.SetLinguagensProgramacao(algoritmo.LinguagensPermitidas);
 
-            foreach (var casoTeste in algoritmoEntity.CasosDeTeste)
+            await _algoritmoRepository.UpdateAsync(algoritmoEntity);
+            await EditarAdicionarCasosTeste(algoritmo.CasosTeste, algoritmo.Id);
+
+            var testesRemovidos = testesExistentes
+                .Select(x => x.Id)
+                .AsEnumerable()
+                .Where(idAlgoritmo =>
+                    !algoritmo.CasosTeste.Any(alg => alg.Id == idAlgoritmo)
+                )
+                .ToList();
+            await RemoverCasosTeste(testesRemovidos);
+
+            return await CommitChangesAsync();
+        }
+
+        private async Task EditarAdicionarCasosTeste(IEnumerable<CasoTesteDTO> casosTeste, Guid idAlgoritmo)
+        {
+            foreach (var casoTeste in casosTeste)
+            {
+                if (casoTeste.Id.HasValue)
+                {
+                    var testeEntity = await _casoTesteRepository.GetSingleAsync(x => x.Id == casoTeste.Id);
+                    testeEntity.Update(casoTeste.EntradaEsperada, casoTeste.SaidaEsperada, casoTeste.TempoMaximoExecucao);
+                    await _casoTesteRepository.UpdateAsync(testeEntity);
+                }
+                else
+                {
+                    var novoCasoTeste = new CasoTeste(casoTeste.EntradaEsperada, casoTeste.SaidaEsperada, casoTeste.TempoMaximoExecucao, idAlgoritmo);
+                    await _casoTesteRepository.AddAsync(novoCasoTeste);
+                }
+            }
+        }
+
+        private async Task RemoverCasosTeste(IEnumerable<Guid> testesRemovidos)
+        {
+            var casosTeste = await _casoTesteRepository.GetManyAsync(x => testesRemovidos.Contains(x.Id));
+            foreach (var casoTeste in casosTeste.ToList())
             {
                 await _casoTesteRepository.DeleteAsync(casoTeste);
             }
+        }
 
-            foreach (var casoTeste in algoritmo.CasosTeste)
-            {
-                algoritmoEntity.CasosDeTeste.Add(new CasoTeste(casoTeste.EntradaEsperada, casoTeste.SaidaEsperada,
-                    casoTeste.TempoMaximoExecucao, algoritmoEntity.Id));
-            }
-
-            await _algoritmoRepository.UpdateAsync(algoritmoEntity);
-
-            return await CommitChangesAsync();
+        private void RemoverLinguagensDisponiveis(Guid idAlgoritmo)
+        {
+            var dbSet = _unitOfWork.Context.Set<AlgoritmoLinguagemDisponivel>();
+            var linguagensDisponiveis = dbSet
+                .AsQueryable()
+                .Where(x => x.IdAlgoritmo == idAlgoritmo);
+            dbSet.RemoveRange(linguagensDisponiveis);
         }
     }
 }

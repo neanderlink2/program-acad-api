@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProgramAcad.API.Presentation.Controllers;
 using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Models.PagedList;
@@ -21,11 +22,13 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
     public class AlgoritmosController : ApiBaseController
     {
         private readonly IAlgoritmoAppService _algoritmoAppService;
+        private readonly ICasoTesteAppService _casoTesteAppService;
 
-        public AlgoritmosController(IAlgoritmoAppService algoritmoAppService,
+        public AlgoritmosController(IAlgoritmoAppService algoritmoAppService, ICasoTesteAppService casoTesteAppService,
             DomainNotificationManager notifyManager) : base(notifyManager)
         {
             _algoritmoAppService = algoritmoAppService;
+            _casoTesteAppService = casoTesteAppService;
         }
 
         [HttpGet("{idAlgoritmo}")]
@@ -47,7 +50,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
             var algoritmos = await _algoritmoAppService.ObterTodosAlgoritmosPorTurmaAsync(idTurma,
                 emailUsuario,
                 busca,
-                numPagina, 
+                numPagina,
                 qtdePorPagina,
                 colunasOrdenacao,
                 direcaoOrdenacao);
@@ -70,6 +73,18 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
                 colunasOrdenacao,
                 direcaoOrdenacao);
             return Response(algoritmos);
+        }
+
+        [Authorize]
+        [HttpGet("{idAlgoritmo}/testes")]
+        public async Task<IActionResult> GetTestesByAlgoritmo(Guid idAlgoritmo)
+        {
+            if (User.IsInRole("INSTRUTOR"))
+            {
+                var response = await _casoTesteAppService.ObterTestesPorAlgoritmo(idAlgoritmo);
+                return Response(response);
+            }
+            return Forbid();
         }
 
         [HttpGet("turma/{idTurma}/filtro/linguagens")]

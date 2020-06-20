@@ -18,6 +18,7 @@ using ProgramAcad.Infra.Data.Workers;
 using ProgramAcad.Infra.IoC;
 using ProgramAcad.Services.Modules.Algoritmos.Commands.Validations;
 using ProgramAcad.Services.Modules.Algoritmos.MappingProfile;
+using ProgramAcad.Services.Modules.CasosTeste.MappingProfile;
 using ProgramAcad.Services.Modules.Usuarios.MappingProfile;
 using System;
 
@@ -59,12 +60,11 @@ namespace ProgramAcad.API.Presentation
                 configs.Filters.Add(new AuthorizeFilter(policy));
             })
                 .AddFluentValidation(config =>
-                {                    
+                {
                     config.RegisterValidatorsFromAssemblyContaining<AtualizarAlgoritmoValidator>();
                 })
                 .AddNewtonsoftJson(config =>
                 {
-                    //config.use();
                     config.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 });
 
@@ -141,8 +141,9 @@ namespace ProgramAcad.API.Presentation
 
             services.AddAutoMapper(configs =>
             {
-                configs.AddProfile(new AlgoritmoMappingProfile());
-                configs.AddProfile(new UsuarioMappingProfile());
+                configs.AddProfile<UsuarioMappingProfile>();
+                configs.AddProfile<AlgoritmoMappingProfile>();
+                configs.AddProfile<CasoTesteMappingProfile>();
             }, AppDomain.CurrentDomain.GetAssemblies());
         }
     }

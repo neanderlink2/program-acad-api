@@ -3,7 +3,7 @@ using ProgramAcad.Services.Modules.CasosTeste.DTOs;
 
 namespace ProgramAcad.Services.Modules.CasosTeste.Commands.Validations
 {
-    public class CriarCasosTesteValidator : AbstractValidator<CriarCasoTesteDTO>
+    public class CriarCasosTesteValidator : AbstractValidator<CasoTesteDTO>
     {
         public CriarCasosTesteValidator()
         {

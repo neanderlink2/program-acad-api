@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProgramAcad.Common.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace ProgramAcad.Domain.Entities
@@ -41,10 +42,18 @@ namespace ProgramAcad.Domain.Entities
 
         public void EditTurma(string nome, int capacidadeTurma, string urlImagemTurma, DateTime dataTermino)
         {
-            Nome = nome;
             CapacidadeAlunos = capacidadeTurma;
-            UrlImagemTurma = urlImagemTurma;
             DataTermino = dataTermino;
+
+            if (nome.HasValue())
+            {
+                Nome = nome;
+            }
+
+            if (urlImagemTurma.HasValue())
+            {
+                UrlImagemTurma = urlImagemTurma;
+            }
         }
 
         public void Desativar()

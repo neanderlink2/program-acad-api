@@ -4,7 +4,7 @@ namespace ProgramAcad.Domain.Entities
 {
     public class TurmaUsuario
     {
-        public TurmaUsuario(Guid idUsuario, Guid idTurma, DateTime dataIngresso, bool? aceito)
+        public TurmaUsuario(Guid idUsuario, Guid idTurma, DateTime dataIngresso, bool? aceito = null)
         {
             IdUsuario = idUsuario;
             IdTurma = idTurma;            

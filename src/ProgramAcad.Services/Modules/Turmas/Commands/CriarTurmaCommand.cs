@@ -26,6 +26,7 @@ namespace ProgramAcad.Services.Modules.Turmas.Commands
 
         public override async Task<bool> ExecuteAsync(CriarTurmaDTO turma)
         {
+            _validation.ValidateNomeExistente();
             var result = _validation.Validate(turma);
             await NotifyValidationErrorsAsync(result);
             if (_notifyManager.HasNotifications()) return false;

@@ -1,5 +1,4 @@
-﻿using ProgramAcad.Common.Extensions;
-using ProgramAcad.Common.Models;
+﻿using ProgramAcad.Common.Models;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Contracts.Repositories;
 using ProgramAcad.Domain.Entities;
@@ -18,7 +17,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
     {
         private readonly CriarAlgoritmoValidator _validation;
         private readonly IAlgoritmoRepository _algoritmoRepository;
-        private readonly INivelDificuldadeRepository _nivelDificuldadeRepository;        
+        private readonly INivelDificuldadeRepository _nivelDificuldadeRepository;
 
         public CriarAlgoritmoCommand(CriarAlgoritmoValidator validation,
             IAlgoritmoRepository algoritmoRepository, INivelDificuldadeRepository nivelDificuldadeRepository, DomainNotificationManager notifyManager, IUnitOfWork unitOfWork) : base(notifyManager, unitOfWork)
@@ -38,7 +37,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
             var nivelDificuldade = await _nivelDificuldadeRepository.GetSingleAsync(x => x.Nivel == algoritmo.NivelDificuldade);
 
             var entity = new Algoritmo(algoritmo.IdTurma, algoritmo.Titulo, algoritmo.HtmlDescricao, nivelDificuldade.Id, algoritmo.DataCriacao);
-            entity.LinguagensPermitidas = ObterLinguagensFromString(algoritmo.LinguagensPermitidas, entity.Id).ToList();
+            entity.SetLinguagensProgramacao(algoritmo.LinguagensPermitidas);
 
             foreach (var casoTeste in algoritmo.CasosTeste)
             {
@@ -64,8 +63,8 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Commands
                     if (linguagem != default)
                     {
                         yield return new AlgoritmoLinguagemDisponivel(idAlgoritmo, linguagem.Id);
-                    }                    
-                }                
+                    }
+                }
             }
             //Se não possuir nenhuma linguagem, retornar Enumerable vazio.
             yield break;

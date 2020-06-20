@@ -24,5 +24,12 @@ namespace ProgramAcad.Domain.Entities
 
         public Algoritmo AlgoritmoVinculado { get; set; }
         public ICollection<ExecucaoTeste> ExecucoesTeste { get; set; }
+
+        public void Update(IEnumerable<string> entradaEsperada, IEnumerable<string> saidaEsperada, int tempoMaximoDeExecucao)
+        {
+            EntradaEsperada = entradaEsperada;
+            SaidaEsperada = saidaEsperada;
+            TempoMaximoDeExecucao = tempoMaximoDeExecucao;
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ProgramAcad.Common.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProgramAcad.Domain.Entities
 {
@@ -45,6 +47,31 @@ namespace ProgramAcad.Domain.Entities
         public void Deactivate()
         {
             IsAtivo = false;
+        }
+
+        public void SetLinguagensProgramacao(IEnumerable<string> identificadoresLinguagem)
+        {
+            LinguagensPermitidas = ObterLinguagensFromApiIdentifier(identificadoresLinguagem).ToList();
+        }
+
+        private IEnumerable<AlgoritmoLinguagemDisponivel> ObterLinguagensFromApiIdentifier(IEnumerable<string> linguagens)
+        {
+            //transforma o Enum em IEnumerable
+            var enumLinguagens = Enumeration.GetAll<LinguagemProgramacao>();
+            if (enumLinguagens.Any(x => linguagens.Contains(x.ApiIdentifier)))
+            {
+                foreach (var item in linguagens)
+                {
+                    var linguagem = enumLinguagens.FirstOrDefault(x => x.ApiIdentifier.Equals(item));
+                    //Para cada linguagem solicitada, Busca o primeiro valor que está contido dentro do array de linguagens.
+                    if (linguagem != default)
+                    {
+                        yield return new AlgoritmoLinguagemDisponivel(Id, linguagem.Id);
+                    }
+                }
+            }
+            //Se não possuir nenhuma linguagem, retornar Enumerable vazio.
+            yield break;
         }
     }
 }
