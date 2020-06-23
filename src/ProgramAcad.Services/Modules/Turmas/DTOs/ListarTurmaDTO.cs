@@ -10,6 +10,7 @@ namespace ProgramAcad.Services.Modules.Turmas.DTOs
 
         }
 
+
         /// <summary>
         /// Transforma a entidade Turma em uma DTO.
         /// </summary>
