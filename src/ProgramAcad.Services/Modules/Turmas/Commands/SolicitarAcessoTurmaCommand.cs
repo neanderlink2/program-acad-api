@@ -37,7 +37,7 @@ namespace ProgramAcad.Services.Modules.Turmas.Commands
 
             if (await _turmaUsuarioRepository.AnyAsync(x => x.IdTurma == solicitacao.IdTurma && x.IdUsuario == usuario.Id))
             {
-                await NotifyAsync(NotifyReasons.VALIDATION_ERROR, "Já existe uma solicitação de acesso pendente.");
+                await NotifyAsync(NotifyReasons.VALIDATION_ERROR, "Já existe uma solicitação de acesso pendente para essa turma.");
                 return false;
             }
 

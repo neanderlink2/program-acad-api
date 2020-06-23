@@ -39,11 +39,24 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
             return Response(response);
         }
 
+        [Authorize]
         [HttpGet("{idTurma}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ListarTurmaDTO))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
         public async Task<IActionResult> GetById(Guid idTurma)
         {
-            var response = await _turmaAppService.GetTurmaById(idTurma);
-            return Response(response);
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("INSTRUTOR"))
+                {
+                    var response = await _turmaAppService.GetTurmaById(idTurma);
+                    return Response(response);
+                }
+                var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "";
+                var responseEstudante = await _turmaAppService.GetTurmaByIdParaEstudante(idTurma, email);
+                return Response(responseEstudante);
+            }
+            return Unauthorized();
         }
 
         [Authorize]

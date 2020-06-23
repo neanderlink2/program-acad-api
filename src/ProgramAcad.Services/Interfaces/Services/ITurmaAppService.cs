@@ -14,6 +14,7 @@ namespace ProgramAcad.Services.Interfaces.Services
         Task SolicitarAcesso(SolicitarAcessoTurmaDTO acesso);
         Task AlternarEstado(Guid idTurma);
         Task<ListarTurmaDTO> GetTurmaById(Guid idTurma);
+        Task<ListarTurmaDTO> GetTurmaByIdParaEstudante(Guid idTurma, string emailUsuario);
         Task<IEnumerable<UsuarioInscritoDTO>> GetUsuariosInscritosByTurma(Guid idTurma);
         Task<IPagedList<ListarTurmaDTO>> GetTurmasPaged(string busca, int pageIndex, int totalItems, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc");
         Task<IPagedList<ListarTurmaDTO>> GetTurmasPagedByUsuario(string emailUsuario, string busca, int pageIndex, int totalItems, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc");

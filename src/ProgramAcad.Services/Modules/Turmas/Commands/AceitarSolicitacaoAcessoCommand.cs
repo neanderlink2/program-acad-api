@@ -36,8 +36,15 @@ namespace ProgramAcad.Services.Modules.Turmas.Commands
                 return false;
             }
 
-            turmaUsuario.ConfirmarInscricao(solicitacao.IsAceito);
-            await _turmaUsuarioRepository.UpdateAsync(turmaUsuario);
+            if (solicitacao.IsAceito)
+            {
+                turmaUsuario.ConfirmarInscricao();
+                await _turmaUsuarioRepository.UpdateAsync(turmaUsuario);
+            }
+            else
+            {
+                await _turmaUsuarioRepository.DeleteAsync(turmaUsuario);
+            }
 
             return await CommitChangesAsync();
         }

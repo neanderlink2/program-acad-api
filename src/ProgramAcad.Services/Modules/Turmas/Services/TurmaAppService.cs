@@ -68,6 +68,13 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
             return new ListarTurmaDTO(turma);
         }
 
+        public async Task<ListarTurmaDTO> GetTurmaByIdParaEstudante(Guid idTurma, string emailUsuario)
+        {
+            var turma = await _turmaRepository.GetSingleAsync(x => x.Id == idTurma, "Instrutor");
+            var turmaInscricao = await _turmaUsuarioRepository.GetSingleAsync(x => x.IdTurma == turma.Id && x.Estudante.Email.ToUpper() == emailUsuario.ToUpper());
+            return new ListarTurmaDTO(turma, turmaInscricao != null, turmaInscricao.PontosUsuario);
+        }
+
         public async Task<IPagedList<ListarTurmaDTO>> GetTurmasPaged(string busca, int pageIndex, int totalItems,
             TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc")
         {

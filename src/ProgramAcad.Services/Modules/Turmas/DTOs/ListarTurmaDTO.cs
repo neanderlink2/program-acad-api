@@ -14,7 +14,7 @@ namespace ProgramAcad.Services.Modules.Turmas.DTOs
         /// Transforma a entidade Turma em uma DTO.
         /// </summary>
         /// <param name="turma">Dados da turma</param>
-        public ListarTurmaDTO(Turma turma, bool isUsuarioInscrito = false)
+        public ListarTurmaDTO(Turma turma, bool isUsuarioInscrito = false, int? qtdePontos = null)
         {
             Id = turma.Id;
             DataHoraTermino = turma.DataTermino;
@@ -23,10 +23,12 @@ namespace ProgramAcad.Services.Modules.Turmas.DTOs
             CapacidadeAlunos = turma.CapacidadeAlunos;
             UrlImagem = turma.UrlImagemTurma;
             IsUsuarioInscrito = isUsuarioInscrito;
+            QtdePontos = qtdePontos;
         }
 
         public Guid Id { get; set; }
         public string NomeInstrutor { get; set; }
         public bool IsUsuarioInscrito { get; set; }
+        public int? QtdePontos { get; set; }
     }
 }

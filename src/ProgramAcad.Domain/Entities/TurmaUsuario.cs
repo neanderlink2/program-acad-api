@@ -28,9 +28,9 @@ namespace ProgramAcad.Domain.Entities
             PontosUsuario += pontos;
         }
 
-        public void ConfirmarInscricao(bool isAceito)
+        public void ConfirmarInscricao()
         {
-            Aceito = isAceito;
+            Aceito = true;
         }
     }
 }
