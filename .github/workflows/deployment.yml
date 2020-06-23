@@ -30,7 +30,7 @@ jobs:
     - name: Execução dos Testes
       run: dotnet test --no-restore --verbosity normal
     - name: Upload Google Credentials          
-      uses: DamianReeves/write-file-action
+      uses: DamianReeves/write-file-action@v1.0
       with:
         path: ./build/google-credentials.json
         contents: ${{ secrets.GOOGLE_CREDENTIALS }}
