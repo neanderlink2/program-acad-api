@@ -22,16 +22,18 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.0.103
+        dotnet-version: 3.1.301
     - name: Instala as dependências
       run: dotnet restore    
     - name: Publicação
       run: dotnet publish ./src/ProgramAcad.API.Presentation/ProgramAcad.API.Presentation.csproj --output ./build --configuration Release
     - name: Execução dos Testes
       run: dotnet test --no-restore --verbosity normal
-    - name: 'Deploy to Azure WebApp'
+    - name: Upload Google Credentials
+      run: echo ${{ secrets.GOOGLE_CREDENTIALS }} > ./build/google-credentials.json
+    - name: 'Deploy para o Azure'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ProgramAcadAPIPresentation20200109114653
+        app-name: program-acad-api
         publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
         package: ./build 
