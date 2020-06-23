@@ -25,8 +25,8 @@ jobs:
         dotnet-version: 3.1.101
     - name: Instala as dependências
       run: dotnet restore    
-    - name: Build
-      run: dotnet build --configuration Release --output ./build
+    - name: Publicação
+      run: dotnet publish ./src/ProgramAcad.API.Presentation/ProgramAcad.API.Presentation.csproj --output ./build --configuration Release
     - name: Execução dos Testes
       run: dotnet test --no-restore --verbosity normal
     - name: 'Deploy to Azure WebApp'
