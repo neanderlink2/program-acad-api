@@ -29,8 +29,12 @@ jobs:
       run: dotnet publish ./src/ProgramAcad.API.Presentation/ProgramAcad.API.Presentation.csproj --output ./build --configuration Release
     - name: Execução dos Testes
       run: dotnet test --no-restore --verbosity normal
-    - name: Upload Google Credentials
-      run: echo ${{ secrets.GOOGLE_CREDENTIALS }} > ./build/google-credentials.json
+    - name: Upload Google Credentials          
+      uses: DamianReeves/write-file-action
+      with:
+        path: ./build/google-credentials.json
+        contents: ${{ secrets.GOOGLE_CREDENTIALS }}
+        write-mode: overwrite
     - name: 'Deploy para o Azure'
       uses: azure/webapps-deploy@v2
       with:
