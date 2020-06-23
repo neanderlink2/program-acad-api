@@ -25,16 +25,12 @@ jobs:
         dotnet-version: 3.1.101
     - name: Instala as dependências
       run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release
     - name: Execução dos Testes
       run: dotnet test --no-restore --verbosity normal
-    - name: FTP Deploy para o Azure
-      uses: SamKirkland/FTP-Deploy-Action@3.0.0
+    - name: Build
+      run: dotnet build --configuration Release
+    - name: 'Deploy to Azure WebApp'
+      uses: azure/webapps-deploy@v2
       with:
-        # Deployment destination server & path. Formatted as protocol://domain.com:port/full/destination/path/
-        ftp-server: ftp://waws-prod-dm1-117.ftp.azurewebsites.windows.net/site/wwwroot
-        # FTP account username
-        ftp-username: ProgramAcadAPIPresentation20200109114653\$ProgramAcadAPIPresentation20200109114653
-        # FTP account password
-        ftp-password: DbLR57cKosqplLzN5jNnEuiQsjNNFpi1N5LW2cq1NSvnZSrT9YtbvzllZev4
+        app-name: ProgramAcadAPIPresentation20200109114653
+        publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
