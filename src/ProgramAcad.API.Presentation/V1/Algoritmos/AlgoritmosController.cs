@@ -111,8 +111,7 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
         public async Task<IActionResult> CreateAlgoritmo(CriarAlgoritmoDTO algoritmo)
         {
             var algoritmoCriado = await _algoritmoAppService.CriarAlgoritmoAsync(algoritmo);
-            var rota = Url.Action("GetById", "Algoritmos", new { idAlgoritmo = algoritmoCriado.Id }, Request.Scheme);
-            return ResponseCreated(rota, algoritmoCriado);
+            return ResponseCreated($"api/algoritmos/{algoritmoCriado.Id}", algoritmoCriado);
         }
 
         [HttpPut]
