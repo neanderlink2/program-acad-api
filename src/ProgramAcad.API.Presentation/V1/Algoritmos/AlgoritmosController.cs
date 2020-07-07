@@ -57,6 +57,21 @@ namespace ProgramAcad.API.Presentation.V1.Algoritmos
             return Response(algoritmos);
         }
 
+        [Authorize]
+        [HttpGet("{idAlgoritmo}/concluidos")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedList<ListarAlgoritmoDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
+        public async Task<IActionResult> GetConcluidosByTurma(Guid idAlgoritmo)
+        {
+            if (User.IsInRole("INSTRUTOR"))
+            {
+                var algoritmos = await _algoritmoAppService.ObterUsuariosConcluiram(idAlgoritmo);
+                return Response(algoritmos);
+            }
+
+            return Unauthorized();
+        }
+
         [HttpGet("turma/{idTurma}/nivel/{nivel}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedList<ListarAlgoritmoDTO>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
