@@ -1,5 +1,4 @@
 ﻿using ProgramAcad.Common.Models.PagedList;
-using ProgramAcad.Domain.Entities;
 using ProgramAcad.Domain.Models;
 using ProgramAcad.Services.Modules.Algoritmos.DTOs;
 using System;
@@ -17,6 +16,7 @@ namespace ProgramAcad.Services.Interfaces.Services
         Task<IPagedList<ListarAlgoritmoDTO>> ObterTodosAlgoritmosPorTurmaAsync(Guid idTurma, string emailUsuario, string busca, int numPagina, int qtdePorPagina,
             ColunasOrdenacaoAlgoritmo colunasOrdenacao, string direcaoOrdenacao);
         Task<ListarAlgoritmoDTO> ObterAlgoritmoPorIdAsync(Guid idAlgoritmo);
+        Task<IEnumerable<UsuarioConcluiuAlgoritmoDTO>> ObterUsuariosConcluiram(Guid idAlgoritmo);
         Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorNivelDificuldadeAsync(int nivel, Guid idTurma, string emailUsuario, string busca, int numPagina, int qtdePorPagina,
             ColunasOrdenacaoAlgoritmo colunasOrdenacao, string direcaoOrdenacao);
         Task<IPagedList<ListarAlgoritmoDTO>> ObterAlgoritmosPorLinguagemAsync(int linguagem, Guid idTurma, string emailUsuario, string busca, int numPagina, int qtdePorPagina,

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using ProgramAcad.Common.Constants;
-using ProgramAcad.Common.Extensions;
 using ProgramAcad.Common.Models.PagedList;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Contracts.Repositories;
@@ -212,6 +211,23 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                     return source.OrderByDescending(x => x.DataCriacao);
                 }
             }
+        }
+
+        public async Task<IEnumerable<UsuarioConcluiuAlgoritmoDTO>> ObterUsuariosConcluiram(Guid idAlgoritmo)
+        {
+            var algoritmosResolvidos = await _algoritmoResolvidoRepository.GetManyAsync(x => x.IdAlgoritmo == idAlgoritmo);
+            var dtos = algoritmosResolvidos
+                .Select(algoritmoResolvido => new UsuarioConcluiuAlgoritmoDTO
+                {
+                    IdAlgoritmo = algoritmoResolvido.IdAlgoritmo,
+                    DataConclusao = algoritmoResolvido.DataConclusao,
+                    IdLinguagem = algoritmoResolvido.IdLinguagem,
+                    NicknameUsuario = algoritmoResolvido.Usuario.Nickname,
+                    NomeAlgoritmo = algoritmoResolvido.Algoritmo.Titulo,
+                    NomeUsuario = algoritmoResolvido.Usuario.NomeCompleto
+                })
+                .ToList();
+            return dtos;
         }
     }
 }
