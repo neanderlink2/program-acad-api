@@ -14,7 +14,7 @@ namespace ProgramAcad.Infra.Data.Data.Migrations.ProgramAcadDb
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     nome = table.Column<string>(maxLength: 20, nullable: true),
-                    descricao = table.Column<string>(maxLength: 200, nullable: true),
+                    descricao = table.Column<string>(maxLength: 400, nullable: true),
                     num_tipo_compilador = table.Column<int>(nullable: false),
                     api_id = table.Column<string>(nullable: true)
                 },
@@ -136,8 +136,7 @@ namespace ProgramAcad.Infra.Data.Data.Migrations.ProgramAcadDb
                         name: "FK_TB_USUARIO_PERTENCE_TURMA_TB_USUARIO_id_usuario",
                         column: x => x.id_usuario,
                         principalTable: "TB_USUARIO",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -214,8 +213,7 @@ namespace ProgramAcad.Infra.Data.Data.Migrations.ProgramAcadDb
                         name: "FK_TB_USUARIO_RESOLVE_ALGORITMO_TB_USUARIO_id_usuario",
                         column: x => x.id_usuario,
                         principalTable: "TB_USUARIO",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -248,8 +246,7 @@ namespace ProgramAcad.Infra.Data.Data.Migrations.ProgramAcadDb
                         name: "FK_TB_TESTE_PRIMEIRA_EXECUCAO_TB_USUARIO_id_usuario",
                         column: x => x.id_usuario,
                         principalTable: "TB_USUARIO",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateIndex(

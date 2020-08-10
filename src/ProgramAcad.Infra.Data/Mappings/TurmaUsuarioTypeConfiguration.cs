@@ -24,7 +24,8 @@ namespace ProgramAcad.Infra.Data.Mappings
 
             builder.HasOne(x => x.Estudante)
                 .WithMany(x => x.TurmasInscritas)
-                .HasForeignKey(x => x.IdUsuario);
+                .HasForeignKey(x => x.IdUsuario)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

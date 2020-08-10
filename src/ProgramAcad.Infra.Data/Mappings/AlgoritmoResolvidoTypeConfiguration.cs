@@ -20,7 +20,8 @@ namespace ProgramAcad.Infra.Data.Mappings
 
             builder.HasOne(x => x.Usuario)
                 .WithMany(x => x.AlgoritmosResolvidos)
-                .HasForeignKey(x => x.IdUsuario);
+                .HasForeignKey(x => x.IdUsuario)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(x => x.Algoritmo)
                 .WithMany(x => x.AlgoritmosResolvidos)

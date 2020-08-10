@@ -14,7 +14,7 @@ namespace ProgramAcad.Infra.Data.Mappings
 
             builder.Property(x => x.Id).HasColumnName("id");
             builder.Property(x => x.Name).HasColumnName("nome").HasMaxLength(20);
-            builder.Property(x => x.Descricao).HasColumnName("descricao").HasMaxLength(200);
+            builder.Property(x => x.Descricao).HasColumnName("descricao").HasMaxLength(400);
             builder.Property(x => x.NumCompilador).HasColumnName("num_tipo_compilador");
             builder.Property(x => x.ApiIdentifier).HasColumnName("api_id");
 

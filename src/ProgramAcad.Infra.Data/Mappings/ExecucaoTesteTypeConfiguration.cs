@@ -25,7 +25,8 @@ namespace ProgramAcad.Infra.Data.Mappings
 
             builder.HasOne(x => x.UsuarioExecutou)
                 .WithMany(x => x.TestesExecutados)
-                .HasForeignKey(x => x.IdUsuario);
+                .HasForeignKey(x => x.IdUsuario)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(x => x.LinguagemProgramacao)
                 .WithMany(x => x.ExecucoesDessaLinguagem)

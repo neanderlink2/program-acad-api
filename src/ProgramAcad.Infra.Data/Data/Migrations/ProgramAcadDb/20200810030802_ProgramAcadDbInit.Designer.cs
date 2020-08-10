@@ -10,7 +10,7 @@ using ProgramAcad.Infra.Data.Workers;
 namespace ProgramAcad.Infra.Data.Data.Migrations.ProgramAcadDb
 {
     [DbContext(typeof(ProgramAcadDataContext))]
-    [Migration("20200810013756_ProgramAcadDbInit")]
+    [Migration("20200810030802_ProgramAcadDbInit")]
     partial class ProgramAcadDbInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -195,8 +195,8 @@ namespace ProgramAcad.Infra.Data.Data.Migrations.ProgramAcadDb
 
                     b.Property<string>("Descricao")
                         .HasColumnName("descricao")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.Property<string>("Name")
                         .HasColumnName("nome")
@@ -423,7 +423,7 @@ namespace ProgramAcad.Infra.Data.Data.Migrations.ProgramAcadDb
                     b.HasOne("ProgramAcad.Domain.Entities.Usuario", "Usuario")
                         .WithMany("AlgoritmosResolvidos")
                         .HasForeignKey("IdUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -453,7 +453,7 @@ namespace ProgramAcad.Infra.Data.Data.Migrations.ProgramAcadDb
                     b.HasOne("ProgramAcad.Domain.Entities.Usuario", "UsuarioExecutou")
                         .WithMany("TestesExecutados")
                         .HasForeignKey("IdUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -477,7 +477,7 @@ namespace ProgramAcad.Infra.Data.Data.Migrations.ProgramAcadDb
                     b.HasOne("ProgramAcad.Domain.Entities.Usuario", "Estudante")
                         .WithMany("TurmasInscritas")
                         .HasForeignKey("IdUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
