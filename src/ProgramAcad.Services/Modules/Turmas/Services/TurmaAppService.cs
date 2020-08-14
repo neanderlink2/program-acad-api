@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ProgramAcad.Common.Extensions;
 using ProgramAcad.Common.Models.PagedList;
 using ProgramAcad.Common.Notifications;
 using ProgramAcad.Domain.Contracts.Repositories;
@@ -98,6 +99,42 @@ namespace ProgramAcad.Services.Modules.Turmas.Services
             );
 
             return lista;
+        }
+
+        public async Task<PontuacaoTurmaDTO> BuscarPontuacaoTurma(Guid idTurma, string busca, int pageIndex, int pageSize,
+            string colunaOrdenacao, string direcaoOrdenacao = "asc")
+        {
+            var turma = await _turmaRepository.GetSingleAsync(x => x.Id == idTurma && x.Status,
+                "AlgoritmosDisponiveis", "AlgoritmosDisponiveis.NivelDificuldade");
+            var maxPontos = turma.AlgoritmosDisponiveis.Sum(algoritmo => algoritmo.NivelDificuldade.PontosReceber);
+
+            busca = busca?.ToUpper();
+            var listagem = await _turmaUsuarioRepository.GetPagedListAsync(
+                selecao: usuarioTurma => new UsuarioTurmaDTO
+                {
+                    NomeTurma = usuarioTurma.Turma.Nome,
+                    NomeUsuario = usuarioTurma.Estudante.NomeCompleto,
+                    QtdePontos = usuarioTurma.PontosUsuario,
+                    Nickname = usuarioTurma.Estudante.Nickname
+                },
+                condicao: usuarioTurma => usuarioTurma.IdTurma == idTurma && usuarioTurma.Aceito.HasValue && usuarioTurma.Aceito.Value && (
+                 string.IsNullOrWhiteSpace(busca) || (
+                    usuarioTurma.Estudante.Email.ToUpper().Contains(busca) ||
+                    usuarioTurma.Estudante.NomeCompleto.ToUpper().Contains(busca) ||
+                    usuarioTurma.Estudante.Nickname.ToUpper().Contains(busca)
+                  )
+                ),
+                ordenacaoPorSelecao: x => x.OrderByFrom(colunaOrdenacao, direcaoOrdenacao == "desc"),
+                indicePagina: pageIndex, tamanhoPagina: pageSize);
+
+
+            var pontuacao = new PontuacaoTurmaDTO
+            {
+                MaximoPontos = maxPontos,
+                Inscritos = listagem
+            };
+
+            return pontuacao;
         }
 
         public async Task<IPagedList<ListarTurmaDTO>> GetTurmasPagedByInstrutor(string emailInstrutor, string busca, int pageIndex, int totalItems, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc")

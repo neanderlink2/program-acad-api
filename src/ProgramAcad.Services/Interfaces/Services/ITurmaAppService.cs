@@ -19,5 +19,7 @@ namespace ProgramAcad.Services.Interfaces.Services
         Task<IPagedList<ListarTurmaDTO>> GetTurmasPaged(string busca, int pageIndex, int totalItems, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc");
         Task<IPagedList<ListarTurmaDTO>> GetTurmasPagedByUsuario(string emailUsuario, string busca, int pageIndex, int totalItems, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc");
         Task<IPagedList<ListarTurmaDTO>> GetTurmasPagedByInstrutor(string emailInstrutor, string busca, int pageIndex, int totalItems, TurmaColunasOrdenacao colunaOrdenacao, string direcaoOrdenacao = "asc");
+        Task<PontuacaoTurmaDTO> BuscarPontuacaoTurma(Guid idTurma, string busca, int pageIndex, int pageSize,
+            string colunaOrdenacao, string direcaoOrdenacao = "asc");
     }
 }

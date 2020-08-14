@@ -75,6 +75,22 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
         }
 
         [Authorize]
+        [HttpGet("{idTurma}/pontuacao")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PontuacaoTurmaDTO))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ExpectedError>))]
+        public async Task<IActionResult> GetPontuacaoTurma(Guid idTurma, string busca = "", int pageIndex = 0, int pageSize = 20, 
+            string orderBy = "NomeUsuario", string orderDirection = "asc")
+        {
+            if (User.IsInRole("INSTRUTOR"))
+            {                
+                var response = await _turmaAppService
+                    .BuscarPontuacaoTurma(idTurma, busca, pageIndex, pageSize, orderBy, orderDirection);
+                return Response(response);
+            }
+            return Unauthorized();
+        }
+
+        [Authorize]
         [HttpGet("{idTurma}/inscritos")]
         public async Task<IActionResult> GetUsuariosInscritosByTurma(Guid idTurma)
         {
@@ -101,14 +117,14 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTurma([FromBody]CriarTurmaDTO criarTurma)
+        public async Task<IActionResult> CreateTurma([FromBody] CriarTurmaDTO criarTurma)
         {
             await _turmaAppService.CriarTurma(criarTurma);
             return ResponseNoContent();
         }
 
         [HttpPost("{idTurma}/acesso")]
-        public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery]DateTime dataEnvio)
+        public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery] DateTime dataEnvio)
         {
             var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value ?? "";
             await _turmaAppService.SolicitarAcesso(new SolicitarAcessoTurmaDTO()
@@ -121,14 +137,14 @@ namespace ProgramAcad.API.Presentation.V1.Turmas
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateTurma([FromBody]EditarTurmaDTO editarTurma)
+        public async Task<IActionResult> UpdateTurma([FromBody] EditarTurmaDTO editarTurma)
         {
             await _turmaAppService.EditarTurma(editarTurma);
             return ResponseNoContent();
         }
 
         [HttpPut("{idTurma}/acesso")]
-        public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery]string emailUsuario, [FromQuery]bool isAceito = true)
+        public async Task<IActionResult> SolicitarAcesso(Guid idTurma, [FromQuery] string emailUsuario, [FromQuery] bool isAceito = true)
         {
             await _turmaAppService.AceitarSolicitacaoAcesso(new SolicitarAcessoTurmaDTO()
             {
