@@ -170,7 +170,7 @@ namespace ProgramAcad.Services.Modules.Algoritmos.Services
                 indicePagina: numPagina,
                 tamanhoPagina: qtdePorPagina,
                 isTracking: false,
-                includes: new[] { "NivelDificuldade", "TurmaPertencente", "LinguagensPermitidas" });
+                includes: new[] { "NivelDificuldade", "TurmaPertencente", "LinguagensPermitidas", "LinguagensPermitidas.LinguagemProgramacao" });
 
             List<ListarAlgoritmoDTO> listaAtualizada = new List<ListarAlgoritmoDTO>();
 

@@ -23,15 +23,18 @@ namespace ProgramAcad.Infra.Data.Mappings
 
             builder.HasOne(x => x.Instrutor)
                 .WithMany(x => x.TurmasCriadas)
-                .HasForeignKey(x => x.IdInstrutor);
+                .HasForeignKey(x => x.IdInstrutor)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.AlgoritmosDisponiveis)
                 .WithOne(x => x.TurmaPertencente)
-                .HasForeignKey(x => x.IdTurma);
+                .HasForeignKey(x => x.IdTurma)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.UsuariosInscritos)
                 .WithOne(x => x.Turma)
-                .HasForeignKey(x => x.IdTurma);
+                .HasForeignKey(x => x.IdTurma)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
