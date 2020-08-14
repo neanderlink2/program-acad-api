@@ -162,6 +162,38 @@ namespace ProgramAcad.Infra.Data.Repository
             return Task.Run(() => result.ToPagedList(tamanhoPagina, indicePagina));
         }
 
+        public Task<IPagedList<TResultado>> GetPagedListAsync<TResultado>(Expression<Func<TModel, TResultado>> selecao,
+                                                                     Expression<Func<TModel, bool>> condicao = null,                                                                     
+                                                                     Func<IQueryable<TResultado>, IOrderedQueryable<TResultado>> ordenacaoPorSelecao = null,
+                                                                     int indicePagina = 0,
+                                                                     int tamanhoPagina = 20,
+                                                                     bool isTracking = false,
+                                                                     params string[] includes) where TResultado : class
+        {
+            IQueryable<TModel> query = _dbSet;
+            if (!isTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (includes != null && includes.Any())
+            {
+                query = query.IncludeMultiple(includes);
+            }
+
+            if (condicao != null)
+            {
+                query = query.Where(condicao);
+            }
+
+            var result = query.Select(selecao);
+            if (ordenacaoPorSelecao != null)
+            {
+                result = ordenacaoPorSelecao(result);
+            }
+            return Task.Run(() => result.ToPagedList(tamanhoPagina, indicePagina));
+        }
+
         public TModel GetSingle(Expression<Func<TModel, bool>> where)
         {
             return _dbSet.FirstOrDefault(where);
